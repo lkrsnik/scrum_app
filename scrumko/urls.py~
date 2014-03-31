@@ -4,5 +4,6 @@ from scrumko import views
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
 	url(r'^register/$', views.register, name='register'),
-	url(r'^home/$', views.register, name='register')
+	url(r'^home/$', views.home, name='register'),
+	url(r'^logout/$', views.user_logout, name='logout'),
 	)

@@ -2,19 +2,45 @@
 
 {% block body_block %}
 
-<h1> Nadzorna plošča</h1>
+	<h1> Nadzorna plošča</h1>
 
-<table class="gridmenu">
-	<tr>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-</table>
+
+		
+	
+	
+		
+	{% if request.user.is_superuser %}
+		<table class="gridmenu">
+		<tr>
+			<td><a href="/scrumko/register/>dodaj uporabnika [slika]</p></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		</table>
+		<!--this is just for test -->
+	  	<p>you are superuser</p>
+		<!--end of test -->
+	{% else %}	
+		<table class="gridmenu">
+		<tr>
+			<td><p></p></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		</table>
+		<!--this is just for test -->
+	  	<p>you are not superuser</p>
+		<!--end of test -->
+	{% endif %}
 	
 {% endblock %}

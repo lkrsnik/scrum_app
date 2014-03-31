@@ -1,11 +1,11 @@
-{% extends 'scrumko/welcomebase.html' %}
+{% extends 'scrumko/base.html' %}
 
 {% block body_block %}
-        <h1>Registracija</h1>
+        <h1>Dodajanje uporabnikov</h1>
 
         {% if registered %}
-       Pozdravljeni, <strong>thank you for registering!</strong>
-        <a href="/scrumko/">Return to the homepage.</a><br />
+       	Uporabnik je bil <strong>uspešno  </strong>dodan.<br/>
+        <a href="/scrumko/register/">Dodaj še enega uporabnika.</a><br/>
         {% else %}
         
 
@@ -13,15 +13,11 @@
                 enctype="multipart/form-data">
 
             {% csrf_token %}
-
-            <!-- Display each form. The as_p method wraps each element in a paragraph
-                 (<p>) element. This ensures each element appears on a new line,
-                 making everything look neater. -->
             {{ user_form.as_p }}
             {{ profile_form.as_p }}
-
+	    {{ status_form.as_p }}
             <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
+            <input type="submit" name="submit" value="Dodaj" />
         </form>
         {% endif %}
 {% endblock %}
