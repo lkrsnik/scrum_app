@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+<head>
+<title>Scrumko</title>
+
+<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
+
+
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+	<div class="page">
+		
+		<!-- header of a page -->
+		<div class="headerhold">
+			<div class="menulogo">
+				
+				<div class="logo">
+					scrumko
+				</div>
+				
+				<div class="menu">
+					<ul>
+						{% block header_block %}{% endblock %}
+					</ul>
+				
+				
+				</div>
+				
+			</div>
+		</div>
+		<!-- body of a pege -->
+		<div class="bodyhold">
+			<div class="pagebody">
+				
+				<div class="mainwindow">
+					
+					{% block body_block %}{% endblock %}
+				
+				</div>
+				<div class="sidemenu">
+				
+					{% block side_block %}{% endblock %}
+				</div>
+				
+				
+			</div>
+		</div>
+
+		<div class="footer">
+			<div class="cpyright">
+				<br/>
+				&copy; Petra Mihalič, Manca Žerovnik, Luka Krsnik, Primož Godec
+			</div>
+		
+		</div>
+		
+	</div>
+
+
+</body>
+
+</html>
