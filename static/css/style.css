@@ -19,7 +19,6 @@ h1
 	color: #4590ab;
 }
 
-
 /* page */
 
 .page
@@ -150,13 +149,20 @@ h1
 	border-radius: 15px;
 	width: 170px;
 	height: 170px;
+}
+.gridmenu a
+{
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 15px;
+}
 
-	
+.gridmenu img
+{
+	margin-top: 20px;
 }
 
 .gridmenu
 {
 	border-spacing: 50px 20px;
-	
-
+	text-align: center;
 }

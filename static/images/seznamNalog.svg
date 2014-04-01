@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3798"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="seznamNalog.svg"
+   inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\seznamNalog.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs3800" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="323.04279"
+     inkscape:cy="641.21831"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="784"
+     inkscape:window-height="822"
+     inkscape:window-x="800"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3803">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:15.91279793;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2985"
+       width="725.95319"
+       height="725.95319"
+       x="12.715864"
+       y="4.291223"
+       ry="52.144073"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:8;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4352"
+       sodipodi:cx="384.28571"
+       sodipodi:cy="186.6479"
+       sodipodi:rx="15.714286"
+       sodipodi:ry="48.57143"
+       d="m 399.99999,186.6479 a 15.714286,48.57143 0 1 1 -31.42036,-1.56998 l 15.70608,1.56998 z"
+       sodipodi:start="0"
+       sodipodi:end="3.1739214"
+       transform="matrix(2.3580709,0,0,-1.4370219,-716.65555,472.56251)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:8;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4354"
+       sodipodi:cx="358.57144"
+       sodipodi:cy="155.21933"
+       sodipodi:rx="12.857142"
+       sodipodi:ry="20"
+       d="m 371.42858,155.21933 a 12.857142,20 0 1 1 -25.71428,0 12.857142,20 0 1 1 25.71428,0 z"
+       transform="matrix(2.5547668,0,0,1.7012982,-722.50052,-172.55939)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:8;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4354-9"
+       sodipodi:cx="358.57144"
+       sodipodi:cy="155.21933"
+       sodipodi:rx="12.857142"
+       sodipodi:ry="20"
+       d="m 371.42858,155.21933 a 12.857142,20 0 1 1 -25.71428,0 12.857142,20 0 1 1 25.71428,0 z"
+       transform="matrix(2.5547668,0,0,1.7012982,-715.87608,93.597442)" />
+    <path
+       sodipodi:type="star"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:8;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4374"
+       sodipodi:sides="3"
+       sodipodi:cx="354.28571"
+       sodipodi:cy="875.21936"
+       sodipodi:r1="26.954231"
+       sodipodi:r2="13.477116"
+       sodipodi:arg1="0.55859932"
+       sodipodi:arg2="1.6057969"
+       inkscape:flatsided="true"
+       inkscape:rounded="-1.9116653e-015"
+       inkscape:randomized="0"
+       d="m 377.14285,889.50507 -46.65751,-1.6337 24.74359,-39.58973 z"
+       inkscape:transform-center-x="0.34735552"
+       inkscape:transform-center-y="-9.6380863"
+       transform="matrix(1.7290495,-0.03098102,0.03475467,1.465298,-448.15134,-838.87517)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:8;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4354-4"
+       sodipodi:cx="358.57144"
+       sodipodi:cy="155.21933"
+       sodipodi:rx="12.857142"
+       sodipodi:ry="20"
+       d="m 371.42858,155.21933 a 12.857142,20 0 1 1 -25.71428,0 12.857142,20 0 1 1 25.71428,0 z"
+       transform="matrix(2.5547668,0,0,1.7012982,-713.79513,285.2737)" />
+    <rect
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:14.03377151;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect4385"
+       width="90.866737"
+       height="65.796806"
+       x="156.83795"
+       y="591.11188"
+       ry="3.8704002" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8"
+       width="197.56107"
+       height="9.7217045"
+       x="393.11539"
+       y="82.010674"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-8"
+       width="197.56107"
+       height="9.7217045"
+       x="395.31485"
+       y="127.76204"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-2"
+       width="197.56107"
+       height="9.7217045"
+       x="397.39575"
+       y="175.51712"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-7"
+       width="197.56107"
+       height="9.7217045"
+       x="375.84332"
+       y="549.80273"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-1"
+       width="197.56107"
+       height="9.7217045"
+       x="375.84332"
+       y="594.40387"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-15"
+       width="197.56107"
+       height="9.7217045"
+       x="372.20999"
+       y="641.86212"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-7-2"
+       width="197.56107"
+       height="9.7217045"
+       x="381.16956"
+       y="322.19614"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-15-7"
+       width="197.56107"
+       height="9.7217045"
+       x="374.67908"
+       y="399.96979"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#4d4d4d;stroke-width:10.52229404;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2989-8-15-6"
+       width="197.56107"
+       height="9.7217045"
+       x="375.84332"
+       y="361.08298"
+       ry="4.8608522"
+       inkscape:export-filename="C:\Users\Petra\Desktop\ACScrum\static\icons\rect2985.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>
