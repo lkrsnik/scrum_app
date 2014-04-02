@@ -25,7 +25,25 @@
 		<!--this is just for test -->
 	  	<p>you are superuser</p>
 		<!--end of test -->
-	{% else %}	
+	{% endif %}
+	{% if  request.user.is_staff%}	
+		<table class="gridmenu">
+		<tr>
+			<td><a href="/scrumko/sprintcreate/">kreiraj sprint [slika]</a></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		</table>
+		<!--this is just for test -->
+	  	<p>you are not superuser</p>
+		<!--end of test -->
+	{% endif %}1
+	{% if  not request.user.is_staff and not request.user.is_admin%}	
 		<table class="gridmenu">
 		<tr>
 			<td><p></p></td>
