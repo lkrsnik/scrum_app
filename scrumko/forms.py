@@ -1,6 +1,6 @@
 from django import forms
 
-from scrumko.models import UserProfile, Sprint
+from scrumko.models import UserProfile, Sprint, Project
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -19,6 +19,16 @@ class UserProfileForm(forms.ModelForm):
 class SprintCreateForm(forms.ModelForm):
     class Meta:
         model = Sprint
+		
+class ProjectCreateForm(forms.ModelForm):
+
+    project_name =  forms.CharField(max_length=50, help_text="Ime projekta")
+    #project_owner =  models.ForeignKey(widget=forms.HiddenInput())
+    #scrum_master = models.ForeignKey(widget=forms.HiddenInput())
+    #team = models.ManyToManyField(widget=forms.HiddenInput())
+
+    class Meta:
+        model = Project
         
 
 

@@ -17,7 +17,7 @@ class Project(models.Model):
    
     # The additional attributes we wish to include.
     
-	poject_name =  models.CharField(blank=False, max_length=50)
+	project_name =  models.CharField(blank=False, max_length=50)
 	project_owner =  models.ForeignKey(User, related_name='owner')
 	scrum_master = models.ForeignKey(User, related_name='master')
 	team = models.ManyToManyField(User)

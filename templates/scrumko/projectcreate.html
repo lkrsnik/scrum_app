@@ -1,0 +1,30 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+        <h1>Dodajanje projekta</h1>
+
+        {% if registered %}
+			Projekt je bil <strong>uspešno  </strong>dodan.<br/>
+			
+		{% endif %}
+			
+
+			<form id="project_form" method="post" action="/scrumko/projectcreate/"
+					enctype="multipart/form-data">
+
+				{% csrf_token %}
+				{{ project_form.as_p }}
+				
+				<!--{% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text}}
+                {{ field }}
+            {% endfor %}-->
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" name="submit" value="Dodaj" />
+			</form>
+   {% endblock %}
