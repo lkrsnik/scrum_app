@@ -17,7 +17,7 @@ class Project(models.Model):
    
     # The additional attributes we wish to include.
     
-	poject_name =  models.CharField(blank=False, max_length=50)
+	project_name =  models.CharField(blank=False, max_length=50)
 	project_owner =  models.ForeignKey(User, related_name='owner')
 	scrum_master = models.ForeignKey(User, related_name='master')
 	team = models.ManyToManyField(User)
@@ -34,10 +34,10 @@ class Project(models.Model):
 
 
 class Sprint(models.Model):
-	project_name = models.ForeignKey(User)
+	project_name = models.ForeignKey(Project)
 	start_date = models.DateField(blank=False)
 	finish_date = models.DateField(blank=False)
 	velocity = models.IntegerField(blank=False)
 
-	def __unicode__(self):
-		return self.sprint.project_name
+	#def __unicode__(self):
+	#	return self.sprint.project_name

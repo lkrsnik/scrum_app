@@ -185,7 +185,7 @@ def sprintcreate(request):
 	return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
+@user_passes_test(lambda u: u.is_superuser)
 def projectcreate(request):
     # Like before, get the request's context.
 	context = RequestContext(request)

@@ -9,56 +9,48 @@
 	
 	
 		
-	{% if request.user.is_superuser %}
+	{% if request.user.is_superuser %} <!-- only admin can see this -->
 		<table class="gridmenu">
 		<tr>
-			<td><a href="/scrumko/register/"><img src="/static/images/wall.png" height="130" width="130">Projektni zid</a></td>
+			<td><a href="/scrumko/projectcreate/">kreiraj projekt [slika]</a></td>
 			<td><a href="/scrumko/register/"> <img src="/static/images/seznamZahtev.png" height="130" width="130">Seznam zahtev</a></td>
-			<td><a href="/scrumko/register/"><img src="/static/images/seznamNalog.png" height="130" width="130">Seznam nalog </a></td>
-		</tr>
-		<tr>
-			<td><a href="/scrumko/register/"><img src="/static/images/mojeNaloge.png" height="130" width="130">Moje naloge</a></td>
-			<td><a href="/scrumko/register/"><img src="/static/images/porocilo.png" height="130" width="130">Poročilo</a></td>
 			<td></td>
 		</tr>
+		
 		</table>
 		<!--this is just for test -->
 	  	<p>you are superuser</p>
 		<!--end of test -->
 	{% endif %}
-	{% if  request.user.is_staff%}	
+	
+	{% if  request.user.is_staff%}	<!-- only scrum master can see this -->
 		<table class="gridmenu">
 		<tr>
 			<td><a href="/scrumko/sprintcreate/">kreiraj sprint [slika]</a></td>
-			<td><a href="/scrumko/projectcreate/">kreiraj projekt [slika]</a></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td></td>
+			
 			<td></td>
 			<td></td>
 		</tr>
+		
 		</table>
-		<!--this is just for test -->
-	  	<p>you are not superuser</p>
-		<!--end of test -->
-	{% endif %}1
-	{% if  not request.user.is_staff and not request.user.is_admin%}	
+		
+	{% endif %}
+	
+	<!-- this can be seen by everyone -->
+	
 		<table class="gridmenu">
 		<tr>
-			<td><a href="/scrumko/register/"><img src="/static/images/wall.png" height="130" width="130">Projektni zid</a></td>
-			<td><a href="/scrumko/register/"> <img src="/static/images/seznamZahtev.png" height="130" width="130">Seznam zahtev</a></td>
-			<td><a href="/scrumko/register/"><img src="/static/images/seznamNalog.png" height="130" width="130">Seznam nalog </a></td>
+			<td><a href="/scrumko/register/"><img src="/static/images/wall.png" height="130" width="130"><br/>Projektni zid</a></td>
+			<td><a href="/scrumko/register/"> <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/>Seznam zahtev</a></td>
+			<td><a href="/scrumko/register/"><img src="/static/images/seznamNalog.png" height="130" width="130"><br/>Seznam nalog </a></td>
 		</tr>
 		<tr>
-			<td><a href="/scrumko/register/"><img src="/static/images/mojeNaloge.png" height="130" width="130">Moje naloge</a></td>
-			<td><a href="/scrumko/register/"><img src="/static/images/porocilo.png" height="130" width="130">Poročilo</a></td>
+			<td><a href="/scrumko/register/"><img src="/static/images/mojeNaloge.png" height="130" width="130"><br/>Moje naloge</a></td>
+			<td><a href="/scrumko/register/"><img src="/static/images/porocilo.png" height="130" width="130"><br/>Poročilo</a></td>
 			<td></td>
 		</tr>
 		</table>
-		<!--this is just for test -->
-	  	<p>you are not superuser</p>
-		<!--end of test -->
-	{% endif %}
+		
+	
 	
 {% endblock %}
