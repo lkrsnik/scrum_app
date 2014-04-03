@@ -19,6 +19,11 @@ h1
 	color: #4590ab;
 }
 
+input
+{
+	color: black;
+}
+
 /* page */
 
 .page
@@ -288,4 +293,49 @@ h1
 
 }
 
+/* style for div with information about succes adde something*/
+
+.succes
+{
+	margin: auto;
+	color: green;
+	background-color: #C6FCC0;
+	border: solid 1px;
+	border-color: green;
+	display: inline-block;
+
+	border-radius: 5px;
+	padding: 10px 30px 10px 30px;
+}
+
+.succes_hold
+{
+	text-align: center;
+}
+
+/* style for input fields on normal page */
+
+.mainwindow input, .mainwindow select
+{
+	
+	width: 200px;
+	margin: 0 20px 0 20px;
+	
+	border-radius: 5px;
+	
+	
+	height: 26px;
+}
+
+.mainwindow input[type="submit"]
+{
+	
+
+}
+
+.fieldwrapper
+{
+	float: left;
+	width: 30%;
+}
 

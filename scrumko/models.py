@@ -25,7 +25,7 @@ class Project(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
 	def __unicode__(self):
-		return self.project.project_name
+		return self.project_name
 
 
 	
@@ -40,4 +40,4 @@ class Sprint(models.Model):
 	velocity = models.IntegerField(blank=False)
 
 	def __unicode__(self):
-		return self.sprint.project_name
+		return self.project_name

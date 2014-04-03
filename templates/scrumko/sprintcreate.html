@@ -1,19 +1,44 @@
 {% extends 'scrumko/main.html' %}
 
 {% block body_block %}
+		
+        {% if registered %}
+			<div class="succes_hold">
+				<div class="succes">
+					Uspešno si dodal novo iteracijo.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+
+		
+		
+
         <h1>Dodajanje iteracij</h1>
 
-        {% if registered %}
-			Uporabnik je bil <strong>uspešno  </strong>dodan.<br/>
-			
-		{% endif %}
 			
 
 			<form id="sprint_form" method="post" action="/scrumko/sprintcreate/"
 					enctype="multipart/form-data">
 
 				{% csrf_token %}
-				{{ sprint_form.as_p }}
+				{% for field in sprint_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field.errors }}
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
 				
 				
 				<!-- Provide a button to click to submit the form. -->

@@ -1,8 +1,16 @@
+# -*- coding: utf-8 -*-
+
 from django import forms
 
 from scrumko.models import UserProfile, Sprint, Project
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.template.defaultfilters import mark_safe
+
+my_default_errors = {
+    'required': 'This field is required',
+    'invalid': 'Enter a valid value'
+}
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -17,8 +25,14 @@ class UserProfileForm(forms.ModelForm):
         fields = ('picture',)
 
 class SprintCreateForm(forms.ModelForm):
-    class Meta:
-        model = Sprint
+	
+	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), required=True, label = mark_safe('Ime projekta'), error_messages=my_default_errors)
+	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), required=True, error_messages=my_default_errors)
+	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'))
+	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'))
+	
+	class Meta:
+		model = Sprint
 		
 class ProjectCreateForm(forms.ModelForm):
 
