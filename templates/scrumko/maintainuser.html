@@ -1,0 +1,43 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+        <h1>Vzdrževanje uporabniških računov</h1>
+
+        {% if registered %}
+			Uporabnik je bil <strong>uspešno  </strong>spremenjen.<br/>
+			
+		{% endif %}
+			
+
+			<form id="user_form" method="post" action="/scrumko/maintainuser/"
+					enctype="multipart/form-data">
+
+				{% csrf_token %}
+			<!--	{{ user_dict.as_p }}   -->
+				
+			
+				{% for detail in user_detail %}
+					<div>
+						<div class="table">
+							{{ detail.id }}
+						</div>
+						<div class="table">
+							{{ detail.username }}
+						</div>
+						
+						<div class="table">
+							{{ detail.user_id }}
+						</div>
+						
+						<div class="table">
+							{{ detail.picture }}
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
+				
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" name="submit" value="Dodaj" />
+			</form>
+   {% endblock %}
