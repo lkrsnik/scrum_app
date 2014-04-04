@@ -2,19 +2,15 @@
 
 {% block body_block %}
 
-	<h1> Nadzorna plošča</h1>
+	<h1> Nadzorna ploĹˇÄŤa</h1>
 
 
-		
-	
-	
-		
 	{% if request.user.is_superuser %} <!-- only admin can see this -->
 		<table class="gridmenu">
 		<tr>
 			<td><a href="/scrumko/projectcreate/">kreiraj projekt [slika]</a></td>
 			<td><a href="/scrumko/register/"> <img src="/static/images/seznamZahtev.png" height="130" width="130">Seznam zahtev</a></td>
-			<td></td>
+			<td><a href="/scrumko/maintainuser/">VzdrĹľevanje uporabnikov [slika]</a></td>
 		</tr>
 		
 		</table>
@@ -28,7 +24,7 @@
 		<tr>
 			<td><a href="/scrumko/sprintcreate/">kreiraj sprint [slika]</a></td>
 			
-			<td></td>
+			<td><a href="/scrumko/maintainsprint/">VzdrĹľevanje sprintov [slika]</a></td>
 			<td></td>
 		</tr>
 		
@@ -46,7 +42,7 @@
 		</tr>
 		<tr>
 			<td><a href="/scrumko/register/"><img src="/static/images/mojeNaloge.png" height="130" width="130"><br/>Moje naloge</a></td>
-			<td><a href="/scrumko/register/"><img src="/static/images/porocilo.png" height="130" width="130"><br/>Poročilo</a></td>
+			<td><a href="/scrumko/register/"><img src="/static/images/porocilo.png" height="130" width="130"><br/>PoroÄŤilo</a></td>
 			<td></td>
 		</tr>
 		</table>
