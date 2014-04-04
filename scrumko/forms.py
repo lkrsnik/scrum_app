@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-
+from django.core.validators import RegexValidator
 from scrumko.models import UserProfile, Sprint, Project
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
+from django.core.exceptions import ValidationError
+from datetime import date
 
-my_default_errors = {
-    'required': 'This field is required',
-    'invalid': 'Enter a valid value'
+sprint_error = {
+    'required': 'To polje je obvezno.',    
 }
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -24,15 +26,6 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('picture',)
 
-class SprintCreateForm(forms.ModelForm):
-	
-	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), required=True, label = mark_safe('Ime projekta'), error_messages=my_default_errors)
-	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), required=True, error_messages=my_default_errors)
-	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'))
-	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'))
-	
-	class Meta:
-		model = Sprint
 		
 class ProjectCreateForm(forms.ModelForm):
 
@@ -44,7 +37,73 @@ class ProjectCreateForm(forms.ModelForm):
     class Meta:
         model = Project
         
-
+class SprintCreateForm(forms.ModelForm):
+	
+	
+	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
+	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)
+	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)
+	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'), error_messages=sprint_error, validators=[
+		RegexValidator(
+			regex='^[0-9]*$',
+			message='Hitrost mora biti pozitivno celo število',
+			code='invalid_value'
+		),
+	])   
+    		
+    
+    # for validating date
+	def clean_start_date(self):
+		start_date = self.cleaned_data['start_date']
+		project_name_id = self.cleaned_data['project_name']
+		
+		#covering with the other sprint
+		covering = Sprint.objects.filter(start_date__gte=start_date, finish_date__lte=start_date, project_name = project_name_id)
+		
+		print len(covering)
+		
+		if len(covering) > 0:
+			raise ValidationError("Datum se prekriva z drugo iteracijo.")
+			return
+		
+		# check if not in past
+		if start_date < date.today():
+			raise ValidationError("Ne smete vnašati preteklih datumov.")
+			return
+		
+		
+		
+								
+		return start_date
+		
+	def clean_finish_date(self):
+		end_date = self.cleaned_data['finish_date']
+		project_name_id = self.cleaned_data['project_name']
+		
+		#covering with the other sprint
+		covering = Sprint.objects.filter(start_date__gte=end_date, finish_date__lte=end_date, project_name = project_name_id)
+					
+		if len(covering) > 0:
+			raise ValidationError("Datum se prekriva z drugo iteracijo.")
+			return
+		
+		# check if not in past
+		if end_date < date.today():
+			raise ValidationError("Ne smete vnašati preteklih datumov.")
+			return
+			
+		# check if start berfore end
+		start_date = self.cleaned_data['start_date']
+		
+		if end_date < start_date:
+			raise ValidationError("Začetek iteracije mora biti pred koncem.")
+			return
+								
+		return end_date
+		
+	
+	class Meta:
+		model = Sprint
 
 
 

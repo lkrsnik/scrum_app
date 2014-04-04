@@ -7,9 +7,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
+
+
 from scrumko.models import User
 from scrumko.models import UserProfile
-from scrumko.models import Sprint
+from scrumko.models import Sprint, Project
 #from scrumko.forms import UserForm, UserProfileForm
 
 @login_required
@@ -132,6 +134,7 @@ def index(request):
         # blank dictionary object...
         return render_to_response('scrumko/index.html', {}, context)
 
+
 # Use the login_required() decorator to ensure only those logged in can access the view.
 @login_required
 def user_logout(request):
@@ -140,6 +143,7 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/scrumko/')
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -157,6 +161,9 @@ def sprintcreate(request):
         # Note that we make use of both UserForm and UserProfileForm.
   		sprint_form = SprintCreateForm(data=request.POST)
   		
+  		
+  		
+  		 		
         # If the two forms are valid...
 		if sprint_form.is_valid():
             # Save the user's form data to the database.
@@ -178,11 +185,19 @@ def sprintcreate(request):
         # They'll also be shown to the user.
 		else:
 			print sprint_form.errors
+			return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
+			
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
 	
-	sprint_form = SprintCreateForm()
+	
+	# set id of project to hidden input field
+	current_user = request.user.id
+	user_project =  Project.objects.filter(scrum_master__id = current_user)
+	r = user_project[0]
+		
+	sprint_form = SprintCreateForm(initial={'project_name': r.id})
 		
 		
     # Render the template depending on the context.

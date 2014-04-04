@@ -24,6 +24,11 @@ input
 	color: black;
 }
 
+select
+{
+	color: black;
+}
+
 /* page */
 
 .page
@@ -318,7 +323,7 @@ input
 .mainwindow input, .mainwindow select
 {
 	
-	width: 100px;
+	width: 200px;
 	margin: 0 20px 0 20px;
 	
 	border-radius: 5px;
@@ -331,10 +336,21 @@ input
 
 }
 
-.fieldwrapper
+.mainwindow select[multiple="multiple"]
+{
+	height: 300px;
+
+}
+
+.fieldwrapper, .errorwrapper
 {
 	float: left;
 	width: 30%;
+}
+
+.errorwrapper
+{
+	color: red;
 }
 
 .userTable {

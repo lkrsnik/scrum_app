@@ -11,7 +11,18 @@
 			<br/>
 		{% endif %}
 
-		
+			<script>
+				$(function() {
+					$( "#id_start_date" ).datepicker();
+				});
+		  </script>
+		  
+		  <script>
+				$(function() {
+					$( "#id_finish_date" ).datepicker();
+				});
+		  </script>
+
 		
 
         <h1>Dodajanje iteracij</h1>
@@ -22,6 +33,10 @@
 					enctype="multipart/form-data">
 
 				{% csrf_token %}
+				{% for hidden in sprint_form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+
 				{% for field in sprint_form.visible_fields %}
 					<div>
 						<div class="fieldwrapper">
@@ -32,8 +47,9 @@
 							{{ field }}
 						</div>
 						
-						<div class="fieldwrapper">
-							{{ field.errors }}
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
 						</div>
 					</div>
 					<br/>

@@ -25,13 +25,7 @@ class Project(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
 	def __unicode__(self):
-		return self.project_name
-
-
-	
-
-
-
+		return self.id
 
 class Sprint(models.Model):
 	project_name = models.ForeignKey(Project)
