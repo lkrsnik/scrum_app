@@ -28,11 +28,6 @@ class Project(models.Model):
 		return self.project_name
 
 
-	
-
-
-
-
 class Sprint(models.Model):
 	project_name = models.ForeignKey(Project)
 	start_date = models.DateField(blank=False)
