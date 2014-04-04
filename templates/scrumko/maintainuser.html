@@ -2,84 +2,42 @@
 
 {% block body_block %}
         <h1>Vzdrževanje uporabniških računov</h1>
-		{% if request.user.is_superuser %} <!-- only admin can see this -->
+
+        {% if registered %}
+			Uporabnik je bil <strong>uspešno  </strong>spremenjen.<br/>
+			
+		{% endif %}
+			
+
 			<form id="user_form" method="post" action="/scrumko/maintainuser/"
 					enctype="multipart/form-data">
-			{% csrf_token %}
-			<table>
-				<tr>
-						<td class="userTableFIRST">
-							ID
-						</td>
-						<td class="userTableFIRST">
-							Uporabniško ime
-						</td>
-						
-						<td class="userTableFIRST">
-							Email
-						</td>
-						<td class="userTableFIRST">
-							Geslo
-						</td>
-						<td class="userTableFIRST">
-							Superuser
-						</td>						
-						<td class="userTableFIRST">
-							Staff
-						</td>
-						<td class="userTableFIRST">
-							Uredi
-						</td>
-						<td class="userTableFIRST">
-							Izbriši
-						</td>
+
+				{% csrf_token %}
+			<!--	{{ user_dict.as_p }}   -->
+				
 			
-				</tr>
 				{% for detail in user_detail %}
-				<tr>
-						<td class="userTableCenter">
+					<div>
+						<div class="table">
 							{{ detail.id }}
-						</td>
-						<td class="userTable">
+						</div>
+						<div class="table">
 							{{ detail.username }}
-						</td>
+						</div>
 						
-						<td class="userTable">
-							{{ detail.email }}
-						</td>
-						<td class="userTable">
-							*****
-						</td>	
-						<td class="userTableCenter">
-							{% if  detail.is_superuser  %}
-								<img src="/static/images/yes.png" alt="yes" height="15" width="15">
-							{% else %}
-								<img src="/static/images/no.png" alt="yes" height="15" width="15">
-							{% endif %}
-						</td>	
-						<td class="userTableCenter">
-							{% if  detail.is_staff  %}
-								<img src="/static/images/yes.png" alt="yes" height="15" width="15">
-							{% else %}
-								<img src="/static/images/no.png" alt="yes" height="15" width="15">
-							{% endif %}
-						</td>	
-						<td class="userTable">
-							<a href="edit"><img src="/static/images/edit.png" alt="yes" height="15" width="15">Uredi</a>						
-						</td>	
-						<td class="userTable">
-							{% if  button.onclick %}
-							<input type="button"  value="Izbriši" />
-							<img src="/static/images/delete.png" alt="yes" height="15" width="15">
-							{% endif %}
+						<div class="table">
+							{{ detail.user_id }}
+						</div>
 						
-						</td>	
-				</tr>
+						<div class="table">
+							{{ detail.picture }}
+						</div>
+					</div>
 					<br/>
 					<br/>
 				{% endfor %}
-			</table>
-			
+				
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" name="submit" value="Dodaj" />
 			</form>
-			{% endif %}
    {% endblock %}

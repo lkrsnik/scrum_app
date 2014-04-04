@@ -6,10 +6,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
-from scrumko.models import User
-from scrumko.models import UserProfile
-from scrumko.models import Sprint
 #from scrumko.forms import UserForm, UserProfileForm
 
 @login_required
@@ -188,7 +184,6 @@ def sprintcreate(request):
     # Render the template depending on the context.
 	return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
 
-
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def projectcreate(request):
@@ -235,24 +230,3 @@ def projectcreate(request):
 		
     # Render the template depending on the context.
 	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered}, context)
-
-def maintainuser(request):
-	context = RequestContext(request)
-	user_info = User.objects.all()
-	user_data = {"user_detail" : user_info}
-
-	
-    # Render the template depending on the context.
-	return render_to_response('scrumko/maintainuser.html',user_data, context)
-	
-def maintainsprint(request):
-	context = RequestContext(request)
-	sprint_info = Sprint.objects.all()
-	sprint_data = {"sprint_detail" : sprint_info}
-
-	
-    # Render the template depending on the context.
-	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
-
-
-
