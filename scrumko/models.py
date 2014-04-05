@@ -25,7 +25,7 @@ class Project(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
 	def __unicode__(self):
-		return self.id
+		return str(self.id)
 
 class Sprint(models.Model):
 	project_name = models.ForeignKey(Project)
@@ -34,4 +34,4 @@ class Sprint(models.Model):
 	velocity = models.IntegerField(blank=False)
 
 	def __unicode__(self):
-		return self.project_name
+		return str(self.project_name)
