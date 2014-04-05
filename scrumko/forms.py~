@@ -15,6 +15,10 @@ sprint_error = {
 required_error = {
 	'required': 'To polje je obvezno.',
 }
+velocity_error = {
+	'required': 'To polje je obvezno.',    
+	'invalid': 'Prosim vpišite celo število',
+}
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(label = mark_safe(u'Geslo'), widget=forms.PasswordInput(), error_messages=required_error)
@@ -24,10 +28,10 @@ class UserForm(forms.ModelForm):
     username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'is_superuser', 'is_staff')
+        fields = ('username', 'email', 'password', 'is_superuser')
 
 class UserProfileForm(forms.ModelForm):
-    picture = forms.ImageField(label = mark_safe(u'Prikazna slika'))
+    picture = forms.ImageField(label = mark_safe(u'Prikazna slika'), required=False)
     class Meta:
         model = UserProfile
         fields = ('picture',)
@@ -49,7 +53,7 @@ class SprintCreateForm(forms.ModelForm):
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
 	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)
 	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)
-	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'), error_messages=sprint_error, validators=[
+	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'), error_messages=velocity_error, validators=[
 		RegexValidator(
 			regex='^[0-9]*$',
 			message='Hitrost mora biti pozitivno celo število',
