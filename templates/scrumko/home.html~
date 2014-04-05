@@ -1,46 +1,30 @@
-{% extends 'scrumko/base.html' %}
+{% extends 'scrumko/main.html' %}
 
 {% block body_block %}
 
-	<h1> Nadzorna plošča</h1>
+	<h1> Nadzorna ploĹˇÄŤa</h1>
 
+
+	
+		<table class="gridmenu">
+		{% if request.user.is_superuser %}		
+		<tr>
+			<td><a href="/scrumko/projectcreate/">Kreiraj projekt [slika]</a></td>
+			<td><a href="/scrumko/register/"> <img src="/static/images/seznamZahtev.png" height="130" width="130">Dodajanje 			uporabnikov<a></td>
+			<td><a href="/scrumko/maintainuser/">Vzdrževanje uporabnikov [slika]</a></td>
+		</tr>
+		{% endif %}
+		{% if  request.user.is_staff%}
+			<tr>
+			<td><a href="/scrumko/sprintcreate/">Kreiraj sprint [slika]</a></td>
+			
+			<td><a href="/scrumko/maintainsprint/">Vzdrževanje sprintov [slika]</a></td>
+			<td></td>
+			</tr>
+		{% endif %}
+		</table>
 
 		
 	
-	
-		
-	{% if request.user.is_superuser %}
-		<table class="gridmenu">
-		<tr>
-			<td><a href="/scrumko/register/>dodaj uporabnika [slika]</p></td>
-			<td></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-		</tr>
-		</table>
-		<!--this is just for test -->
-	  	<p>you are superuser</p>
-		<!--end of test -->
-	{% else %}	
-		<table class="gridmenu">
-		<tr>
-			<td><p></p></td>
-			<td></td>
-			<td></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-		</tr>
-		</table>
-		<!--this is just for test -->
-	  	<p>you are not superuser</p>
-		<!--end of test -->
-	{% endif %}
 	
 {% endblock %}
