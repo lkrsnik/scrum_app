@@ -6,18 +6,39 @@
         {% if registered %}
        	Uporabnik je bil <strong>uspešno  </strong>dodan.<br/>
         <a href="/scrumko/register/">Dodaj še enega uporabnika.</a><br/>
-        {% else %}
+        	{% endif %}
         
 
         <form id="user_form" method="post" action="/scrumko/register/"
                 enctype="multipart/form-data">
 
             {% csrf_token %}
-            {{ user_form.as_p }}
+	    {% for hidden in user_form.hidden_fields %}
+		{{ hidden }}
+	    {% endfor %}
+	    {% for field in user_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+	    {% endfor %}
+ 
             {{ profile_form.as_p }}
-			{{ status_form.as_p }}
+			
             <!-- Provide a button to click to submit the form. -->
             <input type="submit" name="submit" value="Dodaj" />
         </form>
-        {% endif %}
+       
 {% endblock %}

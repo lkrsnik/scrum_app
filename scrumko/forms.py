@@ -12,16 +12,22 @@ from datetime import date
 sprint_error = {
     'required': 'To polje je obvezno.',    
 }
-
+required_error = {
+	'required': 'To polje je obvezno.',
+}
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-    email = forms.EmailField(required=True)
+    password = forms.CharField(label = mark_safe(u'Geslo'), widget=forms.PasswordInput(), error_messages=required_error)
+    email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
+    is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
+    is_staff = forms.BooleanField(label = mark_safe(u'Lastnik projekta'), required=False)
+    username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'is_superuser', 'is_staff')
 
 class UserProfileForm(forms.ModelForm):
+    picture = forms.ImageField(label = mark_safe(u'Prikazna slika'), required=False)
     class Meta:
         model = UserProfile
         fields = ('picture',)
