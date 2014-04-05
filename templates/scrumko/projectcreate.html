@@ -24,7 +24,7 @@
 				{% endfor %}
 
 				{% for field in project_form.visible_fields %}
-					<div>
+					<div class="formpart">
 						<div class="fieldwrapper">
 							{{ field.label_tag }}
 						</div>
@@ -42,6 +42,6 @@
 					<br/>
 				{% endfor %}
 				<!-- Provide a button to click to submit the form. -->
-				<input type="submit" class="formpart" name="submit" value="Dodaj" />
+				<input type="submit" name="submit" value="Dodaj" />
 			</form>
    {% endblock %}
