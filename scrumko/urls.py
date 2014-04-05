@@ -9,5 +9,6 @@ urlpatterns = patterns('',
 	url(r'^sprintcreate/$', views.sprintcreate, name='spcreate'),
 	url(r'^projectcreate/$', views.projectcreate, name='prcreate'),
 	url(r'^maintainuser/$', views.maintainuser, name='maintainuser'),
-	url(r'^maintainsprint/$', views.maintainsprint, name='maintainsprint')
+	url(r'^maintainsprint/$', views.maintainsprint, name='maintainsprint'),
+	url(r'^maintainproject/$', views.maintainproject, name='maintainproject'),
 	)
