@@ -11,16 +11,16 @@ class UserProfile(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
 	def __unicode__(self):
+		#related to Project DON'T CHANGE!
 		return self.user.username
 
 class Project(models.Model):
    
     # The additional attributes we wish to include.
-    
 	project_name =  models.CharField(blank=False, max_length=50)
-	project_owner =  models.ForeignKey(User, related_name='owner')
-	scrum_master = models.ForeignKey(User, related_name='master')
-	team = models.ManyToManyField(User)
+	project_owner =  models.ForeignKey(User, related_name='owner', blank=False)
+	scrum_master = models.ForeignKey(User, related_name='master', blank=False)
+	team = models.ManyToManyField(User, blank=False)
 	
 
     # Override the __unicode__() method to return out something meaningful!

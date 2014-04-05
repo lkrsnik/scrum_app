@@ -4,8 +4,12 @@
         <h1>Dodajanje projekta</h1>
 
         {% if registered %}
-			Projekt je bil <strong>uspešno  </strong>dodan.<br/>
-			
+			<div class="succes_hold">
+				<div class="succes">
+					Projekt je bil <strong>uspešno  </strong>dodan.
+				</div>
+			</div>
+			<br/>
 		{% endif %}
 			
 
@@ -13,17 +17,30 @@
 					enctype="multipart/form-data">
 
 				{% csrf_token %}
-				{{ project_form.as_p }}
+				<!--{{ project_form.as_p }}-->
 				
-				<!--{% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
+				{% for hidden in project_form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
 
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text}}
-                {{ field }}
-            {% endfor %}-->
+				{% for field in project_form.visible_fields %}
+					<div class="formpart">
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
 				<!-- Provide a button to click to submit the form. -->
 				<input type="submit" name="submit" value="Dodaj" />
 			</form>

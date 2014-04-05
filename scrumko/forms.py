@@ -41,17 +41,56 @@ class UserProfileForm(forms.ModelForm):
 		
 class ProjectCreateForm(forms.ModelForm):
 
-    project_name =  forms.CharField(max_length=50, help_text="Ime projekta")
-    #project_owner =  models.ForeignKey(widget=forms.HiddenInput())
-    #scrum_master = models.ForeignKey(widget=forms.HiddenInput())
-    #team = models.ManyToManyField(widget=forms.HiddenInput())
+	project_name =  forms.CharField(label = mark_safe(u'Ime projekta'),max_length=50, error_messages=required_error)
+	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Produktni vodja'),queryset=User.objects.all(),error_messages=required_error)
+	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Skrbnik scrum metodologije'),queryset=User.objects.all(),error_messages=required_error)
+	team = forms.ModelMultipleChoiceField(label = mark_safe(u'Ekipa(za več izborov uporabi "Ctrl" ali "Cmd")'),queryset=User.objects.all(),error_messages=required_error)
 
-    class Meta:
-        model = Project
+	#already exist validation
+	def clean_project_name(self):
+		
+		project_name = self.cleaned_data['project_name']
+		
+		covering = Project.objects.filter(project_name=project_name)
+		if len(covering) > 0:
+			raise ValidationError("To projektno ime že obstaja.")
+			return
+		return project_name
+	
+	#validate if name already taken under other roles
+	def clean_scrum_master(self):
+		scrum_master = self.cleaned_data['scrum_master']
+		try:
+			project_owner = self.cleaned_data['project_owner']
+		except KeyError:
+			return scrum_master
+		
+		if scrum_master==project_owner:
+			raise ValidationError("Vloga "+str(scrum_master)+" je že zasedena.")
+			return
+		return scrum_master
+	
+	#validate if name already taken under other roles
+	def clean_team(self):
+		team = self.cleaned_data['team']
+		try:
+			project_owner = self.cleaned_data['project_owner']
+			scrum_master = self.cleaned_data['scrum_master']
+		except KeyError:
+			return team
+		
+		for member in team:
+			if member==project_owner or member==scrum_master:
+				raise ValidationError("Vloga "+str(member)+" je že zasedena.")
+				return
+		
+		
+		return team
+		
+	class Meta:
+		model = Project
         
-class SprintCreateForm(forms.ModelForm):
-	
-	
+class SprintCreateForm(forms.ModelForm):	
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
 	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)	
 	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)	
