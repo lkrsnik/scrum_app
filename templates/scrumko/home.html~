@@ -2,23 +2,22 @@
 
 {% block body_block %}
 
-	<h1> Nadzorna ploĹˇÄŤa</h1>
+	<h1> Nadzorna plošča</h1>
 
 
 	
 		<table class="gridmenu">
 		{% if request.user.is_superuser %}		
 		<tr>
-			<td><a href="/scrumko/projectcreate/">Kreiraj projekt [slika]</a></td>
-			<td><a href="/scrumko/register/"> <img src="/static/images/seznamZahtev.png" height="130" width="130">Dodajanje 			uporabnikov<a></td>
-			<td><a href="/scrumko/maintainuser/">Vzdrževanje uporabnikov [slika]</a></td>
+			<td><a href="/scrumko/projectcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> Kreiraj 				projekt</a></td>
+			<td><a href="/scrumko/register/"> <img src="/static/images/user.png" height="130" width="130"> Dodajanje 				uporabnikov<a></td>
+			<td><a href="/scrumko/maintainuser/"> <img src="/static/images/user.png" height="130" width="130"> Vzdrževanje 				uporabnikov</a></td>
 		</tr>
 		{% endif %}
 		{% if  request.user.is_staff%}
 			<tr>
-			<td><a href="/scrumko/sprintcreate/">Kreiraj sprint [slika]</a></td>
-			
-			<td><a href="/scrumko/maintainsprint/">Vzdrževanje sprintov [slika]</a></td>
+			<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> Kreiraj 				sprint</a></td>			
+			<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> 				Vzdrževanje sprintov</a></td>
 			<td></td>
 			</tr>
 		{% endif %}
