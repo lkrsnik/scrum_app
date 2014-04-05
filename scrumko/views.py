@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
+from django.db import transaction
 
 
 from scrumko.models import User
@@ -165,6 +165,7 @@ def sprintcreate(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
+@transaction.atomic
 def projectcreate(request):
     # Like before, get the request's context.
 	context = RequestContext(request)
@@ -181,15 +182,22 @@ def projectcreate(request):
   		
         # If the two forms are valid...
 		if project_form.is_valid():
+		
             # Save the user's form data to the database.
-	    
+			scrum_master=User.objects.filter(id = int(request.POST.get('scrum_master')))
+			scrum_master.update(is_staff = True)
+
+			for member in scrum_master:
+				member.save()
+				print member
+
 			project = project_form.save()
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             			
 			project.save()
-
+			
 			# check if is scrum master or team member
            
             # Update our variable to tell the template registration was successful.
@@ -200,6 +208,7 @@ def projectcreate(request):
         # They'll also be shown to the user.
 		else:
 			print project_form.errors
+			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered}, context)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
