@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
 from django.core.exceptions import ValidationError
-from datetime import date
+from datetime import date, datetime
 
 sprint_error = {
     'required': 'To polje je obvezno.',    
@@ -51,8 +51,8 @@ class SprintCreateForm(forms.ModelForm):
 	
 	
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
-	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)
-	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)
+	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)	
+	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)	
 	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'), error_messages=velocity_error, validators=[
 		RegexValidator(
 			regex='^[0-9]*$',
@@ -103,7 +103,9 @@ class SprintCreateForm(forms.ModelForm):
 			return
 			
 		# check if start berfore end
-		start_date = self.cleaned_data['start_date']
+		start_date = self.data.get('start_date')
+		
+		start_date = datetime.strptime(start_date, "%m/%d/%Y").date()
 		
 		if end_date < start_date:
 			raise ValidationError("Začetek iteracije mora biti pred koncem.")
