@@ -1,0 +1,39 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+        <h1>Vzdrževanje projektov</h1>
+	<table>
+	   	
+		
+		<tr>
+			<td class="userTableFIRST">
+				Ime projekta
+			</td>
+			<td class="userTableFIRST">
+				Lastnik projekta
+			</td>
+			
+			<td class="userTableFIRST">
+				
+			</td>
+		</tr>
+		{% for detail in project_detail %}
+		<tr>
+			<td class="userTable">
+				{{ detail.project_name }}
+			</td>
+		
+			<td class="userTable">
+				{{ detail.project_owner }}
+			</td>
+			
+			<td class="userTable">
+			<a href="edit"><img src="/static/images/edit.png" alt="edit" height="15" 		width="15">Uredi<a>						
+			</td>	
+				
+		</tr>
+	<br/>
+	<br/>
+	{% endfor %}
+	</table>
+{% endblock %}

@@ -228,6 +228,16 @@ def maintainsprint(request):
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
 
+def maintainproject(request):
+	context = RequestContext(request)
+	project_info = Project.objects.all()
+	project_data = {"project_detail" : project_info}	
+    # Render the template depending on the context.
+	return render_to_response('scrumko/maintainproject.html', project_data, context)
+
+
+
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def storycreate(request):
@@ -254,3 +264,4 @@ def storycreate(request):
 	story_form = StoryForm(initial={'project_name': r.id})
 	
 	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
+

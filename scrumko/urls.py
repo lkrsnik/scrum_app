@@ -11,4 +11,5 @@ urlpatterns = patterns('',
 	url(r'^maintainuser/$', views.maintainuser, name='maintainuser'),
 	url(r'^maintainsprint/$', views.maintainsprint, name='maintainsprint'),
 	url(r'^storycreate/$', views.storycreate, name='storycreate'),
+	url(r'^maintainproject/$', views.maintainproject, name='maintainproject'),
 	)
