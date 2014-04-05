@@ -43,14 +43,17 @@
 							{{ field.label_tag }}
 						</div>
 						
-						<div class="fieldwrapper">
+						<div class="fieldwrapper2">
 							{{ field }}
+							
+							
+							<div class="errorwrapper2">
+								{{ field.errors.as_text }}
+							
+							</div>
 						</div>
 						
-						<div class="errorwrapper">
-							{{ field.errors.as_text }}
-							
-						</div>
+						
 					</div>
 					<br/>
 					<br/>

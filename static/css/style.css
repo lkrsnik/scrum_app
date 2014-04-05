@@ -342,6 +342,29 @@ select, textarea, opition
 	
 }
 
+/* style for wide form */
+.fieldwrapper2 input, .fieldwrapper2 select
+{
+	
+	width: 400px;
+	margin: 0 20px 0 20px;
+	
+	border-radius: 5px;
+	height: 26px;
+}
+
+.fieldwrapper2 textarea
+{
+	
+	width: 400px;
+	margin: 0 20px 0 20px;
+	resize: none;
+	border-radius: 5px;
+	
+}
+
+
+
 .mainwindow input[type="submit"]
 {
 	
@@ -360,7 +383,13 @@ select, textarea, opition
 	width: 30%;
 }
 
-.errorwrapper
+.fieldwrapper2, .errorwrapper2
+{
+	float: left;
+	width: 55%;
+}
+
+.errorwrapper, .errorwrapper2
 {
 	color: red;
 }
