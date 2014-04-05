@@ -25,6 +25,7 @@ class Project(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
 	def __unicode__(self):
+		# do not change, related to sprint
 		return str(self.id)
 
 class Sprint(models.Model):
@@ -35,3 +36,28 @@ class Sprint(models.Model):
 
 	def __unicode__(self):
 		return str(self.project_name)
+
+
+class Story (models.Model):
+	project_name = models.ForeignKey(Project)
+	story_name = models.CharField(blank=False, max_length=100)
+	text = models.TextField(blank=False, max_length=1000)
+	bussines_value = models.IntegerField(blank=False)
+	
+	PRIORITY_CHOICES = (
+        ('must have', 'must have'),
+        ('could have', 'could have'),
+        ('should have', 'should have'),
+        ('won\'t have this time', 'won\'t have this time'),
+    )
+    
+	priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, null=True, default='must have', blank=False)
+	test_text = models.TextField(blank=False, max_length=1000)
+	
+	def __unicode__(self):
+		return self.story_name
+		
+
+
+
+

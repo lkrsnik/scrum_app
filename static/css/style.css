@@ -24,10 +24,12 @@ input
 	color: black;
 }
 
-select
+select, textarea, opition
 {
 	color: black;
 }
+
+
 
 /* page */
 
@@ -330,6 +332,16 @@ select
 	height: 26px;
 }
 
+.mainwindow textarea
+{
+	
+	width: 200px;
+	margin: 0 20px 0 20px;
+	resize: none;
+	border-radius: 5px;
+	
+}
+
 .mainwindow input[type="submit"]
 {
 	
@@ -351,6 +363,13 @@ select
 .errorwrapper
 {
 	color: red;
+}
+
+/* div hold one form line */
+.formpart
+{
+	width: 100%;
+	display: inline-block;
 }
 
 .userTable {

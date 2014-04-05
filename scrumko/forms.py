@@ -2,7 +2,7 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from scrumko.models import UserProfile, Sprint, Project
+from scrumko.models import UserProfile, Sprint, Project, Story
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
@@ -19,6 +19,8 @@ velocity_error = {
 	'required': 'To polje je obvezno.',    
 	'invalid': 'Prosim vpišite celo število',
 }
+
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(label = mark_safe(u'Geslo'), widget=forms.PasswordInput(), error_messages=required_error)
@@ -116,6 +118,42 @@ class SprintCreateForm(forms.ModelForm):
 	
 	class Meta:
 		model = Sprint
+
+class StoryForm (forms.ModelForm):
+	
+	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
+	story_name = forms.CharField(label = mark_safe('Ime uporabniške zgodbe'), error_messages=required_error)
+	text = forms.CharField(label = mark_safe('Opis uporabniške zgodbe'), widget=forms.Textarea, error_messages=required_error)
+	bussines_value = forms.IntegerField(label = mark_safe('Poslovna vrednost'), error_messages=velocity_error, validators=[
+		RegexValidator(
+			regex='^[0-9]*$',
+			message='Vpišite pozitivno celo število',
+			code='invalid'
+		),
+	])
+	
+		
+	priority = forms.TypedChoiceField(label = mark_safe('Prioriteta'), choices=Story.PRIORITY_CHOICES)
+	test_text = forms.CharField(label = mark_safe('Sprejemni testi'), widget=forms.Textarea, error_messages=required_error)
+	
+	class Meta:
+		model = Story
+		
+	def clean_story_name(self):
+		story_name_new = self.cleaned_data['story_name']
+		project_name_id = self.cleaned_data['project_name']
+		
+		#covering with the other story name
+		covering = Story.objects.filter(story_name = story_name_new, project_name = project_name_id)
+					
+		if len(covering) > 0:
+			raise ValidationError("Zgodba z enakim imenom že obstaja.")
+			return
+		
+		return story_name_new
+	
+	
+
 
 
 

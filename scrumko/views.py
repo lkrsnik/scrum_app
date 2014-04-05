@@ -1,6 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm
+
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
@@ -227,5 +228,29 @@ def maintainsprint(request):
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
 
-
-
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def storycreate(request):
+    
+	context = RequestContext(request)
+	registered = False
+	if request.method == 'POST':
+  		story_form = StoryForm(data=request.POST)
+  		
+  				
+		if story_form.is_valid():	    
+			story = story_form.save()	    
+									
+				
+			registered = True
+		else:
+			print story_form.errors
+			return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
+			
+	current_user = request.user.id
+	user_project =  Project.objects.filter(scrum_master__id = current_user)
+	r = user_project[0]
+	
+	story_form = StoryForm(initial={'project_name': r.id})
+	
+	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
