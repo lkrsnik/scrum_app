@@ -107,11 +107,15 @@ class SprintCreateForm(forms.ModelForm):
 		# check if start berfore end
 		start_date = self.data.get('start_date')
 		
-		start_date = datetime.strptime(start_date, "%m/%d/%Y").date()
-		
+		try:
+			start_date = datetime.strptime(start_date, "%m/%d/%Y").date()
+		except:
+			return end_date
+						
 		if end_date < start_date:
 			raise ValidationError("Začetek iteracije mora biti pred koncem.")
-			return
+			return 
+		
 								
 		return end_date
 		
