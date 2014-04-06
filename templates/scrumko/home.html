@@ -31,7 +31,7 @@
 			</tr>
 		{% endif %}
 		
-		{% if  request.user.is_staff and request.user.is_superuser %}
+		{% if  request.user.is_staff or request.user.is_superuser %}
 			<tr>
 				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> 				Vzdrževanje projektov</a></td>			
 				<td></td>

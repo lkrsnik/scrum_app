@@ -1,0 +1,29 @@
+{% extends 'scrumko/base.html' %}
+{% block header_block %}
+	<li><a href="/scrumko/home/">Domov</a></li>
+	<li><a href="">Projektni zid</a></li>
+	<li><a href="">Seznam zahtev</a></li>
+	<li><a href="">Seznam nalog</a></li>
+	<li><a href="">Moje naloge</a></li>
+	<li><a href="">Poročilo</a></li>
+
+{% endblock %}
+
+
+{% block body_block %}
+	
+{% endblock %}
+			
+{% block side_block %}
+	
+	<h1> Obvestila</h1>					
+	<h2> Narediti </h2>
+	
+	<h2> Nedavne aktivnosti </h2>
+
+	
+	<h2> Sporočila </h2>
+
+	
+{% endblock %}
+					

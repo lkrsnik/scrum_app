@@ -436,6 +436,24 @@ select, textarea, option
 	background-color: rgba(255, 255, 255, 0.1);
 	font-weight:900;
 }
-
+.projectTable {
+	margin:5px;
+	padding:5px;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	border:1px solid #000000;
+	table-layout: fixed;
+	width:700px;
+	
+}
+.projectTableFIRST {
+	margin:5px;
+	padding:5px;
+	width:100%;
+	
+	border:1px solid #000000;
+	background-color: rgba(255, 255, 255, 0.01);
+	font-weight:900;
+}
 
 
