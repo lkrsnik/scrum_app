@@ -17,17 +17,25 @@ from scrumko.models import Sprint, Project
 
 @login_required
 def home(request):
+	
+	# get current user
+	current_user = request.user.id
+	
+	# check if current user product owner
+	user_project_owner =  Project.objects.filter(project_owner__id = current_user)
+	is_owner = len (user_project_owner) > 0
+	
     # Request the context of the request.
     # The context contains information such as the client's machine 	details, for example.
-    context = RequestContext(request)
+	context = RequestContext(request)
 
     # Construct a dictionary to pass to the template engine as its context.
     # Note the key boldmessage is the same as {{ boldmessage }} in the template!
-    context_dict = {};
+	context_dict = {'is_owner':is_owner};
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
-    return render_to_response('scrumko/home.html', context_dict, context)
+	return render_to_response('scrumko/home.html', context_dict, context)
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -165,7 +173,7 @@ def sprintcreate(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
-@transaction.atomic
+#@transaction.atomic
 def projectcreate(request):
     # Like before, get the request's context.
 	context = RequestContext(request)
@@ -248,13 +256,25 @@ def maintainproject(request):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
+#@user_passes_test(lambda u: u.is_staff)
 def storycreate(request):
     
+    # get current user
+	current_user = request.user.id
+	
+	# check on which project is this user owner or scrum master
+	user_project_master =  Project.objects.filter(scrum_master__id = current_user)
+	user_project_owner =  Project.objects.filter(project_owner__id = current_user)
+    
+    # check if user is scrum master or owner 
+    # if not redirect (he has no permision to this site)
+	if len (user_project_master) == 0 and len (user_project_owner) == 0:
+		return HttpResponseRedirect("/scrumko/home")
+	       
 	context = RequestContext(request)
 	registered = False
 	if request.method == 'POST':
-  		story_form = StoryForm(data=request.POST)
+		story_form = StoryForm(data=request.POST)
   		
   				
 		if story_form.is_valid():	    
@@ -265,11 +285,14 @@ def storycreate(request):
 		else:
 			print story_form.errors
 			return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
-			
-	current_user = request.user.id
-	user_project =  Project.objects.filter(scrum_master__id = current_user)
-	r = user_project[0]
+		
+	# take project where user is scrum master or owner
+	if len (user_project_master) > 0:
+		r = user_project_master[0]
+	else:
+		r = user_project_owner[0]
 	
+	# fill hidden with id of project
 	story_form = StoryForm(initial={'project_name': r.id})
 	
 	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
