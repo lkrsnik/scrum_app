@@ -24,7 +24,7 @@ input
 	color: black;
 }
 
-select, textarea, opition
+select, textarea, option
 {
 	color: black;
 }
@@ -97,11 +97,14 @@ select, textarea, opition
 
 .pagebody
 {
-	overflow: auto;
+	
 	margin: auto;
 	
 	width: 1100px;
+	
 	height: auto;
+	overflow-x:hidden;
+	overflow-y: hidden;
 }
 
 .mainwindow
@@ -109,6 +112,7 @@ select, textarea, opition
 	
 	
 	height: auto;
+	
 	
 	width: 70%;
 	float: left;
