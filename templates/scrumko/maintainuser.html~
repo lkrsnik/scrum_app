@@ -75,7 +75,8 @@
 						
 						</td>	
 				</tr>
-					
+					<br/>
+					<br/>
 				{% endfor %}
 			</table>
 			

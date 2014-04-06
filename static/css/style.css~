@@ -24,7 +24,7 @@ input
 	color: black;
 }
 
-select, textarea, opition
+select, textarea, option
 {
 	color: black;
 }
@@ -97,11 +97,14 @@ select, textarea, opition
 
 .pagebody
 {
-	overflow: auto;
+	
 	margin: auto;
 	
 	width: 1100px;
+	
 	height: auto;
+	overflow-x:hidden;
+	overflow-y: hidden;
 }
 
 .mainwindow
@@ -109,6 +112,7 @@ select, textarea, opition
 	
 	
 	height: auto;
+	
 	
 	width: 70%;
 	float: left;
@@ -303,6 +307,7 @@ select, textarea, opition
 {
 	font-size: 10px;	
 	color: red;
+	font-weight: normal;
 }
 
 /* style for div with information about succes adde something*/
@@ -431,6 +436,24 @@ select, textarea, opition
 	background-color: rgba(255, 255, 255, 0.1);
 	font-weight:900;
 }
-
+.projectTable {
+	margin:5px;
+	padding:5px;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	border:1px solid #000000;
+	table-layout: fixed;
+	width:700px;
+	
+}
+.projectTableFIRST {
+	margin:5px;
+	padding:5px;
+	width:100%;
+	text-align:center;
+	border:1px solid #000000;
+	background-color: rgba(255, 255, 255, 0.01);
+	font-weight:900;
+}
 
 

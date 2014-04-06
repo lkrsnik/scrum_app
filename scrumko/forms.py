@@ -68,7 +68,7 @@ class ProjectCreateForm(forms.ModelForm):
 		if len(covering) > 0:
 			raise ValidationError("To projektno ime že obstaja.")
 			return
-		return projeclean_project_name
+		return project_name
 	
 	#validate if name already taken under other roles
 	def clean_scrum_master(self):
