@@ -24,7 +24,7 @@ input
 	color: black;
 }
 
-select, textarea, option
+select, textarea, opition
 {
 	color: black;
 }
@@ -97,14 +97,11 @@ select, textarea, option
 
 .pagebody
 {
-	
+	overflow: auto;
 	margin: auto;
 	
 	width: 1100px;
-	
 	height: auto;
-	overflow-x:hidden;
-	overflow-y: hidden;
 }
 
 .mainwindow
@@ -112,7 +109,6 @@ select, textarea, option
 	
 	
 	height: auto;
-	
 	
 	width: 70%;
 	float: left;
@@ -307,7 +303,6 @@ select, textarea, option
 {
 	font-size: 10px;	
 	color: red;
-	font-weight: normal;
 }
 
 /* style for div with information about succes adde something*/

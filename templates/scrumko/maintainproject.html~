@@ -10,11 +10,11 @@
 				Ime projekta
 			</td>
 			<td class="userTableFIRST">
-				Uporabniško ime
+				Lastnik projekta
 			</td>
 			
 			<td class="userTableFIRST">
-				Lastnik projekta
+				
 			</td>
 		</tr>
 		{% for detail in project_detail %}

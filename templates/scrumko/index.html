@@ -18,7 +18,13 @@
             Geslo
             <br/>
              <input type="password" name="password" value="" size="50" class="loginfield"/>
-            <br /><br/>
+            
+	    {% if success %}
+		<br /><br/>
+	    {% else %}
+		<h2 class="error">Neveljaven vnos!&nbsp Poskusite ponovno.</h2>
+		 
+	    {% endif %}
 
             <input type="submit" value="submit" />
             

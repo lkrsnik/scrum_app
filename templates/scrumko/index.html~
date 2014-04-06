@@ -1,31 +1,34 @@
-{% extends 'scrumko/welcomebase.html' %}
+{% extends 'scrumko/base2.html' %}
 
 {% block body_block %}
-<!--
-<h1> Nadzorna plošča</h1>
 
-<table class="gridmenu">
-	<tr>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td></td>
-		<td></td>
-	</tr>
-</table>-->
-<h1>Login to Rango</h1>
 
-        <form id="index" method="post" action="/scrumko/home/">
+
+		<h1 class="header2">Prijava</h1>
+
+		
+
+        <form id="index" method="post" action="/scrumko/" >
             {% csrf_token %}
-            Username: <input type="text" name="username" value="" size="50" />
+            Uporabniško ime
+            <br class=""/>
+            <input type="text" name="username" value="" size="50" class="loginfield"/>
             <br />
-            Password: <input type="password" name="password" value="" size="50" />
-            <br />
+            <br/>
+            Geslo
+            <br/>
+             <input type="password" name="password" value="" size="50" class="loginfield"/>
+            
+	    {% if success %}
+		<br /><br/>
+	    {% else %}
+		<h2 class="error">Neveljaven vnos!Poskusite ponovno.</h2>
+		 
+	    {% endif %}
 
             <input type="submit" value="submit" />
+            
+            <br/><br/>
         </form>				
 			
 {% endblock %}

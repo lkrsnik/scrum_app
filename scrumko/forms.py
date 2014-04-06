@@ -23,15 +23,28 @@ velocity_error = {
 
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(label = mark_safe(u'Geslo'), widget=forms.PasswordInput(), error_messages=required_error)
+	
+    
     email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
     is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
-
     username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
+    first_name = forms.CharField(label = mark_safe(u'Ime'), error_messages=required_error)
+    last_name = forms.CharField(label = mark_safe(u'Priimek'), error_messages=required_error)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Geslo", error_messages=required_error)
+    password2 = forms.CharField(widget=forms.PasswordInput(), label="Ponovite geslo", error_messages=required_error)
+
+    def clean_password(self):
+        if self.data['password'] != self.data['password2']:
+            raise forms.ValidationError('Gesli se ne ujemata.')
+        return self.data['password']
+	
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'is_superuser')
+        fields = ('first_name', 'last_name', 'username', 'email', 'is_superuser','password',)
+	
 
+
+    
 class UserProfileForm(forms.ModelForm):
     picture = forms.ImageField(label = mark_safe(u'Prikazna slika'), required=False)
     class Meta:
@@ -55,7 +68,7 @@ class ProjectCreateForm(forms.ModelForm):
 		if len(covering) > 0:
 			raise ValidationError("To projektno ime že obstaja.")
 			return
-		return project_name
+		return projeclean_project_name
 	
 	#validate if name already taken under other roles
 	def clean_scrum_master(self):
