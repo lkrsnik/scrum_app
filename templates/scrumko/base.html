@@ -29,7 +29,12 @@
 		<!--LOGOUT BUTTON - CHANGE POSITION -->
 		
 			{% if user.is_authenticated %}
-			<img src="{% static "images/user.png" %}" id="user"  alt="user" />
+			{% if user.userprofile.picture %}
+            			<img src="{{MEDIA_URL}}{{ user.userprofile.picture }}" id="user"  alt="user" />
+			{% else %}
+				<img src="{% static  'images/user.png' %}" id="user"  alt="user" />
+        		{% endif %}
+			
 				<div  id="userdata">
 					<a href="/scrumko/logout/">Odjava </a> &nbsp; &nbsp;
 					{{ user.username }}

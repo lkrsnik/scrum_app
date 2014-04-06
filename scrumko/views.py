@@ -61,7 +61,7 @@ def register(request):
 def index(request):
     # Like before, obtain the context for the user's request.
     context = RequestContext(request)
-
+    success=True;
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
         # Gather the username and password provided by the user.
@@ -85,18 +85,21 @@ def index(request):
                 return HttpResponseRedirect('/scrumko/home/')
             else:
                 # An inactive account was used - no logging in!
+                success=False;
                 return HttpResponse("Your Rango account is disabled.")
         else:
             # Bad login details were provided. So we can't log the user in.
             print "Invalid login details: {0}, {1}".format(username, password)
-            return HttpResponse("Invalid login details supplied.")
+            success=False;
+            return render_to_response('scrumko/index.html', {'success': success}, context)
+            #return HttpResponse("Invalid login details supplied.")
 
     # The request is not a HTTP POST, so display the login form.
     # This scenario would most likely be a HTTP GET.
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render_to_response('scrumko/index.html', {}, context)
+        return render_to_response('scrumko/index.html', {'success': success}, context)
 
 
 # Use the login_required() decorator to ensure only those logged in can access the view.
@@ -165,7 +168,7 @@ def sprintcreate(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
-@transaction.atomic
+#@transaction.atomic
 def projectcreate(request):
     # Like before, get the request's context.
 	context = RequestContext(request)

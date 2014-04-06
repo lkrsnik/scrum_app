@@ -1,42 +1,101 @@
-{% extends 'scrumko/welcomebase.html' %}
-{% block header_block %}
-	<li><a href="">Projektni zid</a></li>
-	<li><a href="">Seznam zahtev</a></li>
-	<li><a href="">Seznam nalog</a></li>
-	<li><a href="">Moje naloge</a></li>
-	<li><a href="">Poročilo</a></li>
+<!DOCTYPE html>
 
-{% endblock %}
+{% load static %}
+
+<html>
+<head>
+<title>Scrumko</title>
+
+	<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
 
 
-{% block body_block %}
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+	<!-- fonts from google -->
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+	<!-- jquery -->
+	<link href="{% static 'jquery/css/smoothness/jquery-ui-1.10.4.custom.css' %}" rel="stylesheet">
+	<script src="{% static  'jquery/js/jquery-1.10.2.js' %}"></script>
+	<script src="{% static  'jquery/js/jquery-ui-1.10.4.custom.js' %}"></script>
+
+</head>
+
+<body>
 	
-{% endblock %}
+	<div class="userbarhold">
+		<div class="userbar">
+		<!--LOGOUT BUTTON - CHANGE POSITION -->
+		
+			{% if user.is_authenticated %}
+			{% if userprofile.picture %}
+            			<img src="{{MEDIA_URL}}{{ user.userprofile.picture }}" id="user"  alt="user" />
+			{% else %}
+				<img src="{% static  'images/user.png' %}" id="user"  alt="user" />
+        		{% endif %}
 			
-{% block side_block %}
-	<!--LOGOUT BUTTON - CHANGE POSITION -->	
-	{% if user.is_authenticated %}
-	<h1>{{ user.username }}</h1>		
-	<a href="/scrumko/logout/">Logout </a><br />
-	<a href="/scrumko/home/">Logout </a><br />			
-	{% endif %}
-	<!--END OF LOGOUT BUTTON-->
-	<h1> Obvestila</h1>					
-	<h2> Narediti </h2>
-	<br/>
-	<br/>
-	<br/>
-	
-	<h2> Nedavne aktivnosti </h2>
-	<br/>
-	<br/>
-	<br/>
-	
-	<h2> Sporočila </h2>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	
-{% endblock %}
+				<div  id="userdata">
+					<a href="/scrumko/logout/">Odjava </a> &nbsp; &nbsp;
+					{{ user.username }}
 					
+				</div>
+			{% endif %}
+				<!--END OF LOGOUT BUTTON </div> -->
+			
+			
+		</div>
+	</div>
+	
+	<div class="page">
+		
+		<!-- header of a page -->
+		<div class="headerhold">
+			<div class="menulogo">
+				
+				<div class="logo">
+					scrumko
+				</div>
+				
+				<div class="menu">
+					<ul>
+						{% block header_block %}{% endblock %}
+					</ul>
+				
+				
+				</div>
+				
+			</div>
+		</div>
+		<!-- body of a pege -->
+		<div class="bodyhold">
+			<div class="pagebody">
+				
+				<div class="mainwindow">
+					
+					{% block body_block %}{% endblock %}
+				
+				</div>
+				<div class="sidemenu">
+				
+					{% block side_block %}{% endblock %}
+				</div>
+				
+				
+			</div>
+		</div>
+
+		<div class="footer">
+			<div class="cpyright">
+				<br/>
+				&copy; Petra Mihalič, Manca Žerovnik, Luka Krsnik, Primož Godec
+			</div>
+		
+		</div>
+		
+	</div>
+
+
+</body>
+
+</html>

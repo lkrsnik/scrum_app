@@ -303,7 +303,6 @@ select, textarea, opition
 {
 	font-size: 10px;	
 	color: red;
-	font-weight: normal;
 }
 
 /* style for div with information about succes adde something*/

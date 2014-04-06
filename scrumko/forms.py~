@@ -2,12 +2,12 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from scrumko.models import UserProfile, Sprint, Project
+from scrumko.models import UserProfile, Sprint, Project, Story
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
 from django.core.exceptions import ValidationError
-from datetime import date
+from datetime import date, datetime
 
 sprint_error = {
     'required': 'To polje je obvezno.',    
@@ -20,16 +20,31 @@ velocity_error = {
 	'invalid': 'Prosim vpišite celo število',
 }
 
+
+
 class UserForm(forms.ModelForm):
-    password = forms.CharField(label = mark_safe(u'Geslo'), widget=forms.PasswordInput(), error_messages=required_error)
+	
+    
     email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
     is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
-    is_staff = forms.BooleanField(label = mark_safe(u'Lastnik projekta'), required=False)
     username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
+    first_name = forms.CharField(label = mark_safe(u'Ime'), error_messages=required_error)
+    last_name = forms.CharField(label = mark_safe(u'Priimek'), error_messages=required_error)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Geslo")
+    password2 = forms.CharField(widget=forms.PasswordInput(), label="Ponovite geslo")
+
+    def clean_password(self):
+        if self.data['password'] != self.data['password2']:
+            raise forms.ValidationError('Gesli se ne ujemata.')
+        return self.data['password']
+	
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'is_superuser')
+        fields = ('first_name', 'last_name', 'username', 'email', 'is_superuser','password',)
+	
 
+
+    
 class UserProfileForm(forms.ModelForm):
     picture = forms.ImageField(label = mark_safe(u'Prikazna slika'), required=False)
     class Meta:
@@ -39,20 +54,59 @@ class UserProfileForm(forms.ModelForm):
 		
 class ProjectCreateForm(forms.ModelForm):
 
-    project_name =  forms.CharField(max_length=50, help_text="Ime projekta")
-    #project_owner =  models.ForeignKey(widget=forms.HiddenInput())
-    #scrum_master = models.ForeignKey(widget=forms.HiddenInput())
-    #team = models.ManyToManyField(widget=forms.HiddenInput())
+	project_name =  forms.CharField(label = mark_safe(u'Ime projekta'),max_length=50, error_messages=required_error)
+	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Produktni vodja'),queryset=User.objects.all(),error_messages=required_error)
+	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Skrbnik scrum metodologije'),queryset=User.objects.all(),error_messages=required_error)
+	team = forms.ModelMultipleChoiceField(label = mark_safe(u'Ekipa(za več izborov uporabi "Ctrl" ali "Cmd")'),queryset=User.objects.all(),error_messages=required_error)
 
-    class Meta:
-        model = Project
+	#already exist validation
+	def clean_project_name(self):
+		
+		project_name = self.cleaned_data['project_name']
+		
+		covering = Project.objects.filter(project_name=project_name)
+		if len(covering) > 0:
+			raise ValidationError("To projektno ime že obstaja.")
+			return
+		return projeclean_project_name
+	
+	#validate if name already taken under other roles
+	def clean_scrum_master(self):
+		scrum_master = self.cleaned_data['scrum_master']
+		try:
+			project_owner = self.cleaned_data['project_owner']
+		except KeyError:
+			return scrum_master
+		
+		if scrum_master==project_owner:
+			raise ValidationError("Vloga "+str(scrum_master)+" je že zasedena.")
+			return
+		return scrum_master
+	
+	#validate if name already taken under other roles
+	def clean_team(self):
+		team = self.cleaned_data['team']
+		try:
+			project_owner = self.cleaned_data['project_owner']
+			scrum_master = self.cleaned_data['scrum_master']
+		except KeyError:
+			return team
+		
+		for member in team:
+			if member==project_owner or member==scrum_master:
+				raise ValidationError("Vloga "+str(member)+" je že zasedena.")
+				return
+		
+		
+		return team
+		
+	class Meta:
+		model = Project
         
-class SprintCreateForm(forms.ModelForm):
-	
-	
+class SprintCreateForm(forms.ModelForm):	
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
-	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)
-	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)
+	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)	
+	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)	
 	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'), error_messages=velocity_error, validators=[
 		RegexValidator(
 			regex='^[0-9]*$',
@@ -103,17 +157,59 @@ class SprintCreateForm(forms.ModelForm):
 			return
 			
 		# check if start berfore end
-		start_date = self.cleaned_data['start_date']
+		start_date = self.data.get('start_date')
 		
+		try:
+			start_date = datetime.strptime(start_date, "%m/%d/%Y").date()
+		except:
+			return end_date
+						
 		if end_date < start_date:
 			raise ValidationError("Začetek iteracije mora biti pred koncem.")
-			return
+			return 
+		
 								
 		return end_date
 		
 	
 	class Meta:
 		model = Sprint
+
+class StoryForm (forms.ModelForm):
+	
+	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
+	story_name = forms.CharField(label = mark_safe('Ime uporabniške zgodbe'), error_messages=required_error)
+	text = forms.CharField(label = mark_safe('Opis uporabniške zgodbe'), widget=forms.Textarea, error_messages=required_error)
+	bussines_value = forms.IntegerField(label = mark_safe('Poslovna vrednost'), error_messages=velocity_error, validators=[
+		RegexValidator(
+			regex='^[0-9]*$',
+			message='Vpišite pozitivno celo število',
+			code='invalid'
+		),
+	])
+	
+		
+	priority = forms.TypedChoiceField(label = mark_safe('Prioriteta'), choices=Story.PRIORITY_CHOICES)
+	test_text = forms.CharField(label = mark_safe('Sprejemni testi'), widget=forms.Textarea, error_messages=required_error)
+	
+	class Meta:
+		model = Story
+		
+	def clean_story_name(self):
+		story_name_new = self.cleaned_data['story_name']
+		project_name_id = self.cleaned_data['project_name']
+		
+		#covering with the other story name
+		covering = Story.objects.filter(story_name = story_name_new, project_name = project_name_id)
+					
+		if len(covering) > 0:
+			raise ValidationError("Zgodba z enakim imenom že obstaja.")
+			return
+		
+		return story_name_new
+	
+	
+
 
 
 
