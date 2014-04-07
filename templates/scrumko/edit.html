@@ -1,0 +1,64 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+        <h1>Urejanje uporabnika</h1>
+
+        {% if registered %}
+       	Uporabnik je bil <strong>uspesno  </strong>dodan.<br/>
+        <a href="/scrumko/edit">Dodaj se enega uporabnika.</a><br/>
+        	
+        
+	{% else %}
+        <form id="user_form" method="post" action="/scrumko/edit/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+	    {% for hidden in user_form.hidden_fields %}
+		{{ hidden }}
+	    {% endfor %}
+	    {% for field in user_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+	    {% endfor %}
+	     {% for hidden in profile_form.hidden_fields %}
+		{{ hidden }}
+	    {% endfor %}
+	    {% for field in profile_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+
+	    {% endfor %}
+ 
+         
+			
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Dodaj" />
+        </form>
+       {% endif %}
+{% endblock %}
