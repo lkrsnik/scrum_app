@@ -17,7 +17,7 @@ required_error = {
 }
 velocity_error = {
 	'required': 'To polje je obvezno.',    
-	'invalid': 'Prosim vpišite celo število',
+	'invalid': 'Prosim vpišite celo pozitivno število',
 }
 
 
