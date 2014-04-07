@@ -292,7 +292,7 @@ def storycreate(request):
 	# take project where user is scrum master or owner
 	if len (user_project_master) > 0:
 		r = user_project_master[0]
-	else:
+	elif len (user_project_owner) > 0:
 		r = user_project_owner[0]
 	
 	# fill hidden with id of project
