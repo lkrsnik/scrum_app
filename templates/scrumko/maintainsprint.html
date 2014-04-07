@@ -1,0 +1,67 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+        <h1>Vzdrzevanje sprintov</h1>
+		{% if request.user.is_staff %} <!-- only admin can see this -->
+		
+			
+				<table>
+				<tr>
+						<td class="userTableFIRST">
+							Ime projekta
+						</td>
+						<td class="userTableFIRST">
+							Zacetek sprinta
+						</td>
+						
+						<td class="userTableFIRST">
+							Konec sprinta
+						</td>
+						<td class="userTableFIRST">
+							Hitrost
+						</td>
+						<td class="userTableFIRST">
+							Uredi
+						</td>
+						<td class="userTableFIRST">
+							Izbrisi
+						</td>
+			
+				</tr>
+				{% for detail in sprint_data %}
+				<tr>
+						<td class="userTableCenter">
+							{{ detail.project_name }}
+						</td>
+						<td class="userTable">
+							{{ detail.start_date }}
+						</td>
+						
+						<td class="userTable">
+							{{ detail.finish_date }}
+						</td>
+						<td class="userTable">
+							{{ detail.velocity }}
+						</td>	
+						<td class="userTable">
+							<a href="edit"><img src="/static/images/edit.png" alt="yes" height="15" width="15">Uredi</a>						
+						</td>	
+						<td class="userTable">
+							{% if  button.onclick %}
+							<input type="button"  value="Izbrisi" />
+							<img src="/static/images/delete.png" alt="yes" height="15" width="15">
+							{% endif %}
+						
+						</td>	
+						
+				</tr>
+				{% endfor %}
+			</table>
+				
+				
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" name="submit" value="Dodaj" />
+			</form>
+			</form>
+		{% endif %}
+   {% endblock %}

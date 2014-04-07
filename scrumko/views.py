@@ -300,3 +300,29 @@ def storycreate(request):
 	
 	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
 
+def edit(request):
+	#manjka: preko seje pridobi uporabnika!
+	context = RequestContext(request)
+	registered = False
+	if request.method == 'POST':
+  		user_form = UserForm(data=request.POST)
+  		profile_form = UserProfileForm(data=request.POST)
+		
+		if user_form.is_valid() and profile_form.is_valid():	    
+			user = user_form.save()	    
+			user.set_password(user.password)
+			user.save()
+			profile = profile_form.save(commit=False)
+			profile.user = user
+
+			if 'picture' in request.FILES:
+				profile.picture = request.FILES['picture']
+			profile.save()
+			registered = True
+		else:
+			print user_form.errors, profile_form.errors
+			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
+	else:
+		user_form = UserForm()
+		profile_form = UserProfileForm()
+	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
