@@ -5,11 +5,12 @@ body {
 	margin: 0;
 	background-color: #282828;
 	
+	font-family: 'Open Sans', sans-serif;
+	color: #c9c9c9;
 }
 
 *{
-	font-family: 'Open Sans', sans-serif;
-	color: #c9c9c9;
+	
 }
 
 h1
@@ -456,4 +457,8 @@ select, textarea, option
 	font-weight:900;
 }
 
+.ui-datepicker-year
+{
+	color: black !important;
+}
 

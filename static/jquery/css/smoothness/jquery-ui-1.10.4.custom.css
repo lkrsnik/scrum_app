@@ -301,10 +301,12 @@ button.ui-button::-moz-focus-inner {
 	width: 17em;
 	padding: .2em .2em 0;
 	display: none;
+	color: black;
 }
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
 	padding: .2em 0;
+	color: black;
 }
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
@@ -337,11 +339,13 @@ button.ui-button::-moz-focus-inner {
 	margin-left: -8px;
 	top: 50%;
 	margin-top: -8px;
+	color: black;
 }
 .ui-datepicker .ui-datepicker-title {
 	margin: 0 2.3em;
 	line-height: 1.8em;
 	text-align: center;
+	color: black;
 }
 .ui-datepicker .ui-datepicker-title select {
 	font-size: 1em;
@@ -349,6 +353,7 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
+	color: black;
 	width: 49%;
 }
 .ui-datepicker table {

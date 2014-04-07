@@ -121,8 +121,11 @@ class SprintCreateForm(forms.ModelForm):
 		start_date = self.cleaned_data['start_date']
 		project_name_id = self.cleaned_data['project_name']
 		
+		print project_name_id
+	
 		#covering with the other sprint
-		covering = Sprint.objects.filter(start_date__gte=start_date, finish_date__lte=start_date, project_name = project_name_id)
+		covering = Sprint.objects.filter(start_date__lte=start_date, finish_date__gte=start_date, project_name=project_name_id)
+		
 		
 		print len(covering)
 		
@@ -145,7 +148,7 @@ class SprintCreateForm(forms.ModelForm):
 		project_name_id = self.cleaned_data['project_name']
 		
 		#covering with the other sprint
-		covering = Sprint.objects.filter(start_date__gte=end_date, finish_date__lte=end_date, project_name = project_name_id)
+		covering = Sprint.objects.filter(start_date__lte=end_date, finish_date__gte=end_date, project_name=project_name_id)
 					
 		if len(covering) > 0:
 			raise ValidationError("Datum se prekriva z drugo iteracijo.")
