@@ -55,9 +55,9 @@ class UserProfileForm(forms.ModelForm):
 class ProjectCreateForm(forms.ModelForm):
 
 	project_name =  forms.CharField(label = mark_safe(u'Ime projekta'),max_length=50, error_messages=required_error)
-	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Produktni vodja'),queryset=User.objects.all(),error_messages=required_error)
-	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Skrbnik scrum metodologije'),queryset=User.objects.all(),error_messages=required_error)
-	team = forms.ModelMultipleChoiceField(label = mark_safe(u'Ekipa(za več izborov uporabi "Ctrl" ali "Cmd")'),queryset=User.objects.all(),error_messages=required_error)
+	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Produktni vodja'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
+	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Skrbnik scrum metodologije'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
+	team = forms.ModelMultipleChoiceField(label = mark_safe(u'Ekipa(za več izborov uporabi "Ctrl" ali "Cmd")'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
 
 	#already exist validation
 	def clean_project_name(self):
@@ -86,16 +86,6 @@ class ProjectCreateForm(forms.ModelForm):
 	#validate if name already taken under other roles
 	def clean_team(self):
 		team = self.cleaned_data['team']
-		try:
-			project_owner = self.cleaned_data['project_owner']
-			scrum_master = self.cleaned_data['scrum_master']
-		except KeyError:
-			return team
-		
-		for member in team:
-			if member==project_owner or member==scrum_master:
-				raise ValidationError("Vloga "+str(member)+" je že zasedena.")
-				return
 		
 		
 		return team
