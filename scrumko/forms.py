@@ -10,14 +10,14 @@ from django.core.exceptions import ValidationError
 from datetime import date, datetime
 
 sprint_error = {
-    'required': 'To polje je obvezno.',    
+    'required': 'Required.',    
 }
 required_error = {
-	'required': 'To polje je obvezno.',
+	'required':  'Required.',  
 }
 velocity_error = {
-	'required': 'To polje je obvezno.',    
-	'invalid': 'Prosim vpišite celo pozitivno število',
+	'required':  'Required.',     
+	'invalid': 'Please enter a positive integer.',
 }
 
 
@@ -95,12 +95,12 @@ class ProjectCreateForm(forms.ModelForm):
         
 class SprintCreateForm(forms.ModelForm):	
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
-	start_date = forms.DateField(label = mark_safe(u'Datum začetka'), error_messages=sprint_error)	
-	finish_date = forms.DateField(label = mark_safe(u'Datum zaključka'), error_messages=sprint_error)	
-	velocity = forms.IntegerField(label = mark_safe(u'Predvidena hitrost'), error_messages=velocity_error, validators=[
+	start_date = forms.DateField(label = mark_safe(u'Begining'), error_messages=sprint_error)	
+	finish_date = forms.DateField(label = mark_safe(u'End'), error_messages=sprint_error)	
+	velocity = forms.IntegerField(label = mark_safe(u'Planned velocity'), error_messages=velocity_error, validators=[
 		RegexValidator(
-			regex='^[0-9]*$',
-			message='Hitrost mora biti pozitivno celo število',
+			regex='^[1-9][0-9]*$',
+			message='Please enter a positive integer.',
 			code='invalid_value'
 		),
 	])   
@@ -120,12 +120,12 @@ class SprintCreateForm(forms.ModelForm):
 		print len(covering)
 		
 		if len(covering) > 0:
-			raise ValidationError("Datum se prekriva z drugo iteracijo.")
+			raise ValidationError("Date overlaps with another sprint.")
 			return
 		
 		# check if not in past
 		if start_date < date.today():
-			raise ValidationError("Ne smete vnašati preteklih datumov.")
+			raise ValidationError("Do not enter past dates.")
 			return
 		
 		
@@ -141,12 +141,12 @@ class SprintCreateForm(forms.ModelForm):
 		covering = Sprint.objects.filter(start_date__lte=end_date, finish_date__gte=end_date, project_name=project_name_id)
 					
 		if len(covering) > 0:
-			raise ValidationError("Datum se prekriva z drugo iteracijo.")
+			raise ValidationError("Date overlaps with another sprint.")
 			return
 		
 		# check if not in past
 		if end_date < date.today():
-			raise ValidationError("Ne smete vnašati preteklih datumov.")
+			raise ValidationError("Do not enter past dates.")
 			return
 			
 		# check if start berfore end
@@ -158,7 +158,7 @@ class SprintCreateForm(forms.ModelForm):
 			return end_date
 						
 		if end_date < start_date:
-			raise ValidationError("Začetek iteracije mora biti pred koncem.")
+			raise ValidationError("Begining date must be before end date.")
 			return 
 		
 								
@@ -171,19 +171,19 @@ class SprintCreateForm(forms.ModelForm):
 class StoryForm (forms.ModelForm):
 	
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
-	story_name = forms.CharField(label = mark_safe('Ime uporabniške zgodbe'), error_messages=required_error)
-	text = forms.CharField(label = mark_safe('Opis uporabniške zgodbe'), widget=forms.Textarea, error_messages=required_error)
-	bussines_value = forms.IntegerField(label = mark_safe('Poslovna vrednost'), error_messages=velocity_error, validators=[
+	story_name = forms.CharField(label = mark_safe('Name'), error_messages=required_error)
+	text = forms.CharField(label = mark_safe('Content'), widget=forms.Textarea, error_messages=required_error)
+	bussines_value = forms.IntegerField(label = mark_safe('Bussines value'), error_messages=velocity_error, validators=[
 		RegexValidator(
 			regex='^[0-9]*$',
-			message='Vpišite pozitivno celo število',
+			message='Please enter a positive integer.',
 			code='invalid'
 		),
 	])
 	
 		
-	priority = forms.TypedChoiceField(label = mark_safe('Prioriteta'), choices=Story.PRIORITY_CHOICES)
-	test_text = forms.CharField(label = mark_safe('Sprejemni testi'), widget=forms.Textarea, error_messages=required_error)
+	priority = forms.TypedChoiceField(label = mark_safe('Priority'), choices=Story.PRIORITY_CHOICES)
+	test_text = forms.CharField(label = mark_safe('Acceptance tests'), widget=forms.Textarea, error_messages=required_error)
 	
 	class Meta:
 		model = Story
@@ -196,7 +196,7 @@ class StoryForm (forms.ModelForm):
 		covering = Story.objects.filter(story_name = story_name_new, project_name = project_name_id)
 					
 		if len(covering) > 0:
-			raise ValidationError("Zgodba z enakim imenom že obstaja.")
+			raise ValidationError("Story with same name allready exsist.")
 			return
 		
 		return story_name_new

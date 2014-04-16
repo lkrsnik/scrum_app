@@ -2,30 +2,30 @@
 
 {% block body_block %}
 
-	<h1> Nadzorna plošča</h1>
+	<h1> Control panel</h1>
 
-
+	<div class="cpanel">
 	
 		<table class="gridmenu">
 		{% if request.user.is_superuser %}		
 			<tr>
-				<td><a href="/scrumko/projectcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> Kreiraj 				projekt</a></td>
-				<td><a href="/scrumko/register/"> <img src="/static/images/user.png" height="130" width="130"> Dodajanje novih 				uporabnikov<a></td>
-				<td><a href="/scrumko/maintainuser/"> <img src="/static/images/user.png" height="130" width="130"> Vzdrževanje 				uporabnikov</a></td>
+				<td><a href="/scrumko/projectcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> <br/> Create new project </a></td>
+				<td><a href="/scrumko/register/"> <img src="/static/images/user.png" height="130" width="130"><br/> Add new user <a></td>
+				<td><a href="/scrumko/maintainuser/"> <img src="/static/images/user.png" height="130" width="130"><br/> Edit user data</a></td>
 				
 			</tr>
 		{% endif %}
 		{% if  request.user.is_staff%}
 			<tr>
-				<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> Kreiraj 				sprint</a></td>			
-				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> 				Vzdrževanje sprintov</a></td>
-				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"> Dodajanje uporabniških zgodb</a></td>
+				<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Create new sprint</a></td>			
+				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Sprint data edit</a></td>
+				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user story </a></td>
 			
 			</tr>
 		{% endif %}
 		{% if  is_owner %}
 			<tr>
-				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"> Dodajanje uporabniških zgodb</a></td>
+				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user story </a></td>
 				<td></td>
 				<td></td>
 			</tr>
@@ -33,14 +33,14 @@
 		
 		{% if  request.user.is_staff or request.user.is_superuser %}
 			<tr>
-				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> 				Vzdrževanje projektov</a></td>			
+				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Edit project data</a></td>			
 				<td></td>
 				<td></td>
 			</tr>
 		{% endif %}
 		</table>
 
-		
+	</div>
 	
 	
 {% endblock %}

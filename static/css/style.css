@@ -30,6 +30,11 @@ select, textarea, option
 	color: black;
 }
 
+a
+{
+	color: white;
+	text-decoration: none;
+}
 
 
 /* page */
@@ -277,6 +282,17 @@ select, textarea, option
 	height: 22px;
 }
 
+.loginfieldsubmit
+{
+	width: 50%;
+	margin: 0 5% 0 5%;
+	
+	border-radius: 5px;
+	
+	
+	height: 30px;
+}
+
 #index
 {
 	width: 495px;
@@ -306,7 +322,8 @@ select, textarea, option
 }
 .error
 {
-	font-size: 10px;	
+		
+	font-size: 15px;	
 	color: red;
 	font-weight: normal;
 }
@@ -341,6 +358,11 @@ select, textarea, option
 	
 	border-radius: 5px;
 	height: 26px;
+}
+
+.mainwindow2 input
+{
+	
 }
 
 .mainwindow textarea
@@ -397,7 +419,7 @@ select, textarea, option
 .fieldwrapper2, .errorwrapper2
 {
 	float: left;
-	width: 55%;
+	width: 65%;
 }
 
 .errorwrapper, .errorwrapper2
@@ -461,4 +483,5 @@ select, textarea, option
 {
 	color: black !important;
 }
+
 

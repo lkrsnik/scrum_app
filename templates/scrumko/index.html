@@ -4,29 +4,29 @@
 
 
 
-		<h1 class="header2">Prijava</h1>
+		<h1 class="header2">Login</h1>
 
 		
 
         <form id="index" method="post" action="/scrumko/" >
             {% csrf_token %}
-            Uporabniško ime
+            Username
             <br class=""/>
             <input type="text" name="username" value="" size="50" class="loginfield"/>
             <br />
             <br/>
-            Geslo
+            Password
             <br/>
              <input type="password" name="password" value="" size="50" class="loginfield"/>
             
-	    {% if success %}
-		<br /><br/>
-	    {% else %}
-		<h2 class="error">Neveljaven vnos!&nbsp Poskusite ponovno.</h2>
-		 
-	    {% endif %}
+			{% if success %}
+				<br /><br/>
+			{% else %}
+				<h2 class="error"> Invalid username or password please try again!</h2>
+			 
+			{% endif %}
 
-            <input type="submit" value="submit" />
+            <input type="submit" value="Submit" class="loginfieldsubmit" />
             
             <br/><br/>
         </form>				
