@@ -12,5 +12,5 @@ urlpatterns = patterns('',
 	url(r'^maintainsprint/$', views.maintainsprint, name='maintainsprint'),
 	url(r'^storycreate/$', views.storycreate, name='storycreate'),
 	url(r'^maintainproject/$', views.maintainproject, name='maintainproject'),
-	url(r'^edit/$', views.edit, name='edit')
+	url(r'^edit/$', views.edit, name='edit'),
 	)

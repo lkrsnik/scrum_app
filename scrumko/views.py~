@@ -36,8 +36,16 @@ def home(request):
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
 	project_info = Project.objects.all()
-	project_data = {"project_detail" : project_info}
-	return render_to_response('scrumko/home.html', context_dict, project_data, context)
+	context_dict = {"project_detail" : project_info}	
+	if int(request.GET.get('project_id', '0'))>0:
+		request.session['selected_project'] = request.GET.get('project_id', '0')
+		request.session['project_name'] = request.GET.get('name', '')
+	else:
+		if not request.session.get('selected_project')
+			request.session['selected_project'] = ''	
+			request.session['project_name'] = ''
+	return render_to_response('scrumko/home.html', context_dict, context)
+
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)

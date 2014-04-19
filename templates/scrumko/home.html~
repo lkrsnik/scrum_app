@@ -1,6 +1,7 @@
 {% extends 'scrumko/main.html' %}
 
 {% block body_block %}
+	
 	<h1> Choose current project </h1>
 		<table class=projectTable>
 	   	
@@ -37,7 +38,7 @@
 				</td>
 			
 				<td class="projectTable">
-				<a href="">Select<a>						
+				<a href="?project_id={{detail.id}}">Select<a>						
 				</td>	
 				
 			</tr>

@@ -15,7 +15,8 @@
 {% endblock %}
 			
 {% block side_block %}
-	<h1> Selected project</h1>	
+	<h1> Current project</h1>
+	<h2>{{ request.session.selected_project }}</h2>
 	<h1> Notifications</h1>					
 	<h2> To do </h2>
 	<br/>
