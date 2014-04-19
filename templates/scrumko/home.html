@@ -60,7 +60,7 @@
 				
 			</tr>
 		{% endif %}
-		{% if  request.user.is_staff%}
+		{% if  is_scrum_master%}
 			<tr>
 				<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Create new sprint</a></td>			
 				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Sprint data edit</a></td>
@@ -76,7 +76,7 @@
 			</tr>
 		{% endif %}
 		
-		{% if  request.user.is_staff or request.user.is_superuser %}
+		{% if  is_scrum_master or request.user.is_superuser %}
 			<tr>
 				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Edit project data</a></td>			
 				<td></td>

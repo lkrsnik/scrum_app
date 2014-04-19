@@ -21,29 +21,31 @@ def home(request):
 	# get current user
 	current_user = request.user.id
 	
-	# check if current user product owner
-	user_project_owner =  Project.objects.filter(project_owner__id = current_user)
-	is_owner = len (user_project_owner) > 0
-	
-    # Request the context of the request.
-    # The context contains information such as the client's machine 	details, for example.
-	context = RequestContext(request)
-
-    # Construct a dictionary to pass to the template engine as its context.
-    # Note the key boldmessage is the same as {{ boldmessage }} in the template!
-	context_dict = {'is_owner':is_owner};
-    # Return a rendered response to send to the client.
-    # We make use of the shortcut function to make our lives easier.
-    # Note that the first parameter is the template we wish to use.
+	# Request the context of the request.
+   	context = RequestContext(request)
+        	
+	# Project choose
 	project_info = Project.objects.all()
-	context_dict = {"project_detail" : project_info}	
+	context_dict = {"project_detail" : project_info}
+	
+	# if user choose project, save this project id and name	
 	if int(request.GET.get('project_id', '0'))>0:
 		request.session['selected_project'] = int(request.GET.get('project_id', '0'))
 		request.session['project_name'] = request.GET.get('name', '')
+	# if project not choose
 	else:
 		if not request.session.get('selected_project'):
 			request.session['selected_project'] = 0	
 			request.session['project_name'] = ''
+	
+	# get information what roles user has on curent project
+	selected_project_id = request.session['selected_project']
+	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
+	
+	# Construct a dictionary to pass to the template engine as its context.
+	context_dict.update( {'is_owner':is_owner, 'is_scrum_master': is_scrum_master});	
+				
 	return render_to_response('scrumko/home.html', context_dict, context)
 
 
