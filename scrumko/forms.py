@@ -187,6 +187,7 @@ class StoryForm (forms.ModelForm):
 	
 	class Meta:
 		model = Story
+		fields = ('project_name', 'story_name', 'text', 'bussines_value', 'priority', 'test_text', )
 		
 	def clean_story_name(self):
 		story_name_new = self.cleaned_data['story_name']

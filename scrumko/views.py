@@ -326,3 +326,8 @@ def edit(request):
 		user_form = UserForm()
 		profile_form = UserProfileForm()
 	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
+	
+def poker(reques):
+	context = RequestContext(request)
+	
+	

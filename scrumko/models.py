@@ -53,9 +53,21 @@ class Story (models.Model):
     
 	priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, null=True, default='must have', blank=False)
 	test_text = models.TextField(blank=False, max_length=1000)
+	estimate = models.IntegerField()
 	
 	def __unicode__(self):
-		return self.story_name
+		# do not change related to Poker
+		return str(self.id)
+		
+class Poker (models.Model):
+	project = models.ForeignKey(Project)
+	story = models.ForeignKey(Story)
+	active = models.BooleanField()
+	
+class Poker_estimates (models.Model):
+	poker = models.ForeignKey(Poker)
+	user = models.ForeignKey(User)
+	estimate = models.DecimalField(max_digits=3, decimal_places=1)
 		
 
 
