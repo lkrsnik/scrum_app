@@ -35,6 +35,8 @@ def home(request):
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
+	project_info = Project.objects.all()
+	context_dict = {"project_detail" : project_info}
 	return render_to_response('scrumko/home.html', context_dict, context)
 
 @login_required

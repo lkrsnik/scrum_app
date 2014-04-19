@@ -1,7 +1,51 @@
 {% extends 'scrumko/main.html' %}
 
 {% block body_block %}
-
+	<h1> Choose current project </h1>
+		<table class=projectTable>
+	   	
+		
+		<tr>
+			<td class="projectTableFIRST">
+				Project name
+			</td>
+			<td class="projectTableFIRST">
+				Project owner
+			</td>
+			<td class="projectTableFIRST">
+				Scrum master
+			</td>
+			<td class="projectTableFIRST">
+				
+			</td>
+		</tr>
+			
+		{% for detail in project_detail %}
+			{% for team_member in detail.team.all %}
+				
+				{% if team_member.id = request.user.id or request.user.id == detail.project_owner_id or request.user.id == detail.scrum_master_id %}
+					<tr>
+				<td class="projectTable">
+					{{ detail.project_name }}
+				</td>
+		
+				<td class="projectTable">
+					{{ detail.project_owner }}
+				</td>
+				<td class="projectTable">
+					{{ detail.scrum_master }}
+				</td>
+			
+				<td class="projectTable">
+				<a href="">Select<a>						
+				</td>	
+				
+			</tr>
+				{% endif %}
+			{% endfor %}
+			
+		{% endfor %}
+	</table>
 	<h1> Control panel</h1>
 
 	<div class="cpanel">
