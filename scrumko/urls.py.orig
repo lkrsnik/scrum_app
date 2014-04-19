@@ -10,9 +10,11 @@ urlpatterns = patterns('',
 	url(r'^projectcreate/$', views.projectcreate, name='prcreate'),
 	url(r'^maintainuser/$', views.maintainuser, name='maintainuser'),
 	url(r'^maintainsprint/$', views.maintainsprint, name='maintainsprint'),
-<<<<<<< HEAD
 	url(r'^storycreate/$', views.storycreate, name='storycreate'),
-=======
 	url(r'^maintainproject/$', views.maintainproject, name='maintainproject'),
->>>>>>> 8780884c6e9a7b0ce6225980ac66538b2c7afbbd
+	url(r'^edit/$', views.edit, name='edit'),
+<<<<<<< HEAD
+	url(r'^poker/$', views.poker, name='planing_poker')	
+=======
+>>>>>>> 473e0f269e2ea0543e417f4832c698966b7392f5
 	)
