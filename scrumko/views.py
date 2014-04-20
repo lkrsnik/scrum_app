@@ -12,7 +12,7 @@ from django.db import transaction
 
 from scrumko.models import User
 from scrumko.models import UserProfile
-from scrumko.models import Sprint, Project
+from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates
 #from scrumko.forms import UserForm, UserProfileForm
 
 @login_required
@@ -331,7 +331,28 @@ def edit(request):
 		profile_form = UserProfileForm()
 	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
 	
-def poker(reques):
-	context = RequestContext(request)
+def startpoker(request, user_story_id):
 	
+	# get current user
+	current_user = request.user.id
 	
+	# get selected project
+	user_project =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	
+	# redirect back if user has not permision	
+	if len (user_project) == 0:	
+		return HttpResponseRedirect('/scrumko/home')
+	
+	# get user story
+	story = Story.objects.filter(id = user_story_id, project_name = user_project[0])
+	
+	# redirect back if story doesent exsist	
+	if len (story) == 0:
+		return HttpResponseRedirect('/scrumko/home')
+	
+	# if everything ok start poker with writing it in database
+	print 'everything ok'
+			
+	poker = Poker.objects.create(project=user_project[0], story = story[0], active = True)
+		
+	return HttpResponseRedirect('/scrumko/poker')
