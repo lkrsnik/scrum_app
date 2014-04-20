@@ -133,32 +133,35 @@ def user_logout(request):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
 def sprintcreate(request):
-    
-	context = RequestContext(request)    
-	registered = False
 
+	# check permision to form and
+	# project permision check
+	current_user = request.user.id
+	user_project =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	if len(user_project) == 0:
+		return HttpResponseRedirect("/scrumko/home/")
+	
+	# set id of project to hidden input field
+	r = user_project[0]
+
+	# get context
+	context = RequestContext(request)    
+	
+	# variable to check if sprint created
+	registered = False
    
 	if request.method == 'POST':
+  		# get form inputs
   		sprint_form = SprintCreateForm(data=request.POST)
-  		
-  		
-  		
-  		 		
-        # If the two forms are valid...
+  		  		 		
+        # If the forms is valid...
 		if sprint_form.is_valid():
+			
             # Save the user's form data to the database.
-	    
 			sprint = sprint_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            			
 			sprint.save()
-
-			# check if is scrum master or team member
-           
+			           
             # Update our variable to tell the template registration was successful.
 			registered = True
 
@@ -168,19 +171,8 @@ def sprintcreate(request):
 		else:
 			print sprint_form.errors
 			return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
-			
-
-    # Not a HTTP POST, so we render our form using two ModelForm instances.
-    # These forms will be blank, ready for user input.
 	
-	
-	# set id of project to hidden input field
-	current_user = request.user.id
-	user_project =  Project.objects.filter(scrum_master__id = current_user)
-	r = user_project[0]
-		
-	sprint_form = SprintCreateForm(initial={'project_name': r.id})
-		
+	sprint_form = SprintCreateForm(initial={'project_name': r.id})		
 		
     # Render the template depending on the context.
 	return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
@@ -271,15 +263,15 @@ def maintainproject(request):
 
 
 @login_required
-#@user_passes_test(lambda u: u.is_staff)
+
 def storycreate(request):
     
     # get current user
 	current_user = request.user.id
 	
 	# check on which project is this user owner or scrum master
-	user_project_master =  Project.objects.filter(scrum_master__id = current_user)
-	user_project_owner =  Project.objects.filter(project_owner__id = current_user)
+	user_project_master =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	user_project_owner =  Project.objects.filter(project_owner__id = current_user, id = request.session['selected_project'])
     
     # check if user is scrum master or owner 
     # if not redirect (he has no permision to this site)
