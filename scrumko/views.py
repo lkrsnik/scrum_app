@@ -1,6 +1,8 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -14,6 +16,8 @@ from scrumko.models import User
 from scrumko.models import UserProfile
 from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates
 #from scrumko.forms import UserForm, UserProfileForm
+
+@ensure_csrf_cookie
 
 @login_required
 def home(request):
@@ -389,9 +393,9 @@ def poker (request):
 		poker_estimates = get_poker_data (request.session['selected_project'], story)
 		table_dict.update (poker_estimates)
 						
-		table_str = render_to_response('scrumko/planing_poker/table.html', table_dict, context)
+		table_str = render_to_string('scrumko/planing_poker/table.html', table_dict, context)
 		
-			
+		# continue here.... :)
 		
 	# get data for previous planigs
 	
@@ -423,9 +427,25 @@ def get_poker_data (project_id, story):
 	
 		
 	return {'estimate_value' : estimate_value, 'users_value' : users_value}
-		
 
+
+def poker_table (request):
+	context = RequestContext(request)
+	# get active stoy on planing poker
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True)
 	
+	if len (active_poker) == 0:
+		return HttpResponse('')
+	
+	# write data for descriptions
+	story = active_poker[0].story	
+	
+	poker_estimates = get_poker_data (request.session['selected_project'], story)
+	table_dict =  poker_estimates
+					
+	table_str = render_to_string('scrumko/planing_poker/table.html', table_dict, context)
+	
+	return HttpResponse(table_str)
 	
 	
 	

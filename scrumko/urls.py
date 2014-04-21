@@ -14,5 +14,6 @@ urlpatterns = patterns('',
 	url(r'^maintainproject/$', views.maintainproject, name='maintainproject'),
 	url(r'^edit/$', views.edit, name='edit'),
 	url(r'^poker/$', views.poker, name='planing_poker')	,
+	url(r'^poker_table/$', views.poker_table, name='poker_table')	,
 	url(r'^pokerstart/(?P<user_story_id>\w+)/$', views.startpoker, name='startpoker')
 	)

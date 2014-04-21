@@ -1,7 +1,10 @@
 {% extends 'scrumko/main.html' %}
+{% load static %}
 
 {% block body_block %}
 
+		<script type="text/javascript" src="{% static  'javascript/poker_ajax.js' %}" ></script>
+		
 		<div>
 			<h1>Planing poker</h1>
 
@@ -11,7 +14,10 @@
 			<p>{{story_test}}</p>
 			
 			<br/>
-			{{table}}
+			<div id="table">
+			
+			</div>
+			
 				
 			
        </div>
