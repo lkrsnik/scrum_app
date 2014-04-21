@@ -382,13 +382,16 @@ def poker (request):
 		story = active_poker[0].story
 		context_dict.update ({'story_text' : story.text, 'story_test' : story.test_text, 'story_name' : story.story_name})
 		
+		# dict for table
+		table_dict = {}		
+		
 		# write data for stoy estimates
 		poker_estimates = get_poker_data (request.session['selected_project'], story)
-		context_dict.update (poker_estimates)
+		table_dict.update (poker_estimates)
+						
+		table_str = render_to_response('scrumko/planing_poker/table.html', table_dict, context)
 		
-		# get all users who estimates this story
-		
-		
+			
 		
 	# get data for previous planigs
 	
@@ -397,26 +400,31 @@ def poker (request):
 # function used to find data for poker writeout	
 def get_poker_data (project_id, story):
 	# get all pokers
-	pokers = Poker.objects.filter (project__id = project__id, story = story)
+	pokers = Poker.objects.filter (project__id = project_id, story = story)
+			
+	# get all estimates on this story
+	estimates = Poker_estimates.objects.filter (poker__project__id = project_id, poker__story = story)
 	
-	# get all estimates
-	estimates = []
-	for poker in pokers:
-		estimate.append (Poker_estimates.objects.filter (poker = poker))
-		
 	# get all users on this story
-	Poker_estimates.objects.filter (poker = poker)
+	users = estimates.values('user').distinct()
+	users_value = []
+	for user in users:
+		users_value.append (User.objects.get (id = user['user']))
+			
+	# create 2D table of estimates planing poker
+	estimate_value = [[0 for x in range (len (pokers))] for x in range (len (users))]	
+	for i in range (len (pokers)):
+		for j in range (len (users)):
+			res = Poker_estimates.objects.filter (poker = pokers[i], user__id = users[j]['user'])
+			if len (res) == 0:
+				estimate_value[i][j] = 0
+			else:
+				estimate_value[i][j] = res[0].estimate 
 	
-	# continue here 
-	
-	return {'estimates' : estimates, 'pokers' : pokers, 'users' : }
 		
-	
-	
-	
-	
-	
-	
+	return {'estimate_value' : estimate_value, 'users_value' : users_value}
+		
+
 	
 	
 	

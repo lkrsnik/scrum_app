@@ -5,29 +5,31 @@
 			<td class="projectTableFIRST">
 				Index
 			</td>
-			<td class="projectTableFIRST">
-				Lastnik projekta
-			</td>
 			
-			<td class="projectTableFIRST">
-				
+			{% for user in users_value %}
+			<td>
+				{{ user }}
 			</td>
+			{% endfor %}
 		</tr>
-		{% for detail in project_detail %}
-		<tr>
-			<td class="projectTable">
-				{{ detail.project_name }}
-			</td>
 		
-			<td class="projectTable">
-				{{ detail.project_owner }}
-			</td>
-			
-			<td class="projectTable">
-			<a href="?id="><img src="/static/images/edit.png" alt="edit" height="15" 		width="15">Uredi<a>						
-			</td>	
+		{% for row in estimate_value %}
+			<tr>
 				
-		</tr>
+				<td class="projectTable">
+					
+				</td>
+			
+				{% for cell in row %}
+				<td>
+					{{cell}}
+					
+				</td>
+				{% endfor %}
+								
+					
+			</tr>
 	
 		{% endfor %}
+		
 	</table>
