@@ -1,0 +1,33 @@
+
+<table class=projectTable>
+	   			
+		<tr>
+			<td class="projectTableFIRST">
+				Index
+			</td>
+			<td class="projectTableFIRST">
+				Lastnik projekta
+			</td>
+			
+			<td class="projectTableFIRST">
+				
+			</td>
+		</tr>
+		{% for detail in project_detail %}
+		<tr>
+			<td class="projectTable">
+				{{ detail.project_name }}
+			</td>
+		
+			<td class="projectTable">
+				{{ detail.project_owner }}
+			</td>
+			
+			<td class="projectTable">
+			<a href="?id="><img src="/static/images/edit.png" alt="edit" height="15" 		width="15">Uredi<a>						
+			</td>	
+				
+		</tr>
+	
+		{% endfor %}
+	</table>

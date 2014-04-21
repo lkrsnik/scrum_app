@@ -259,9 +259,6 @@ def maintainproject(request):
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainproject.html', project_data, context)
 
-
-
-
 @login_required
 
 def storycreate(request):
@@ -330,7 +327,8 @@ def edit(request):
 		user_form = UserForm()
 		profile_form = UserProfileForm()
 	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
-	
+
+@login_required	
 def startpoker(request, user_story_id):
 	
 	# get current user
@@ -350,9 +348,76 @@ def startpoker(request, user_story_id):
 	if len (story) == 0:
 		return HttpResponseRedirect('/scrumko/home')
 	
+	# close older stories
+	older_opened = Poker.objects.filter(project=user_project[0], active = True)
+	for pok in older_opened:
+		pok.active = False
+		pok.save()	
+
 	# if everything ok start poker with writing it in database
-	print 'everything ok'
-			
 	poker = Poker.objects.create(project=user_project[0], story = story[0], active = True)
 		
 	return HttpResponseRedirect('/scrumko/poker')
+
+@login_required	
+def poker (request):
+	# get context
+	context = RequestContext(request)
+	
+	# initialize dictionary to push content on page
+	context_dict = {}
+	
+	# get active stoy on planing poker
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True)
+		
+	## add data to dictionary
+	
+	# if not active poker, then writeout this
+	if len (active_poker) == 0:
+		context_dict.update ({'story_text' : 'There is not active planing pokers right now.'})
+	
+	#if data available write-out
+	else:
+		# write data for descriptions
+		story = active_poker[0].story
+		context_dict.update ({'story_text' : story.text, 'story_test' : story.test_text, 'story_name' : story.story_name})
+		
+		# write data for stoy estimates
+		poker_estimates = get_poker_data (request.session['selected_project'], story)
+		context_dict.update (poker_estimates)
+		
+		# get all users who estimates this story
+		
+		
+		
+	# get data for previous planigs
+	
+	return render_to_response('scrumko/planing_poker.html', context_dict, context)
+
+# function used to find data for poker writeout	
+def get_poker_data (project_id, story):
+	# get all pokers
+	pokers = Poker.objects.filter (project__id = project__id, story = story)
+	
+	# get all estimates
+	estimates = []
+	for poker in pokers:
+		estimate.append (Poker_estimates.objects.filter (poker = poker))
+		
+	# get all users on this story
+	Poker_estimates.objects.filter (poker = poker)
+	
+	# continue here 
+	
+	return {'estimates' : estimates, 'pokers' : pokers, 'users' : }
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
