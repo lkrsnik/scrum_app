@@ -416,14 +416,15 @@ def get_poker_data (project_id, story):
 		users_value.append (User.objects.get (id = user['user']))
 			
 	# create 2D table of estimates planing poker
-	estimate_value = [[0 for x in range (len (pokers))] for x in range (len (users))]	
+	estimate_value = [[0 for x in range (len (users)+1)] for x in range (len (pokers))]	
 	for i in range (len (pokers)):
+		estimate_value[i][0] = i+1
 		for j in range (len (users)):
 			res = Poker_estimates.objects.filter (poker = pokers[i], user__id = users[j]['user'])
 			if len (res) == 0:
-				estimate_value[i][j] = 0
+				estimate_value[i][j+1] = 0
 			else:
-				estimate_value[i][j] = res[0].estimate 
+				estimate_value[i][j+1] = res[0].estimate 
 	
 		
 	return {'estimate_value' : estimate_value, 'users_value' : users_value}
