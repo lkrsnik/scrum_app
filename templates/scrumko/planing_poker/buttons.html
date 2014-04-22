@@ -1,0 +1,32 @@
+<div>
+	<p> Choose your estimate for current project.</p>
+	
+	{% if estimates %}
+	<form action="" method="post" id="estimate_buttons">
+		<button type="sumbmit" name="estimate" value="0" > 0 </button>
+		<button type="sumbmit" name="estimate" value="0.5" > 0.5 </button>
+		<button type="sumbmit" name="estimate" value="1" > 1 </button>
+		<button type="sumbmit" name="estimate" value="1.5" > 1.5 </button>
+		<button type="sumbmit" name="estimate" value="2" > 2 </button>
+		<button type="sumbmit" name="estimate" value="3" > 3 </button>
+		<button type="sumbmit" name="estimate" value="5" > 5 </button>
+		<button type="sumbmit" name="estimate" value="8" > 8 </button>
+		<button type="sumbmit" name="estimate" value="13" > 13 </button>
+		<button type="sumbmit" name="estimate" value="20" > 20 </button>
+		<button type="sumbmit" name="estimate" value="40" > 40 </button>
+		<button type="sumbmit" name="estimate" value="Pass" > Pass </button>
+	</form>
+	{% endif %}
+	
+	{% if scrummaster %}
+		
+		{% if activeround %}
+			<button type="button" id="endround">End round</button>
+		{% endif %}
+		
+		<button type="button" id="useestimate">Use estimate</button>
+			
+	{% endif %}
+	
+		
+</div>

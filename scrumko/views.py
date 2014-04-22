@@ -15,7 +15,11 @@ from django.db import transaction
 from scrumko.models import User
 from scrumko.models import UserProfile
 from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates
+
+import json
 #from scrumko.forms import UserForm, UserProfileForm
+
+from decimal import Decimal
 
 @ensure_csrf_cookie
 
@@ -429,6 +433,49 @@ def get_poker_data (project_id, story):
 		
 	return {'estimate_value' : estimate_value, 'users_value' : users_value}
 
+# function wich tell what to show in poker (eg. butttons and other)
+def get_button_poker_data (project_id, story, current_user):
+	# create dictionary
+	button_dict = {}
+		
+	## is user scrum master
+	
+	# get selected project
+	user =  Project.objects.filter(scrum_master__id = current_user, id = project_id)
+	
+	# check if scrum master
+	if len (user) > 0:
+		button_dict.update ({'scrummaster' : True })
+	else:
+		button_dict.update ({'scrummaster' : False })
+	
+	## story active?
+	
+	# get active stoy on planing poker
+	active_poker = Poker.objects.filter (project__id = project_id, active = True)
+	
+	if len (active_poker) > 0:
+		button_dict.update ({'activeround' : True })
+	else:
+		button_dict.update ({'activeround' : False })
+
+	## estimated from this user?
+	
+	# get this type of story
+	estimates = Poker_estimates.objects.filter (poker__project__id = project_id, poker__active = True, user__id = current_user)
+	
+	# check if exsist
+	
+	if len (estimates) > 0:
+		button_dict.update ({'estimates' : False })
+	else:
+		button_dict.update ({'estimates' : True })
+	
+	print button_dict['scrummaster']
+	
+	# return data from dict
+	
+	return button_dict
 
 def poker_table (request):
 	context = RequestContext(request)
@@ -438,15 +485,46 @@ def poker_table (request):
 	if len (active_poker) == 0:
 		return HttpResponse('')
 	
+	## poker table
+	
 	# write data for descriptions
 	story = active_poker[0].story	
 	
 	poker_estimates = get_poker_data (request.session['selected_project'], story)
 	table_dict =  poker_estimates
-					
+	
+	# render teplate in string
 	table_str = render_to_string('scrumko/planing_poker/table.html', table_dict, context)
 	
-	return HttpResponse(table_str)
+	## buttons
 	
+	# get data from function
+	button_data = get_button_poker_data (request.session['selected_project'], story, request.user.id)
+	
+	# render template
+	button_str = render_to_string('scrumko/planing_poker/buttons.html', button_data, context)
+	
+	# make dict to return with JSON
+	return_dict = {'table' : table_str, 'button' : button_str }
+	
+	# return data to ajax call
+	return HttpResponse(json.dumps(return_dict), content_type="application/json")
+	
+def poker_estimate (request):
+			
+	# get user estimate
+	estimate = Decimal (request.GET.get('estimate'))
+	
+	# get active poker
+	active_poker = Poker.objects.get (project__id = request.session['selected_project'], active = True)
+	
+	# get user
+	user = request.user
+	
+	print estimate
+		
+	Poker_estimates.objects.create(poker = active_poker, user = user, estimate = estimate)
+	
+	return HttpResponse("")
 	
 	
