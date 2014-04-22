@@ -33,6 +33,7 @@ function disp_table()
         
         // set click listener
         handle_estimates ();
+        handle_activation ();
         
 	},'json');
 }
@@ -51,5 +52,42 @@ function handle_estimates ()
 		
 		
 	});
+	
+}
+
+function handle_activation ()
+{
+	
+	$("#endround").on('click',function(e)
+	{
+		
+		e.preventDefault();
+				
+		// post selection to view
+		$.get('/scrumko/poker_disactivate/', {});		
+		
+	});
+	
+	$("#startround").on('click',function(e)
+	{
+		
+		e.preventDefault();
+				
+		// post selection to view
+		$.get('/scrumko/poker_activate/', {});		
+		
+	});
+	
+	$("#useestimate").on('click',function(e)
+	{
+		alert ('ja');
+		e.preventDefault();
+				
+		// post selection to view
+		$.get('/scrumko/poker_uselast/', {});		
+		
+	});
+	
+	
 	
 }

@@ -376,33 +376,24 @@ def poker (request):
 	context_dict = {}
 	
 	# get active stoy on planing poker
-	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True)
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project']).reverse()[0]
 		
 	## add data to dictionary
 	
 	# if not active poker, then writeout this
-	if len (active_poker) == 0:
+	if not active_poker:
 		context_dict.update ({'story_text' : 'There is not active planing pokers right now.'})
 	
 	#if data available write-out
 	else:
 		# write data for descriptions
-		story = active_poker[0].story
+		story = active_poker.story
 		context_dict.update ({'story_text' : story.text, 'story_test' : story.test_text, 'story_name' : story.story_name})
 		
 		# dict for table
 		table_dict = {}		
-		
-		# write data for stoy estimates
-		poker_estimates = get_poker_data (request.session['selected_project'], story)
-		table_dict.update (poker_estimates)
-						
-		table_str = render_to_string('scrumko/planing_poker/table.html', table_dict, context)
-		
-		# continue here.... :)
-		
+			
 	# get data for previous planigs
-	
 	return render_to_response('scrumko/planing_poker.html', context_dict, context)
 
 # function used to find data for poker writeout	
@@ -425,8 +416,8 @@ def get_poker_data (project_id, story):
 		estimate_value[i][0] = i+1
 		for j in range (len (users)):
 			res = Poker_estimates.objects.filter (poker = pokers[i], user__id = users[j]['user'])
-			if len (res) == 0:
-				estimate_value[i][j+1] = 0
+			if len (res) == 0 or res[0].estimate == -1:
+				estimate_value[i][j+1] = '-'
 			else:
 				estimate_value[i][j+1] = res[0].estimate 
 	
@@ -461,12 +452,12 @@ def get_button_poker_data (project_id, story, current_user):
 
 	## estimated from this user?
 	
-	# get this type of story
+	# get estimates of this user for current active story
 	estimates = Poker_estimates.objects.filter (poker__project__id = project_id, poker__active = True, user__id = current_user)
 	
 	# check if exsist
 	
-	if len (estimates) > 0:
+	if len (estimates) > 0 or len (active_poker) == 0:
 		button_dict.update ({'estimates' : False })
 	else:
 		button_dict.update ({'estimates' : True })
@@ -480,15 +471,19 @@ def get_button_poker_data (project_id, story, current_user):
 def poker_table (request):
 	context = RequestContext(request)
 	# get active stoy on planing poker
-	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True)
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project'])
 	
 	if len (active_poker) == 0:
-		return HttpResponse('')
+		return_dict = {'table' : '', 'button' : '' }
+		return HttpResponse(json.dumps(return_dict), content_type="application/json")
+	
+	# get last one
+	active_poker = active_poker.reverse()[0]
 	
 	## poker table
 	
 	# write data for descriptions
-	story = active_poker[0].story	
+	story = active_poker.story	
 	
 	poker_estimates = get_poker_data (request.session['selected_project'], story)
 	table_dict =  poker_estimates
@@ -509,11 +504,16 @@ def poker_table (request):
 	
 	# return data to ajax call
 	return HttpResponse(json.dumps(return_dict), content_type="application/json")
-	
+
+# function writeout estimation for project on current planing poker 	
 def poker_estimate (request):
 			
 	# get user estimate
-	estimate = Decimal (request.GET.get('estimate'))
+	# pass note with -1 database
+	est = request.GET.get('estimate')
+	if est == 'Pass':
+		est = -1
+	estimate = Decimal (est)
 	
 	# get active poker
 	active_poker = Poker.objects.get (project__id = request.session['selected_project'], active = True)
@@ -527,4 +527,71 @@ def poker_estimate (request):
 	
 	return HttpResponse("")
 	
+# function end round of planing poker
+def poker_disactivate (request):
 	
+	active_poker = Poker.objects.get (project__id = request.session['selected_project'], active = True)
+	
+	active_poker.active = False
+	active_poker.save()
+	
+	return HttpResponse("")	
+	
+# function use last estimate
+def poker_uselast (request):
+	# get last story
+	story = Poker.objects.filter (project__id = request.session['selected_project']).reverse()[0].story
+	
+	# get all pokers on this story
+	pokers = Poker.objects.filter (project__id = request.session['selected_project'], story = story)
+	
+	# iterate throught pokers and find first with one or more estimates
+	for poker in pokers:
+		# find all estimates
+		estimates = Poker_estimates.objects.filter (poker = poker)
+		
+		if len (estimates) > 0:
+			avg_e = calc_avg_est (estimates)
+			story.estimate = avg_e
+			story.save()
+			break
+
+	# add to return that no estimate if not!!!!
+	return HttpResponse("")	
+	
+# function calculate avarage of estimates
+def calc_avg_est (est):
+	total = 0
+	for e in est:
+		total = total + e.estimate
+	
+	return total
+	
+	
+# function start ne round of planing poker
+def poker_activate (request):
+	
+	# user story to start new poker
+	
+	story = Poker.objects.filter (project__id = request.session['selected_project']).reverse()[0].story
+	
+	# get current user
+	current_user = request.user.id
+	
+	# get selected project
+	user_project =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	
+	# redirect back if user has not permision	
+	if len (user_project) == 0 or not story :	
+		return HttpResponseRedirect('/scrumko/home')
+	
+	# close older stories
+	older_opened = Poker.objects.filter(project=user_project[0], active = True)
+	for pok in older_opened:
+		pok.active = False
+		pok.save()	
+
+	# if everything ok start poker with writing it in database
+	poker = Poker.objects.create(project=user_project[0], story = story, active = True)
+	
+	return HttpResponse("")	
