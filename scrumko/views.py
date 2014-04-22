@@ -499,8 +499,13 @@ def poker_table (request):
 	# render template
 	button_str = render_to_string('scrumko/planing_poker/buttons.html', button_data, context)
 	
+	## story text
+	
+	context_dict =  ({'story_text' : story.text, 'story_test' : story.test_text, 'story_name' : story.story_name})
+	
 	# make dict to return with JSON
 	return_dict = {'table' : table_str, 'button' : button_str }
+	return_dict.update (context_dict)
 	
 	# return data to ajax call
 	return HttpResponse(json.dumps(return_dict), content_type="application/json")

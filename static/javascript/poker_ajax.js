@@ -30,6 +30,10 @@ function disp_table()
 			
         $('#table').html(data['table']);
         $('#buttons').html(data['button']);
+        $('#storyname').html(data['story_name']);
+        $('#storytext').html(data['story_text']);
+        $('#storytest').html(data['story_test']);
+        
         
         // set click listener
         handle_estimates ();
