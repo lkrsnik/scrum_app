@@ -365,6 +365,8 @@ a
 	
 	border-radius: 5px;
 	height: 26px;
+	
+	cursor:pointer
 }
 
 .mainwindow2 input
@@ -539,11 +541,18 @@ a
 .planingtable tr:last-child td:first-child { border-bottom-left-radius: 10px; }
 .planingtable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
 
-.estimate_buttons button
+#estimate_buttons button
 {
-	width: 50px;
-	margin: 20px 20px 0 20px;
+	width: 48px;
+	margin: 20px 5px 0 5px;
 	
 	border-radius: 5px;
-	height: 26px;
+	height: 50px;
+	
+	border:0;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	
+	color: white;
+	cursor:pointer
 }
