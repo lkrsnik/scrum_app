@@ -20,6 +20,13 @@ h1
 	color: #4590ab;
 }
 
+h2
+{
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 19px;
+	
+}
+
 input
 {
 	color: black;
@@ -350,7 +357,7 @@ a
 
 /* style for input fields on normal page */
 
-.mainwindow input, .mainwindow select
+.mainwindow input, .mainwindow select, .mainwindow button
 {
 	
 	width: 200px;
@@ -484,4 +491,59 @@ a
 	color: black !important;
 }
 
+/* planing poker */
 
+.storydes
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	width: 86%;
+	
+	padding: 10px 10px 10px 20px;
+	
+	border-radius: 15px;
+}
+
+.planingtable
+{
+	/*background-color: rgba(255, 255, 255, 0.1);*/
+	width: 90%;
+	
+	/*padding: 10px 10px 10px 20px;*/
+	
+	border-radius: 15px;
+}
+
+.planingtable tr
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	height: 40px;
+	
+	border-radius: 15px;
+}
+
+.planingtable tr:first-child
+{
+	color: #4590ab;
+}
+
+.planingtable td
+{
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.planingtable table { border-collapse: separate; }
+
+.planingtable tr:first-child td:first-child { border-top-left-radius: 10px; }
+.planingtable tr:first-child td:last-child { border-top-right-radius: 10px; }
+.planingtable tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+.planingtable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+.estimate_buttons button
+{
+	width: 50px;
+	margin: 20px 20px 0 20px;
+	
+	border-radius: 5px;
+	height: 26px;
+}

@@ -16,6 +16,7 @@ from scrumko.models import User
 from scrumko.models import UserProfile
 from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates
 
+
 import json
 #from scrumko.forms import UserForm, UserProfileForm
 
@@ -397,7 +398,7 @@ def poker (request):
 	return render_to_response('scrumko/planing_poker.html', context_dict, context)
 
 # function used to find data for poker writeout	
-def get_poker_data (project_id, story):
+def get_poker_data (project_id, story, current_user):
 	# get all pokers
 	pokers = Poker.objects.filter (project__id = project_id, story = story)
 			
@@ -411,18 +412,39 @@ def get_poker_data (project_id, story):
 		users_value.append (User.objects.get (id = user['user']))
 			
 	# create 2D table of estimates planing poker
-	estimate_value = [[0 for x in range (len (users)+1)] for x in range (len (pokers))]	
+	estimate_value = [[0 for x in range (len (users)+2)] for x in range (len (pokers))]	
+	
+	# count empty for indexing
+	emty_row_num = 0
 	for i in range (len (pokers)):
-		estimate_value[i][0] = i+1
+		estimate_value[i][0] = i+1 - emty_row_num
+		
+		# calculating estimates average
+		avg = 0
+		num = 0
+		
 		for j in range (len (users)):
 			res = Poker_estimates.objects.filter (poker = pokers[i], user__id = users[j]['user'])
 			if len (res) == 0 or res[0].estimate == -1:
 				estimate_value[i][j+1] = '-'
 			else:
 				estimate_value[i][j+1] = res[0].estimate 
-	
+				avg = avg + res[0].estimate 
+				num = num + 1
+			
+		# row average
+		if num == 0:
+			# delete table row if empty
+			estimate_value[i] = []
+			emty_row_num = emty_row_num + 1			
+		else:
+			estimate_value[i][j+2] = avg / num
+			
+		# check if last planing poker has no my submision
+		my_last = Poker_estimates.objects.filter (poker = pokers[i], user__id = current_user)
+		last_estimate = len (my_last ) == 0
 		
-	return {'estimate_value' : estimate_value, 'users_value' : users_value}
+	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate	}
 
 # function wich tell what to show in poker (eg. butttons and other)
 def get_button_poker_data (project_id, story, current_user):
@@ -485,7 +507,7 @@ def poker_table (request):
 	# write data for descriptions
 	story = active_poker.story	
 	
-	poker_estimates = get_poker_data (request.session['selected_project'], story)
+	poker_estimates = get_poker_data (request.session['selected_project'], story, request.user.id)
 	table_dict =  poker_estimates
 	
 	# render teplate in string

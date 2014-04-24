@@ -1,7 +1,12 @@
+{% load static %}
+
 <div>
-	<p> Choose your estimate for current project.</p>
+	
 	
 	{% if estimates %}
+	
+	<p> Choose your estimate for current project.</p>
+	
 	<form action="" method="post" id="estimate_buttons">
 		<button type="sumbmit" name="estimate" value="0" > 0 </button>
 		<button type="sumbmit" name="estimate" value="0.5" > 0.5 </button>
@@ -18,6 +23,7 @@
 	</form>
 	{% endif %}
 	
+	
 	{% if scrummaster %}
 		
 		{% if activeround %}
@@ -30,6 +36,8 @@
 		<button type="button" id="useestimate">Use estimate</button>
 			
 	{% endif %}
+	
+	
 	
 		
 </div>

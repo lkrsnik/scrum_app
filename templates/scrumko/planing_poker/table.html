@@ -1,6 +1,6 @@
 
 <div>
-	<table class=projectTable>
+	<table class="planingtable">
 	   			
 		<tr>
 			<td>
@@ -12,9 +12,15 @@
 				{{ user }}
 			</td>
 			{% endfor %}
+			
+			<td>
+				Average
+			</td>
 		</tr>
 		
 		{% for row in estimate_value %}
+		
+			{% if row|length > 0 %} 
 			<tr>
 											
 				{% for cell in row %}
@@ -26,8 +32,19 @@
 								
 					
 			</tr>
+			{% endif %}
+			
+			
 	
 		{% endfor %}
 		
-	</table>
+		</table>
+		
+			{% if last_round %}
+			
+					<p style="margin-left: 50px;">Send your estimate to see results for last round.</p>
+				
+			
+			{% endif %}
+	
 </div>
