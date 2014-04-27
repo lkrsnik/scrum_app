@@ -304,6 +304,11 @@ def maintainproject(request):
 	project_data = {"project_detail" : project_info}	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainproject.html', project_data, context)
+	
+def projectdelete(request, id):
+	context = RequestContext(request)
+	projecr_info = Project.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/maintainproject")	
 
 @login_required
 def editproject(request):

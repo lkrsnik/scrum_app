@@ -14,7 +14,10 @@
 			</td>
 			
 			<td>
-				
+				Edit
+			</td>
+			<td>
+				Delete
 			</td>
 		</tr>
 		{% for detail in project_detail %}
@@ -28,9 +31,11 @@
 			</td>
 			
 			<td>
-			<a href="editproject?/id={{detail.id}}"><img src="/static/images/edit.png" alt="edit" height="15" width="15">Uredi<a>						
+			<a href="editproject?/id={{detail.id}}"><img src="/static/images/edit.png" alt="edit" height="20" width="20"><a>						
 			</td>	
-				
+			<td>
+				<a href="projectdelete/{{detail.id}}" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
+			</td>		
 		</tr>
 	
 	{% endfor %}
