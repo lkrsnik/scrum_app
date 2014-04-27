@@ -207,11 +207,11 @@ class ProjectEditForm(forms.ModelForm):
 	#already exist validation
 	def clean_project_name(self):
 		project_name = self.cleaned_data['project_name']
-		
 		covering = Project.objects.filter(project_name=project_name)
 		if len(covering) > 0:
-			raise ValidationError("This project name already exists.")
-			return
+			if not project_name == covering[0].project_name:
+				raise ValidationError("This project name already exists.")
+				return
 		return project_name
 	
 	#validate if name already taken under other roles

@@ -1,6 +1,89 @@
 {% extends 'scrumko/main.html' %}
 {% block body_block %}
         <h1>Edit project: {{project_detail.0.project_name}}</h1>
-              
+        {% if registered %}
+			<div class="succes_hold">
+				<div class="succes">
+					Project was <strong>successfully  </strong>updated.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+        <p id="previous_members" hidden="true">{{ all_members }}</p>
+        <form id="project_form" method="post" action="/scrumko/maintainproject/editproject/"
+					enctype="multipart/form-data">
+				<input name="proj_id" type="hidden" value="{{project_detail.0.id}}"/>
+				{% csrf_token %}
+				<!--{{ project_form.as_p }}-->
+				{% for hidden in sprint_form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+
+				{% for field in project_form.visible_fields %}
+					<div class="formpart">
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
+					<div class="formpart">
+						<div class="fieldwrapper">
+							<label for="id_team1">Team:</label>
+						</div>
+						
+						<div class="fieldwrapper">
+							<select id="id_team" name="team">
+								<option value>---------</option>
+								{% for option in all_options %}
+									<option value={{ option.id }}>{{ option.username }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						
+						<div class="errorwrapper">
+							
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				<button id="add" href="#">Add another team member</button>
+				<br/>
+				<br/>
+				
+				<input type="hidden" id="write_team_members" name="all_members" value=""/>
+				
+				
+				<div class="item">
+				<table class=planingtable>
+					<tr>
+						<td class=projectrows>
+							<p id="team_member" class="message"></p>
+						</td>
+						<td class=projectrows>
+							<a class="delete" href="#">Delete</a>
+						</td>
+					</tr>
+				</table>	
+					
+				</div>
+				
+				<br/>
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" id="complete_form" name="submit" value="Update project" />
+			</form>      
+			</form>      
 
 {% endblock %}
