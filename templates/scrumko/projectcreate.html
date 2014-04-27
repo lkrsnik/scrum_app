@@ -1,12 +1,12 @@
 {% extends 'scrumko/main.html' %}
 
 {% block body_block %}
-        <h1>Dodajanje projekta</h1>
-
+        <h1>Add Project</h1>
+		<p id="previous_members" hidden="true">{{ all_members }}</p>
         {% if registered %}
 			<div class="succes_hold">
 				<div class="succes">
-					Projekt je bil <strong>uspešno  </strong>dodan.
+					Project was <strong>successfully  </strong>added.
 				</div>
 			</div>
 			<br/>
@@ -18,10 +18,10 @@
 
 				{% csrf_token %}
 				<!--{{ project_form.as_p }}-->
-				
-				{% for hidden in project_form.hidden_fields %}
+				{% for hidden in sprint_form.hidden_fields %}
 					{{ hidden }}
 				{% endfor %}
+				
 
 				{% for field in project_form.visible_fields %}
 					<div class="formpart">
@@ -41,7 +41,35 @@
 					<br/>
 					<br/>
 				{% endfor %}
+					<div class="formpart">
+						<div class="fieldwrapper">
+							<label for="id_team1">Team:</label>
+						</div>
+						
+						<div class="fieldwrapper">
+							<select id="id_team" name="team">
+								<option value>---------</option>
+								{% for option in all_options %}
+									<option value={{ option.id }}>{{ option.username }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						
+						<div class="errorwrapper">
+							
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				<p><a id="add" href="#">Add another team member</a></p>
+				<input type="hidden" id="write_team_members" name="all_members" value=""/>
+				<div class="item">
+					<p id="team_member" class="message"></p>
+					<p style=""><a class="delete" href="#">Delete</a></p>
+				</div>
+				
 				<!-- Provide a button to click to submit the form. -->
-				<input type="submit" name="submit" value="Dodaj" />
+				<input type="submit" id="complete_form" name="submit" value="Add project" />
 			</form>
    {% endblock %}

@@ -191,26 +191,67 @@ def sprintcreate(request):
 @user_passes_test(lambda u: u.is_superuser)
 #@transaction.atomic
 def projectcreate(request):
+	#print request
     # Like before, get the request's context.
+	
 	context = RequestContext(request)
 
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
 	registered = False
-
+	all_members = list();
+	all_options=User.objects.all().order_by('username')
     # If it's a HTTP POST, we're interested in processing form data.
 	if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
+		
   		project_form = ProjectCreateForm(data=request.POST)
-  		
+  		all_members = request.POST.get('all_members')
+		#print all_members
+		#for team_member in all_members.split(' '):
+		#	print team_member
+		
+		#find max project number for next project id
+		#print "AAAAAAAAAAAAAAAAaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		
+		
+
+		#for team_member in all_members.split(' '):
+		#	print team_member
+		#	member_test=User.objects.filter(username = team_member)
+		#	print member_test[0].id
+		#print project_test[0].team.add(id='7',project_id='31',user_id='100')
+		
+		#for team_member in all_members.split(' '):
+		#	print team_member
+		#	member_test2=User.objects.filter(username = team_member)
+		#	print member_test
+		#	print member_test2
+		
+		
+		print "BBBBBBAAAAAAAAAAAAAAAAAaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		
+		#try:
+		#	project_form.full_clean()
+		#except ValidationError as e:
+		#	print e.message_dict
+			# Do something based on the errors contained in e.message_dict.
+			# Display them to a user, or handle them programmatically.
+		#	pass
+		
+		
         # If the two forms are valid...
 		if project_form.is_valid():
-		
+			print "CCCCCCAAAAAAAAAaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			#print request.POST.get('scrum_master')
+			
             # Save the user's form data to the database.
 			scrum_master=User.objects.filter(id = int(request.POST.get('scrum_master')))
 			scrum_master.update(is_staff = True)
 
+			
+			
 			for member in scrum_master:
 				member.save()
 				print member
@@ -219,7 +260,7 @@ def projectcreate(request):
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
-            			
+			print "BBBBBBbbbbbbbbbbbbbbbbBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"			
 			project.save()
 			
 			# check if is scrum master or team member
@@ -227,12 +268,29 @@ def projectcreate(request):
             # Update our variable to tell the template registration was successful.
 			registered = True
 
+			print "CCCCCCCCCCCCCCCCCCCCCCCCCCCCccccccccccccccccccccccccccccCCCCCCCCCCCCC"	
+			project_team=Project.objects.all()
+			max = int(0)
+			for proj in project_team:
+				if max < int(proj.id):
+					max = int(proj.id)
+	
+			print "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDcccccccccccccccccccccccccccCCCCCCCCCCCCC"
+			print max
+			project_test=Project.objects.filter(id = int(max))
+			for team_member in all_members.split(' '):
+			#	print team_member
+				member_test=User.objects.filter(username = team_member)
+				#print member_test[0].id
+				project_test[0].team.add(int(member_test[0].id))
+	
+			all_members=list()
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
 		else:
 			print project_form.errors
-			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered}, context)
+			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -241,8 +299,8 @@ def projectcreate(request):
 		
 		
     # Render the template depending on the context.
-	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered}, context)
-
+	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
+	
 def maintainuser(request):
 	context = RequestContext(request)
 	user_info = User.objects.all()
