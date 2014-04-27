@@ -303,6 +303,7 @@ def editproject(request):
 		projectid = int(request.GET.get('id', '0'))
 	project_info = Project.objects.filter(id = projectid)
 	project_data = {"project_detail" : project_info}	
+	project_form = ProjectCreateForm(data=request.POST)
 	return render_to_response('scrumko/editproject.html', project_data, context)
 
 @login_required

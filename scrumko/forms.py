@@ -195,6 +195,41 @@ class StoryForm (forms.ModelForm):
 			return
 		
 		return story_name_new
+		
+class ProjectEditForm(forms.ModelForm):
+
+	project_name =  forms.CharField(label = mark_safe(u'Project name'),max_length=50, error_messages=required_error)
+	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Product owner'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
+	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Scrum master'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
+	team = forms.ModelMultipleChoiceField(widget=forms.HiddenInput(),queryset=User.objects.none(), required=False)
+	
+	
+	#already exist validation
+	def clean_project_name(self):
+		project_name = self.cleaned_data['project_name']
+		
+		covering = Project.objects.filter(project_name=project_name)
+		if len(covering) > 0:
+			raise ValidationError("This project name already exists.")
+			return
+		return project_name
+	
+	#validate if name already taken under other roles
+	def clean_scrum_master(self):
+		scrum_master = self.cleaned_data['scrum_master']
+		try:
+			project_owner = self.cleaned_data['project_owner']
+		except KeyError:
+			return scrum_master
+		
+		if scrum_master==project_owner:
+			raise ValidationError("Role "+str(scrum_master)+" is already taken.")
+			return
+		return scrum_master
+	
+		
+	class Meta:
+		model = Project
 	
 	
 
