@@ -20,7 +20,7 @@ class Project(models.Model):
 	project_name =  models.CharField(blank=False, max_length=50)
 	project_owner =  models.ForeignKey(User, related_name='owner', blank=False)
 	scrum_master = models.ForeignKey(User, related_name='master', blank=False)
-	team = models.ManyToManyField(User, blank=False)
+	team = models.ManyToManyField(User, blank=True)
 	
 
     # Override the __unicode__() method to return out something meaningful!
