@@ -141,7 +141,14 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect('/scrumko/')
 
-
+@login_required
+def productbacklog(request):
+	allStories = Story.objects.all()
+	print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
+	print allStories
+	context = RequestContext(request)
+	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories}, context)
+	
 @login_required
 def sprintcreate(request):
 	# check permision to form and
