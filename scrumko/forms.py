@@ -54,19 +54,19 @@ class UserProfileForm(forms.ModelForm):
 		
 class ProjectCreateForm(forms.ModelForm):
 
-	project_name =  forms.CharField(label = mark_safe(u'Ime projekta'),max_length=50, error_messages=required_error)
-	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Produktni vodja'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
-	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Skrbnik scrum metodologije'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
-	team = forms.ModelMultipleChoiceField(label = mark_safe(u'Ekipa(za več izborov uporabi "Ctrl" ali "Cmd")'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
-
+	project_name =  forms.CharField(label = mark_safe(u'Project name'),max_length=50, error_messages=required_error)
+	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Product owner'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
+	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Scrum master'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
+	team = forms.ModelMultipleChoiceField(widget=forms.HiddenInput(),queryset=User.objects.none(), required=False)
+	
+	
 	#already exist validation
 	def clean_project_name(self):
-		
 		project_name = self.cleaned_data['project_name']
 		
 		covering = Project.objects.filter(project_name=project_name)
 		if len(covering) > 0:
-			raise ValidationError("To projektno ime že obstaja.")
+			raise ValidationError("This project name already exists.")
 			return
 		return project_name
 	
@@ -79,16 +79,10 @@ class ProjectCreateForm(forms.ModelForm):
 			return scrum_master
 		
 		if scrum_master==project_owner:
-			raise ValidationError("Vloga "+str(scrum_master)+" je že zasedena.")
+			raise ValidationError("Role "+str(scrum_master)+" is already taken.")
 			return
 		return scrum_master
 	
-	#validate if name already taken under other roles
-	def clean_team(self):
-		team = self.cleaned_data['team']
-		
-		
-		return team
 		
 	class Meta:
 		model = Project

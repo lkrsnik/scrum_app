@@ -541,6 +541,11 @@ a
 .planingtable tr:last-child td:first-child { border-bottom-left-radius: 10px; }
 .planingtable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
 
+.projectrows
+{
+	width: 50%;
+}
+
 #estimate_buttons button
 {
 	width: 48px;
