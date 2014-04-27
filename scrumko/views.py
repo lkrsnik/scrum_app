@@ -260,13 +260,23 @@ def maintainsprint(request):
 	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
-
+@login_required
 def maintainproject(request):
 	context = RequestContext(request)
 	project_info = Project.objects.all()
 	project_data = {"project_detail" : project_info}	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainproject.html', project_data, context)
+
+@login_required
+def editproject(request):
+	context = RequestContext(request)
+	# Render the template depending on the context.
+	if int(request.GET.get('id', '0'))>0:
+		projectid = int(request.GET.get('id', '0'))
+	project_info = Project.objects.filter(id = projectid)
+	project_data = {"project_detail" : project_info}	
+	return render_to_response('scrumko/editproject.html', project_data, context)
 
 @login_required
 
