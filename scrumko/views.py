@@ -143,9 +143,12 @@ def user_logout(request):
 
 @login_required
 def productbacklog(request):
-	allStories = Story.objects.all()
-	print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
-	print allStories
+	#allStories = Story.objects.all()
+	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	#print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
+	#print allStories[0].story_name
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
 	context = RequestContext(request)
 	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories}, context)
 	
