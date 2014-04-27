@@ -269,7 +269,6 @@ def maintainproject(request):
 	return render_to_response('scrumko/maintainproject.html', project_data, context)
 
 @login_required
-
 def storycreate(request):
     
     # get current user
