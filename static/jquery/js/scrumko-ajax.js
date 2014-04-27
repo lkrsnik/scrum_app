@@ -81,6 +81,7 @@ $(document).ready(function (e) {
 	
 	//Add project button
 	$("#complete_form").click(function () {
+		$("#id_team").val( "---------" );
 		var postText = "";
 		a=0;
 		$("p.message").each(function() {

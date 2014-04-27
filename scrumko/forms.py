@@ -57,18 +57,11 @@ class ProjectCreateForm(forms.ModelForm):
 	project_name =  forms.CharField(label = mark_safe(u'Project name'),max_length=50, error_messages=required_error)
 	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Product owner'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
 	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Scrum master'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
-	#team = forms.ModelMultipleChoiceField(label = mark_safe(u'Ekipa(za več izborov uporabi "Ctrl" ali "Cmd")'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
-	#team = forms.ModelChoiceField(label = mark_safe(u'Team'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
 	team = forms.ModelMultipleChoiceField(widget=forms.HiddenInput(),queryset=User.objects.none(), required=False)
 	
-	#print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-	#print forms
-	#print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-	#print self.cleaned_data['project_name']
 	
 	#already exist validation
 	def clean_project_name(self):
-		print "DDDDDDAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 		project_name = self.cleaned_data['project_name']
 		
 		covering = Project.objects.filter(project_name=project_name)
@@ -79,7 +72,6 @@ class ProjectCreateForm(forms.ModelForm):
 	
 	#validate if name already taken under other roles
 	def clean_scrum_master(self):
-		print "EEEEEAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 		scrum_master = self.cleaned_data['scrum_master']
 		try:
 			project_owner = self.cleaned_data['project_owner']
@@ -91,12 +83,6 @@ class ProjectCreateForm(forms.ModelForm):
 			return
 		return scrum_master
 	
-	#validate if name already taken under other roles
-	#def clean_team(self):
-	#	team = self.cleaned_data['team']
-		
-		
-	#	return team
 		
 	class Meta:
 		model = Project

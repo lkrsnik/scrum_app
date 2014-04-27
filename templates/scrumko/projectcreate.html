@@ -62,13 +62,28 @@
 					</div>
 					<br/>
 					<br/>
-				<p><a id="add" href="#">Add another team member</a></p>
+				<button id="add" href="#">Add another team member</button>
+				<br/>
+				<br/>
+				
 				<input type="hidden" id="write_team_members" name="all_members" value=""/>
+				
+				
 				<div class="item">
-					<p id="team_member" class="message"></p>
-					<p style=""><a class="delete" href="#">Delete</a></p>
+				<table class=planingtable>
+					<tr>
+						<td class=projectrows>
+							<p id="team_member" class="message"></p>
+						</td>
+						<td class=projectrows>
+							<a class="delete" href="#">Delete</a>
+						</td>
+					</tr>
+				</table>	
+					
 				</div>
 				
+				<br/>
 				<!-- Provide a button to click to submit the form. -->
 				<input type="submit" id="complete_form" name="submit" value="Add project" />
 			</form>
