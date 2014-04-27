@@ -199,15 +199,15 @@ def projectcreate(request):
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
 	registered = False
-	all_members = "";
+	all_members = list();
 	all_options=User.objects.all().order_by('username')
     # If it's a HTTP POST, we're interested in processing form data.
 	if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
 		
-  		project_form = ProjectCreateForm(data=request.POST);
-  		all_members = request.POST.get('all_members');
+  		project_form = ProjectCreateForm(data=request.POST)
+  		all_members = request.POST.get('all_members')
 		#print all_members
 		#for team_member in all_members.split(' '):
 		#	print team_member
@@ -284,7 +284,7 @@ def projectcreate(request):
 				#print member_test[0].id
 				project_test[0].team.add(int(member_test[0].id))
 	
-			all_members=""
+			all_members=list()
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
