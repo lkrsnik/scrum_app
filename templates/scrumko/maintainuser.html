@@ -1,78 +1,66 @@
 {% extends 'scrumko/main.html' %}
 
 {% block body_block %}
-        <h1>Vzdrzevanje uporabniskih racunov</h1>
+        <h1>Edit user data</h1>
 		{% if request.user.is_superuser %} <!-- only admin can see this -->
 			<form id="user_form" method="post" action="/scrumko/maintainuser/"
 					enctype="multipart/form-data">
 			{% csrf_token %}
-			<table>
+			<table class=planingtable>
 				<tr>
-						<td class="userTableFIRST">
+						<td>
 							ID
 						</td>
-						<td class="userTableFIRST">
-							Uporabnisko ime
+						<td>
+							User name
 						</td>
 						
-						<td class="userTableFIRST">
-							Email
-						</td>
-						<td class="userTableFIRST">
-							Geslo
-						</td>
-						<td class="userTableFIRST">
+						
+						
+						<td>
 							Superuser
 						</td>						
-						<td class="userTableFIRST">
+						<td>
 							Staff
 						</td>
-						<td class="userTableFIRST">
-							Uredi
+						<td>
+							Edit
 						</td>
-						<td class="userTableFIRST">
-							Izbrisi
+						<td>
+							Delete
 						</td>
 			
 				</tr>
 				{% for detail in user_detail %}
 				<tr>
-						<td class="userTableCenter">
+						<td>
 							{{ detail.id }}
 						</td>
-						<td class="userTable">
+						<td>
 							{{ detail.username }}
 						</td>
 						
-						<td class="userTable">
-							{{ detail.email }}
-						</td>
-						<td class="userTable">
-							*****
-						</td>	
-						<td class="userTableCenter">
+						
+							
+						<td>
 							{% if  detail.is_superuser  %}
 								<img src="/static/images/yes.png" alt="yes" height="15" width="15">
 							{% else %}
 								<img src="/static/images/no.png" alt="yes" height="15" width="15">
 							{% endif %}
 						</td>	
-						<td class="userTableCenter">
+						<td>
 							{% if  detail.is_staff  %}
 								<img src="/static/images/yes.png" alt="yes" height="15" width="15">
 							{% else %}
 								<img src="/static/images/no.png" alt="yes" height="15" width="15">
 							{% endif %}
 						</td>	
-						<td class="userTable">
-							<a href="/scrumko/edit/"><img src="/static/images/edit.png" alt="edit" height="15" width="15">Uredi</a>						
+						<td>
+							<a href="/scrumko/edit/"><img src="/static/images/edit.png" alt="edit" height="20" width="20"></a>						
 						</td>	
-						<td class="userTable">
-							
-						
-							<a href="edit"><img src="/static/images/delete.png" alt="edit" height="15" width="15">Izbrisi</a>	
-							
-						
+						<td>
+							<a href="userdelete/{{detail.id}}" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 				
 						</td>	
 				</tr>
 					

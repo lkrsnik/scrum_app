@@ -268,10 +268,19 @@ def maintainuser(request):
 	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainuser.html',user_data, context)
+
+def userdelete(request, id):
+	context = RequestContext(request)
+	user_info = User.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/maintainuser")		
 	
 def maintainsprint(request):
 	context = RequestContext(request)
-	sprint_info = Sprint.objects.all()
+	
+	#request.session['selected_project'] = int(request.GET.get('project_id', '0'))
+	#sprint.object.filter{project__id. = request.session{"selected_project"}
+	
+	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
 	sprint_data = {"sprint_detail" : sprint_info}
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)

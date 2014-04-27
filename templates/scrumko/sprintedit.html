@@ -1,0 +1,62 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+		
+        {% if registered %}
+			<div class="succes_hold">
+				<div class="succes">
+					Sprint created successfully.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+
+			<script>
+				$(function() {
+					$( "#id_start_date" ).datepicker();
+				});
+		  </script>
+		  
+		  <script>
+				$(function() {
+					$( "#id_finish_date" ).datepicker();
+				
+				});
+				
+				
+		  </script>
+
+        <h1>Sprint edit</h1>
+
+			<form id="sprint_form" method="post" action="/scrumko/sprintedit/"
+					enctype="multipart/form-data">
+
+				{% csrf_token %}
+				{% for hidden in sprint_form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+
+				{% for field in sprint_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
+				
+				
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" name="submit" value="Save changes" />
+			</form>
+   {% endblock %}

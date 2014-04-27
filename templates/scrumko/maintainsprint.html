@@ -1,5 +1,6 @@
 {% extends 'scrumko/main.html' %}
 {% block body_block %}
+		
         <h1>Sprint edit</h1>
 		{% if request.user.is_staff %} <!-- only admin can see this -->
 			<table class=planingtable>
