@@ -10,7 +10,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
-
+from django.db.models import Q
 
 from scrumko.models import User
 from scrumko.models import UserProfile
@@ -34,7 +34,8 @@ def home(request):
    	context = RequestContext(request)
         	
 	# Project choose
-	project_info = Project.objects.all()
+	
+	project_info = Project.objects.filter(Q(scrum_master__id = current_user) | Q(project_owner = current_user) | Q(team__id = current_user)).distinct()
 	context_dict = {"project_detail" : project_info}
 	
 	# if user choose project, save this project id and name	
