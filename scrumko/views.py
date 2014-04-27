@@ -143,7 +143,6 @@ def user_logout(request):
 
 @login_required
 def sprintcreate(request):
-
 	# check permision to form and
 	# project permision check
 	current_user = request.user.id
@@ -256,10 +255,20 @@ def maintainsprint(request):
 	context = RequestContext(request)
 	sprint_info = Sprint.objects.all()
 	sprint_data = {"sprint_detail" : sprint_info}
-
-	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
+	
+def sprintedit(request):
+	context = RequestContext(request)
+	sprint_info = Sprint.objects.all()
+	sprint_data = {"sprint_detail" : sprint_info}
+    # Render the template depending on the context.
+	return render_to_response('scrumko/sprintedit.html',sprint_data, context)
+
+def sprintdelete(request, sprint_id):
+	context = RequestContext(request)
+	sprint_info = Sprint.objects.get(id=sprint_id).delete()
+	return HttpResponseRedirect("/scrumko/maintainsprint")	
 
 def maintainproject(request):
 	context = RequestContext(request)
