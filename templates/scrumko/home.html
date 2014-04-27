@@ -22,9 +22,9 @@
 		</tr>
 			
 		{% for detail in project_detail %}
-			{% for team_member in detail.team.all %}
+			
 				
-				{% if team_member.id = request.user.id or request.user.id == detail.project_owner_id or request.user.id == detail.scrum_master_id %}
+				
 					<tr>
 				<td>
 					{{ detail.project_name }}
@@ -42,8 +42,8 @@
 				</td>	
 				
 			</tr>
-				{% endif %}
-			{% endfor %}
+				
+			
 			
 		{% endfor %}
 	</table>

@@ -10,7 +10,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
-
+from django.db.models import Q
 
 from scrumko.models import User
 from scrumko.models import UserProfile
@@ -34,7 +34,8 @@ def home(request):
    	context = RequestContext(request)
         	
 	# Project choose
-	project_info = Project.objects.all()
+	
+	project_info = Project.objects.filter(Q(scrum_master__id = current_user) | Q(project_owner = current_user) | Q(team__id = current_user)).distinct()
 	context_dict = {"project_detail" : project_info}
 	
 	# if user choose project, save this project id and name	
@@ -140,7 +141,17 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect('/scrumko/')
 
-
+@login_required
+def productbacklog(request):
+	#allStories = Story.objects.all()
+	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	#print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
+	#print allStories[0].story_name
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
+	context = RequestContext(request)
+	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories}, context)
+	
 @login_required
 def sprintcreate(request):
 	# check permision to form and
@@ -266,10 +277,19 @@ def maintainuser(request):
 	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainuser.html',user_data, context)
+
+def userdelete(request, id):
+	context = RequestContext(request)
+	user_info = User.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/maintainuser")		
 	
 def maintainsprint(request):
 	context = RequestContext(request)
-	sprint_info = Sprint.objects.all()
+	
+	#request.session['selected_project'] = int(request.GET.get('project_id', '0'))
+	#sprint.object.filter{project__id. = request.session{"selected_project"}
+	
+	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
 	sprint_data = {"sprint_detail" : sprint_info}
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
@@ -292,6 +312,11 @@ def maintainproject(request):
 	project_data = {"project_detail" : project_info}	
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainproject.html', project_data, context)
+	
+def projectdelete(request, id):
+	context = RequestContext(request)
+	projecr_info = Project.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/maintainproject")	
 
 @login_required
 def editproject(request):

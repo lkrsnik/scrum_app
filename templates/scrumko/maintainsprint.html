@@ -1,5 +1,6 @@
 {% extends 'scrumko/main.html' %}
 {% block body_block %}
+		
         <h1>Sprint edit</h1>
 		{% if request.user.is_staff %} <!-- only admin can see this -->
 			<table class=planingtable>
@@ -39,10 +40,10 @@
 							{{ detail.velocity }}
 						</td>	
 						<td>
- 							<a href="/scrumko/sprintedit"><img src="/static/images/edit.png" alt="yes" height="15" width="15">Edit</a> 						
+ 							<a href="/scrumko/sprintedit"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 						
 						</td>	
 						<td>
-							<a href="sprintdelete/{{detail.id}}" ><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete</a> 
+							<a href="sprintdelete/{{detail.id}}" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
 						</td>	
 				</tr>
 				{% endfor %}

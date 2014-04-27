@@ -561,3 +561,55 @@ a
 	color: white;
 	cursor:pointer
 }
+
+/*CSS for Product backlog*/
+.story_container
+{
+	width: 90%;
+	
+}
+.story_name_container
+{
+	margin-bottom:5px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #4590ab;
+}
+.story_actions_container
+{
+	padding:1px 15px 1px 15px;
+	margin-bottom:5px;
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+}
+.story_priority,.story_business
+{
+	width: 25%;
+	text-align: center;
+	padding-right:15px;
+	float: left;
+}
+.story_estimation,.story_edit
+{
+	width: 3%;
+	text-align: center;
+	padding-left:15px;
+	float: right;
+}
+.story_content_container
+{
+	margin-bottom:5px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+}
+.story_acceptance_test_container
+{
+	margin-bottom:5px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
