@@ -38,4 +38,26 @@ $(document).ready(function() {
 		});
 	  });
 
+	$(function() {
+		$( "#dialog_note" ).dialog({
+		  autoOpen: false,
+		  show: {
+			effect: "fade",
+			duration: 1000
+		  },
+		  hide: {
+			effect: "fade",
+			duration: 1000
+		  },
+		  width: 600
+		});
+	 
+		$( ".edit_note" ).click(function() {
+			$('#storyid1').val ($(this).attr('data-story'));
+		
+			$('#note').val ($(this).parents('.story_container').find('.notes').html());
+		
+		  $( "#dialog_note" ).dialog( "open" );
+		});
+	  });
 });

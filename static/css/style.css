@@ -576,6 +576,7 @@ a
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	color: #4590ab;
+	font-weight: bold; 
 }
 .story_actions_container
 {
@@ -616,11 +617,23 @@ a
 	background-color: rgba(255, 255, 255, 0.1);
 	color: white;
 }
-.story_acceptance_test_container
+/*.story_acceptance_test_container
 {
 	margin-bottom:3px;
 	padding:15px 15px 15px 15px;
 	background-color: rgba(255, 255, 255, 0.1);
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
+}*/
+
+.notes
+{
+	margin: 0px 0px 0px 0px;
+	font-size: 0.8em;
+	color: orange;
+}
+
+#note {
+  width: 80%;
+  
 }
