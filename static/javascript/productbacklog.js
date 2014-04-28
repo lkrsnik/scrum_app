@@ -1,5 +1,20 @@
 $(document).ready(function() {
 
+	$('.target').click(function(e) {
+		 // get form associated with the button
+		var form = $(this)
+
+		var x;
+		var r=confirm("Do you really want to delete user story?");
+		if (!r)
+		  {
+		  e.preventDefault();
+		  }
+	});
+
+
+
+
 	$(function() {
 		$( "#dialog" ).dialog({
 		  autoOpen: false,

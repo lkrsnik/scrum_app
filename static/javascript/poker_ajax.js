@@ -87,7 +87,7 @@ function handle_activation ()
 		disp_table();
 	});
 	
-	$("#useestimate").on('click',function(e)
+	/*$("#useestimate").on('click',function(e)
 	{
 		
 		$("#imgProgress").show();
@@ -98,7 +98,7 @@ function handle_activation ()
 		$.get('/scrumko/poker_uselast/', {});		
 		
 		disp_table();
-	});
+	});*/
 	
 	
 	

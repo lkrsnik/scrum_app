@@ -570,7 +570,7 @@ a
 }
 .story_name_container
 {
-	margin-bottom:5px;
+	margin-bottom:3px;
 	padding:15px 15px 15px 15px;
 	background-color: rgba(255, 255, 255, 0.1);
 	border-top-left-radius: 10px;
@@ -580,7 +580,7 @@ a
 .story_actions_container
 {
 	padding:1px 15px 1px 15px;
-	margin-bottom:5px;
+	margin-bottom:3px;
 	background-color: rgba(255, 255, 255, 0.1);
 	font-size: 13px;
 }
@@ -591,7 +591,7 @@ a
 	padding-right:15px;
 	float: left;
 }
-.story_estimation,.story_edit
+.story_estimation,.story_edit,.backlog_poker
 {
 	
 	text-align: center;
@@ -606,19 +606,19 @@ a
 
 .story_edit
 {
-	width: 3%;
+	width: 8%;
 }
 
 .story_content_container
 {
-	margin-bottom:5px;
+	margin-bottom:3px;
 	padding:15px 15px 15px 15px;
 	background-color: rgba(255, 255, 255, 0.1);
 	color: white;
 }
 .story_acceptance_test_container
 {
-	margin-bottom:5px;
+	margin-bottom:3px;
 	padding:15px 15px 15px 15px;
 	background-color: rgba(255, 255, 255, 0.1);
 	border-bottom-left-radius: 10px;

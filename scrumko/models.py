@@ -56,6 +56,7 @@ class Story (models.Model):
 	priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, null=True, default='must have', blank=False)
 	test_text = models.TextField(blank=False, max_length=1000)
 	estimate = models.DecimalField(default=0, max_digits=3, decimal_places=1)
+	#status = models.BooleanField(default=False)
 	
 	def __unicode__(self):
 		# do not change related to Poker

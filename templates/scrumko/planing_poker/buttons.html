@@ -32,8 +32,9 @@
 			<button type="button" id="startround">Start new round</button>
 			
 		{% endif %}
-		
-		<button type="button" id="useestimate">Use estimate</button>
+		<form action="/scrumko/poker_uselast/" method="post" style="float: left;">
+			<input type="submit" id="useestimate" value="Use estimate"/>{% csrf_token %}
+		</form>
 			
 	{% endif %}
 	
