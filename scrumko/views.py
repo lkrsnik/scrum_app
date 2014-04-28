@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -146,12 +146,14 @@ def user_logout(request):
 def productbacklog(request):
 	#allStories = Story.objects.all()
 	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
-	#print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
-	#print allStories[0].story_name
-	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
+	current_user = request.user.id
+	selected_project_id = request.session['selected_project']
+	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
 	
 	context = RequestContext(request)
-	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories}, context)
+	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 	
 @login_required
 def sprintcreate(request):
@@ -225,12 +227,13 @@ def projectcreate(request):
         # Note that we make use of both UserForm and UserProfileForm.
 		
   		project_form = ProjectCreateForm(data=request.POST)
+  		notification_form = NotificationPermissionForm(data=request.POST)
   		all_members = request.POST.get('all_members')
 		
 		
         # If the two forms are valid...
-		if project_form.is_valid():
-			
+		if project_form.is_valid() and notification_form.is_valid():
+						
             # Save the user's form data to the database.
 			scrum_master=User.objects.filter(id = int(request.POST.get('scrum_master')))
 			scrum_master.update(is_staff = True)
@@ -263,21 +266,25 @@ def projectcreate(request):
 				project_test[0].team.add(int(member_test[0].id))
 	
 			all_members=""
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
+			
+			
+			notification_permission = notification_form.save(commit=False)
+			notification_permission.project = project_test[0]
+			notification_permission.permission=request.POST['permission']
+			notification_permission.save()
+		
 		else:
 			print project_form.errors
-			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
+			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'notification_form': notification_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
 	
 	project_form = ProjectCreateForm()
-		
+	notification_form= NotificationPermissionForm()	
 		
     # Render the template depending on the context.
-	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
+	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'notification_form': notification_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
 def maintainuser(request):
 	context = RequestContext(request)
 	user_info = User.objects.all()
@@ -345,6 +352,7 @@ def editproject(request):
         # Note that we make use of both UserForm and UserProfileForm.
 		
 		project_form = ProjectEditForm(data=request.POST)
+		notification_form = NotificationPermissionForm(data=request.POST)
 		all_members = request.POST.get('all_members')
 		
 		
@@ -443,6 +451,61 @@ def storycreate(request):
 	
 	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
 
+@login_required
+def storyedit(request, id):
+	# get current user
+	current_user = request.user.id
+	
+	# check on which project is this user owner or scrum master
+	user_project_master =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	user_project_owner =  Project.objects.filter(project_owner__id = current_user, id = request.session['selected_project'])
+    
+    # check if user is scrum master or owner 
+    # if not redirect (he has no permision to this site)
+	if len (user_project_master) == 0 and len (user_project_owner) == 0:
+		return HttpResponseRedirect("/scrumko/home")
+	       
+	context = RequestContext(request)
+	registered = False
+	story_info = Story.objects.filter(id = id)
+	r = story_info[0]
+	if request.method == 'POST':
+		story_form = StoryEditForm(data=request.POST)
+  		
+  				
+		if story_form.is_valid():
+			already_exist=Story.objects.filter(project_name=request.POST['project_name'],story_name=request.POST['story_name'])
+			
+			if len(already_exist)>0 and not already_exist[0].id == r.id:
+				
+				already_exist_message = "* Username already exists!"
+				return render_to_response('scrumko/storyedit.html',{'already_exist_message':already_exist_message, 'story_form': story_form, 'registered': registered,'story_id': id}, context)
+			else:    
+				r.story_name=request.POST['story_name']
+				r.text=request.POST['text']
+				r.bussines_value=request.POST['bussines_value']	
+				r.priority=request.POST['priority']	
+				r.test_text=request.POST['test_text']
+				#r.project_name=User.objects.get(id=project_owner)	
+				r.save();
+				registered = True
+		else:
+			print story_form.errors
+			return render_to_response('scrumko/storyedit.html',{'story_form': story_form, 'registered': registered,'story_id': id}, context)
+	
+	
+		
+		
+		
+	story_form = StoryEditForm(initial={'project_name': r.project_name, 'story_name': r.story_name, 'text': r.text, 'bussines_value': r.bussines_value, 'priority': r.priority, 'test_text': r.test_text})
+	
+	return render_to_response('scrumko/storyedit.html',{'story_form': story_form, 'registered': registered,'story_id': id}, context)
+
+def storydelete(request, id):
+	context = RequestContext(request)
+	Story.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/productbacklog")	
+	
 def edit(request):
 	context = RequestContext(request)	
 	registered = False

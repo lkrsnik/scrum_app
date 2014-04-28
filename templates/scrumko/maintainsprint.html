@@ -1,6 +1,11 @@
 {% extends 'scrumko/main.html' %}
+{% load static %}
+
 {% block body_block %}
 		
+		<script type="text/javascript" src="{% static  'javascript/maintainsprint.js' %}" ></script>
+
+				
         <h1>Sprint edit</h1>
 		{% if request.user.is_staff %} <!-- only admin can see this -->
 			<table class=planingtable>
@@ -43,7 +48,7 @@
  							<a href="/scrumko/sprintedit" ><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 						
 						</td>	
 						<td>
-							<a href="sprintdelete/{{detail.id}}" id="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
+							<a href="sprintdelete/{{detail.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
 						</td>	
 				</tr>
 				{% endfor %}
