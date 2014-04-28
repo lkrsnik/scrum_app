@@ -514,13 +514,18 @@ def edit(request):
 		userid = request.POST['us_id']
 		project_info = User.objects.filter(id = userid)
 		r= project_info[0]
+		
+		oldusername = r.username
+		
+		r.username = ""
+		r.save()
         
 		user_form = UserEditForm(data=request.POST)
 		
 		if user_form.is_valid():			
 			username = request.POST['username']
 			email = request.POST['email']
-			is_superuser = request.POST['is_superuser']
+			is_superuser = request.POST.get('is_superuser', False)
 			first_name = request.POST['first_name']
 			last_name = request.POST['last_name']
 			password = request.POST['password']
@@ -537,6 +542,10 @@ def edit(request):
 			registered = True	
 			
 		else:
+			
+			r.username = oldusername
+			r.save()
+			
 			print user_form.errors		
 			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
 	
