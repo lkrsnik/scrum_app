@@ -151,9 +151,10 @@ def productbacklog(request):
 	selected_project_id = request.session['selected_project']
 	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
-	
+	note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
+	note_permission = note_permission.permission
 	context = RequestContext(request)
-	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	return render_to_response('scrumko/productbacklog.html', {'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 	
 @login_required
 def sprintcreate(request):
@@ -383,10 +384,10 @@ def editproject(request):
 					member_test=User.objects.filter(username = team_member)
 					project_info[0].team.add(int(member_test[0].id))	
 				
-				notification_permission = notification_form.save(commit=False)
-				notification_permission.project = project_info[0]
-				notification_permission.permission=request.POST.get('is_private', False)
-				notification_permission.save()
+				notification_perm=NotificationPermission.objects.get(project__id=project_info[0].id)
+				
+				notification_perm.permission=request.POST.get('permission', False)
+				notification_perm.save()
 
 				registered = True	
 				all_members=""
