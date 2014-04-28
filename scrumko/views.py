@@ -350,17 +350,18 @@ def editproject(request):
 		
         # If the two forms are valid...
 		if project_form.is_valid():
-			
+			change=True;
 			scrum_master = request.POST['scrum_master']
 			project_owner = request.POST['project_owner']
 			project_name = request.POST['project_name']
-			already_exist=Project.objects.get(project_name=project_name)
-			
-			if not already_exist.id == r.id:
-				
-				already_exist_message = "Username already exists!"
-				return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
-			else:
+			already_exist=Project.objects.filter(project_name=project_name)
+			if len(already_exist)>0:
+				already_exist=already_exist[0]
+				if not already_exist.id == r.id:
+					change=False;
+					already_exist_message = "Username already exists!"
+					return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+			if(change):
 				r.scrum_master=User.objects.get(id=scrum_master)
 				r.project_owner=User.objects.get(id=project_owner)			
 				r.project_name=project_name
