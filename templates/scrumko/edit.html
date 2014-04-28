@@ -1,18 +1,21 @@
 {% extends 'scrumko/main.html' %}
 
 {% block body_block %}
-        <h1>Urejanje uporabnika</h1>
-
+       <h1>Edit user: {{project_detail.0.username}}</h1>
         {% if registered %}
-       	Uporabnik je bil <strong>uspesno  </strong>dodan.<br/>
-        <a href="/scrumko/edit">Dodaj se enega uporabnika.</a><br/>
-        	
-        
-	{% else %}
-        <form id="user_form" method="post" action="/scrumko/edit/"
+			<div class="succes_hold">
+				<div class="succes">
+					User was <strong>successfully  </strong>updated.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+		
+               <form id="user_form" method="post" action="/scrumko/edit/"
                 enctype="multipart/form-data">
-
+			<input name="us_id" type="hidden" value="{{project_detail.0.id}}"/>
             {% csrf_token %}
+            
 	    {% for hidden in user_form.hidden_fields %}
 		{{ hidden }}
 	    {% endfor %}
@@ -52,13 +55,13 @@
 							
 						</div>
 					</div>
-
+					<br/>
+					<br/>
 	    {% endfor %}
  
          
 			
             <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Dodaj" />
+            <input type="submit" name="submit" value="Update" />
         </form>
-       {% endif %}
 {% endblock %}
