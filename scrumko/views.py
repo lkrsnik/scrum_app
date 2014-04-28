@@ -146,12 +146,14 @@ def user_logout(request):
 def productbacklog(request):
 	#allStories = Story.objects.all()
 	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
-	#print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
-	#print allStories[0].story_name
-	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
+	current_user = request.user.id
+	selected_project_id = request.session['selected_project']
+	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
 	
 	context = RequestContext(request)
-	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories}, context)
+	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 	
 @login_required
 def sprintcreate(request):
