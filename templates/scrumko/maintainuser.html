@@ -29,9 +29,7 @@
 			{% csrf_token %}
 			<table class=planingtable>
 				<tr>
-						<td>
-							ID
-						</td>
+					
 						<td>
 							User name
 						</td>
@@ -51,9 +49,7 @@
 				</tr>
 				{% for detail in user_detail %}
 				<tr>
-						<td>
-							{{ detail.id }}
-						</td>
+						
 						<td>
 							{{ detail.username }}
 						</td>
