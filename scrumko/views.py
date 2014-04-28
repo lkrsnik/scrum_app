@@ -554,7 +554,7 @@ def edit(request):
 			r.save()
 			
 			print user_form.errors		
-			return render_to_response('scrumko/edit.html',{'notification_form': notification_form, 'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
+			return render_to_response('scrumko/edit.html',{ 'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
 	
 	else:
 		userid = int(request.GET.get('id', '0'))
@@ -562,7 +562,7 @@ def edit(request):
 		r = project_info[0]	
 	user_form = UserEditForm(initial={'username': r.username, 'email': r.email, 'is_superuser': r.is_superuser, 'first_name': r.first_name, 'last_name': r.last_name, 'password': r.password, 'password2': r.password })
 	
-	return render_to_response('scrumko/edit.html',{'notification_form': notification_form, 'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
+	return render_to_response('scrumko/edit.html',{ 'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
 
 @login_required	
 def startpoker(request, user_story_id):
