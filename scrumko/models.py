@@ -86,8 +86,8 @@ class Story_Sprint (models.Model):
 	
 class Task (models.Model):
 	story = models.ForeignKey (Story)
-	text = models.CharField(max_length=1000)
-	duratino = models.DecimalField(max_digits=4, decimal_places=1)
+	text = models.CharField(max_length=1000, blank=False)
+	duratino = models.DecimalField(max_digits=4, decimal_places=1, blank=False)
 	worker = models.ForeignKey(User)
 		
 

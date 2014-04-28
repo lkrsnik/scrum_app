@@ -2,6 +2,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, UserOrientedEditForm
+from scrumko.forms import TaskForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -923,3 +924,34 @@ def change_estimation (request):
 	
 	return HttpResponseRedirect('/scrumko/productbacklog/')
 	
+def taskcreate (request, id):
+	
+	context = RequestContext(request)
+	success=False;
+	context_dict = {};
+    
+	# get project id
+	project_id = request.session['selected_project']
+	context_dict ['success'] = success
+    
+	if request.method == 'POST':
+        
+		task_form = TaskForm(project_id, data=request.POST)    
+        
+		if task_form.is_valid():
+			task_form.save()			
+			
+			success=True;
+		else:				
+			print task_form.errors		
+			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+    
+	# get form and add to dict
+	task_form = TaskForm(project_id, initial={'story': id}) 
+	context_dict ['task_form'] = task_form
+	
+       
+	# render page
+	return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+       
+   
