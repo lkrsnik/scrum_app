@@ -79,7 +79,16 @@ class StoryNotification (models.Model):
 class NotificationPermission (models.Model):
 	permission = models.BooleanField()
 	project = models.ForeignKey(Project)
-				
+		
+class Story_Sprint (models.Model):
+	story = models.ForeignKey(Story)
+	sprint = models.ForeignKey(Sprint)
+	
+class Task (models.Model):
+	story = models.ForeignKey (Story)
+	text = models.CharField(max_length=1000)
+	duratino = models.DecimalField(max_digits=4, decimal_places=1)
+	worker = models.ForeignKey(User)
 		
 
 
