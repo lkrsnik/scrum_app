@@ -13,8 +13,9 @@
         <p id="previous_members" hidden="true">{{ all_members }}</p>
         <form id="project_form" method="post" action="/scrumko/maintainproject/editproject/"
 					enctype="multipart/form-data">
+					{% csrf_token %}
 				<input name="proj_id" type="hidden" value="{{project_detail.0.id}}"/>
-				{% csrf_token %}
+				
 				<!--{{ project_form.as_p }}-->
 				{% for hidden in sprint_form.hidden_fields %}
 					{{ hidden }}
@@ -87,8 +88,31 @@
 				
 				<br/>
 				<!-- Provide a button to click to submit the form. -->
+				
+				{% for hidden in notification_form.hidden_fields %}
+				{{ hidden }}
+				{% endfor %}
+				{% for field in notification_form.visible_fields %}
+				
+							<div>
+								<div class="fieldwrapper">
+									{{ field.label_tag }}
+								</div>
+								
+								<div class="fieldwrapper">
+									{{ field }}
+								</div>
+								
+								<div class="errorwrapper">
+									{{ field.errors.as_text }}
+									
+								</div>
+							</div>
+							<br/>
+							<br/>
+				{% endfor %}
 				<input type="submit" id="complete_form" name="submit" value="Update project" />
 			</form>      
-			</form>      
+		   
 
 {% endblock %}

@@ -15,7 +15,7 @@ from django.core.exceptions import ValidationError
 
 from scrumko.models import User
 from scrumko.models import UserProfile
-from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates
+from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission
 
 
 import json
@@ -270,7 +270,7 @@ def projectcreate(request):
 			
 			notification_permission = notification_form.save(commit=False)
 			notification_permission.project = project_test[0]
-			notification_permission.permission=request.POST['permission']
+			notification_permission.permission=request.POST.get('is_private', False)
 			notification_permission.save()
 		
 		else:
@@ -281,7 +281,7 @@ def projectcreate(request):
     # These forms will be blank, ready for user input.
 	
 	project_form = ProjectCreateForm()
-	notification_form= NotificationPermissionForm()	
+	notification_form= NotificationPermissionForm(initial={'permission':False})	
 		
     # Render the template depending on the context.
 	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'notification_form': notification_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
@@ -312,6 +312,7 @@ def sprintedit(request):
 	sprint_data = {"sprint_form" : sprint_form}
     # Render the template depending on the context.
 	return render_to_response('scrumko/sprintedit.html',sprint_data, context)
+
 
 def sprintdelete(request, sprint_id):
 	context = RequestContext(request)
@@ -357,7 +358,7 @@ def editproject(request):
 		
 		
         # If the two forms are valid...
-		if project_form.is_valid():
+		if project_form.is_valid() and notification_form.is_valid():
 			change=True;
 			scrum_master = request.POST['scrum_master']
 			project_owner = request.POST['project_owner']
@@ -368,7 +369,7 @@ def editproject(request):
 				if not already_exist.id == r.id:
 					change=False;
 					already_exist_message = "Username already exists!"
-					return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+					return render_to_response('scrumko/editproject.html',{'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 			if(change):
 				r.scrum_master=User.objects.get(id=scrum_master)
 				r.project_owner=User.objects.get(id=project_owner)			
@@ -382,13 +383,17 @@ def editproject(request):
 					member_test=User.objects.filter(username = team_member)
 					project_info[0].team.add(int(member_test[0].id))	
 				
+				notification_permission = notification_form.save(commit=False)
+				notification_permission.project = project_info[0]
+				notification_permission.permission=request.POST.get('is_private', False)
+				notification_permission.save()
 
 				registered = True	
 				all_members=""
 
 		else:
 			print project_form.errors
-			return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+			return render_to_response('scrumko/editproject.html',{'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 
 	# Not a HTTP POST, so we render our form using two ModelForm instances.
 	# These forms will be blank, ready for user input.
@@ -404,9 +409,11 @@ def editproject(request):
 		
 
 	print r.id
+	notif_perm=NotificationPermission.objects.filter(project__id=r.id)
 	project_form = ProjectEditForm(initial={'project_name': r.project_name, 'project_owner': r.project_owner, 'scrum_master': r.scrum_master, 'team': r.team})
+	notification_form = NotificationPermissionForm(initial={'permission': notif_perm[0].permission})
 	# Render the template depending on the context.
-	return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+	return render_to_response('scrumko/editproject.html',{'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 	
 
 @login_required
@@ -547,7 +554,7 @@ def edit(request):
 			r.save()
 			
 			print user_form.errors		
-			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
+			return render_to_response('scrumko/edit.html',{'notification_form': notification_form, 'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
 	
 	else:
 		userid = int(request.GET.get('id', '0'))
@@ -555,7 +562,7 @@ def edit(request):
 		r = project_info[0]	
 	user_form = UserEditForm(initial={'username': r.username, 'email': r.email, 'is_superuser': r.is_superuser, 'first_name': r.first_name, 'last_name': r.last_name, 'password': r.password, 'password2': r.password })
 	
-	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
+	return render_to_response('scrumko/edit.html',{'notification_form': notification_form, 'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
 
 @login_required	
 def startpoker(request, user_story_id):
