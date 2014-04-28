@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 from scrumko.models import User
 from scrumko.models import UserProfile
@@ -320,6 +321,7 @@ def projectdelete(request, id):
 
 @login_required
 def editproject(request):
+	already_exist_message = ""
 	context = RequestContext(request)
 	# Render the template depending on the context.
 	
@@ -348,25 +350,32 @@ def editproject(request):
 			scrum_master = request.POST['scrum_master']
 			project_owner = request.POST['project_owner']
 			project_name = request.POST['project_name']
+			already_exist=Project.objects.get(project_name=project_name)
 			
-			r.scrum_master=User.objects.get(id=scrum_master)
-			r.project_owner=User.objects.get(id=project_owner)			
-			r.project_name=project_name
-			r.save();
-			for team_member in r.team.all():	
-				project_info[0].team.remove(team_member)
+			if not already_exist.id == r.id:
 				
-			
-			for team_member in all_members.split(' '):
-				member_test=User.objects.filter(username = team_member)
-				project_info[0].team.add(int(member_test[0].id))	
-			
+				already_exist_message = "Username already exists!"
+				return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+			else:
+				r.scrum_master=User.objects.get(id=scrum_master)
+				r.project_owner=User.objects.get(id=project_owner)			
+				r.project_name=project_name
+				r.save();
+				for team_member in r.team.all():	
+					project_info[0].team.remove(team_member)
+					
+				
+				for team_member in all_members.split(' '):
+					member_test=User.objects.filter(username = team_member)
+					project_info[0].team.add(int(member_test[0].id))	
+				
 
-			registered = True	
-			all_members=""
+				registered = True	
+				all_members=""
+
 		else:
 			print project_form.errors
-			return render_to_response('scrumko/editproject.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+			return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 
 	# Not a HTTP POST, so we render our form using two ModelForm instances.
 	# These forms will be blank, ready for user input.
@@ -380,11 +389,11 @@ def editproject(request):
 		team_member=team_member.username
 		all_members=all_members+" "+team_member
 		
-	#r = project_info[0]
-	
+
+	print r.id
 	project_form = ProjectEditForm(initial={'project_name': r.project_name, 'project_owner': r.project_owner, 'scrum_master': r.scrum_master, 'team': r.team})
 	# Render the template depending on the context.
-	return render_to_response('scrumko/editproject.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+	return render_to_response('scrumko/editproject.html',{'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 	
 
 @login_required

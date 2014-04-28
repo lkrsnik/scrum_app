@@ -19,6 +19,7 @@
 					{{ hidden }}
 				{% endfor %}
 				
+				    
 
 				{% for field in project_form.visible_fields %}
 					<div class="formpart">
@@ -32,7 +33,10 @@
 						
 						<div class="errorwrapper">
 							{{ field.errors.as_text }}
+							{% if forloop.counter == 1 %}
 							
+								{{ already_exist_message}}
+							{% endif %}
 						</div>
 					</div>
 					<br/>
