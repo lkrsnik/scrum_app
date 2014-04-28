@@ -586,18 +586,29 @@ a
 }
 .story_priority,.story_business
 {
-	width: 25%;
+	width: 20%;
 	text-align: center;
 	padding-right:15px;
 	float: left;
 }
 .story_estimation,.story_edit
 {
-	width: 3%;
+	
 	text-align: center;
 	padding-left:15px;
 	float: right;
 }
+
+.story_estimation
+{
+	width: 25%;
+}
+
+.story_edit
+{
+	width: 3%;
+}
+
 .story_content_container
 {
 	margin-bottom:5px;
