@@ -525,8 +525,9 @@ def poker (request):
 	context_dict = {}
 	
 	# get active stoy on planing poker
-	active_poker = Poker.objects.filter (project__id = request.session['selected_project']).reverse()[0]
-		
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project'])
+	active_poker = active_poker[len(active_poker) - 1]	
+	
 	## add data to dictionary
 	
 	# if not active poker, then writeout this
@@ -648,7 +649,7 @@ def poker_table (request):
 		return HttpResponse(json.dumps(return_dict), content_type="application/json")
 	
 	# get last one
-	active_poker = active_poker.reverse()[0]
+	active_poker = active_poker[len (active_poker) - 1]
 	
 	## poker table
 	
@@ -715,13 +716,14 @@ def poker_disactivate (request):
 # function use last estimate
 def poker_uselast (request):
 	# get last story
-	story = Poker.objects.filter (project__id = request.session['selected_project']).reverse()[0].story
+	data = Poker.objects.filter (project__id = request.session['selected_project'])
+	story = data[len (data)-1].story
 	
 	# get all pokers on this story
 	pokers = Poker.objects.filter (project__id = request.session['selected_project'], story = story)
 	
 	# iterate throught pokers and find first with one or more estimates
-	for poker in pokers:
+	for poker in reversed(pokers):
 		# find all estimates
 		estimates = Poker_estimates.objects.filter (poker = poker)
 		
@@ -729,10 +731,11 @@ def poker_uselast (request):
 			avg_e = calc_avg_est (estimates)
 			story.estimate = avg_e
 			story.save()
+			 
 			break
 
 	# add to return that no estimate if not!!!!
-	return HttpResponse("")	
+	return HttpResponseRedirect("/scrumko/productbacklog")	
 	
 # function calculate avarage of estimates
 def calc_avg_est (est):
@@ -748,7 +751,8 @@ def poker_activate (request):
 	
 	# user story to start new poker
 	
-	story = Poker.objects.filter (project__id = request.session['selected_project']).reverse()[0].story
+	story = (Poker.objects.filter (project__id = request.session['selected_project']))
+	story = story[len (story) - 1].story
 	
 	# get current user
 	current_user = request.user.id

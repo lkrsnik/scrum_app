@@ -24,10 +24,16 @@
 				<div class="story_edit">
 					<a href="/scrumko/sprintedit"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 						
 				</div>
+				<div class="backlog_poker">
+					<a href="/scrumko/pokerstart/{{story.id}}" > Planing poker</a>
+				</div>
+				
 				<div class="story_estimation">
 					<p style="float: left;  margin-top: 0;">Estimation: &nbsp;</p> <p class="est" style="float: left; margin-top: 0;">{{story.estimate}}</p> 
 					<a href="javascript: void(0)" class="edit_estimate" id="#opener" data-story="{{story.id}}" > Change</a>
+					
 				</div>
+				
 				<br />
 				
 			  
