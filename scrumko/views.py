@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -449,6 +449,56 @@ def storycreate(request):
 	
 	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
 
+@login_required
+def storyedit(request, id):
+	# get current user
+	current_user = request.user.id
+	
+	# check on which project is this user owner or scrum master
+	user_project_master =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	user_project_owner =  Project.objects.filter(project_owner__id = current_user, id = request.session['selected_project'])
+    
+    # check if user is scrum master or owner 
+    # if not redirect (he has no permision to this site)
+	if len (user_project_master) == 0 and len (user_project_owner) == 0:
+		return HttpResponseRedirect("/scrumko/home")
+	       
+	context = RequestContext(request)
+	registered = False
+	story_info = Story.objects.filter(id = id)
+	r = story_info[0]
+	if request.method == 'POST':
+		story_form = StoryEditForm(data=request.POST)
+  		
+  				
+		if story_form.is_valid():
+			already_exist=Story.objects.filter(project_name=request.POST['project_name'],story_name=request.POST['story_name'])
+			
+			if len(already_exist)>0 and not already_exist[0].id == r.id:
+				
+				already_exist_message = "* Username already exists!"
+				return render_to_response('scrumko/storyedit.html',{'already_exist_message':already_exist_message, 'story_form': story_form, 'registered': registered,'story_id': id}, context)
+			else:    
+				r.story_name=request.POST['story_name']
+				r.text=request.POST['text']
+				r.bussines_value=request.POST['bussines_value']	
+				r.priority=request.POST['priority']	
+				r.test_text=request.POST['test_text']
+				#r.project_name=User.objects.get(id=project_owner)	
+				r.save();
+				registered = True
+		else:
+			print story_form.errors
+			return render_to_response('scrumko/storyedit.html',{'story_form': story_form, 'registered': registered,'story_id': id}, context)
+	
+	
+		
+		
+		
+	story_form = StoryEditForm(initial={'project_name': r.project_name, 'story_name': r.story_name, 'text': r.text, 'bussines_value': r.bussines_value, 'priority': r.priority, 'test_text': r.test_text})
+	
+	return render_to_response('scrumko/storyedit.html',{'story_form': story_form, 'registered': registered,'story_id': id}, context)
+	
 def edit(request):
 	context = RequestContext(request)	
 	registered = False

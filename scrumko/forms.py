@@ -215,8 +215,43 @@ class StoryForm (forms.ModelForm):
 		covering = Story.objects.filter(story_name = story_name_new, project_name = project_name_id)
 					
 		if len(covering) > 0:
-			raise ValidationError("Story with same name allready exsist.")
+			raise ValidationError("Story with same name already exist.")
 			return
+		
+		return story_name_new
+		
+class StoryEditForm (forms.ModelForm):
+	
+	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
+	story_name = forms.CharField(label = mark_safe('Name'), error_messages=required_error)
+	text = forms.CharField(label = mark_safe('Content'), widget=forms.Textarea, error_messages=required_error)
+	bussines_value = forms.IntegerField(label = mark_safe('Bussines value'), error_messages=velocity_error, validators=[
+		RegexValidator(
+			regex='^[0-9]*$',
+			message='Please enter a positive integer.',
+			code='invalid'
+		),
+	])
+	
+		
+	priority = forms.TypedChoiceField(label = mark_safe('Priority'), choices=Story.PRIORITY_CHOICES)
+	test_text = forms.CharField(label = mark_safe('Acceptance tests'), widget=forms.Textarea, error_messages=required_error)
+	
+	class Meta:
+		model = Story
+		fields = ('project_name', 'story_name', 'text', 'bussines_value', 'priority', 'test_text', )
+		
+	def clean_story_name(self):
+		story_name_new = self.cleaned_data['story_name']
+		project_name_id = self.cleaned_data['project_name']
+		
+		#covering with the other story name
+		covering = Story.objects.filter(story_name = story_name_new, project_name = project_name_id)
+					
+		if len(covering) > 0:
+			if not story_name_new == covering[0].story_name:
+				raise ValidationError("Story with same name already exists.")
+				return
 		
 		return story_name_new
 		

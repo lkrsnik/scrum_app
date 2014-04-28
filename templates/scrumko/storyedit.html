@@ -1,0 +1,54 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+		
+        {% if registered %}
+			<div class="succes_hold">
+				<div class="succes">
+					User story <strong>succesfully</strong> updated.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+
+        <h1>Edit user story</h1>
+
+			<form id="sprint_form" method="post" action="/scrumko/storyedit/{{ story_id }}/"
+					enctype="multipart/form-data">
+
+				{% csrf_token %}
+				{% for hidden in story_form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+
+				{% for field in story_form.visible_fields %}
+					<div class="formpart">
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper2">
+							{{ field }}
+							
+							
+							<div class="errorwrapper2">
+								{{ field.errors.as_text }}
+								{% if forloop.counter == 1 %}
+							
+									{{ already_exist_message}}
+								{% endif %}
+							
+							</div>
+						</div>
+						
+						
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
+							
+				
+				<!-- Provide a button to click to submit the form. -->
+				<input type="submit" name="submit" value="Save story" />
+			</form>
+   {% endblock %}
