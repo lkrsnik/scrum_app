@@ -216,22 +216,12 @@ class StoryForm (forms.ModelForm):
 		return story_name_new
 		
 class ProjectEditForm(forms.ModelForm):
-
+	
 	project_name =  forms.CharField(label = mark_safe(u'Project name'),max_length=50, error_messages=required_error)
 	project_owner =  forms.ModelChoiceField(label = mark_safe(u'Product owner'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
 	scrum_master = forms.ModelChoiceField(label = mark_safe(u'Scrum master'),queryset=User.objects.all().order_by('username'),error_messages=required_error)
 	team = forms.ModelMultipleChoiceField(widget=forms.HiddenInput(),queryset=User.objects.none(), required=False)
 	
-	
-	#already exist validation
-	def clean_project_name(self):
-		project_name = self.cleaned_data['project_name']
-		covering = Project.objects.filter(project_name=project_name)
-		if len(covering) > 0:
-			if not project_name == covering[0].project_name:
-				raise ValidationError("This project name already exists.")
-				return
-		return project_name
 	
 	#validate if name already taken under other roles
 	def clean_scrum_master(self):
