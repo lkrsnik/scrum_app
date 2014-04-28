@@ -11,7 +11,7 @@
 			<br/>
 		{% endif %}
 		
-               <form id="user_form" method="post" action="/scrumko/edit/"
+               <form id="user_form" method="post" action="/scrumko/editmyprofile/{{ user.id }}/"
                 enctype="multipart/form-data">
 			<input name="us_id" type="hidden" value="{{project_detail.0.id}}"/>
             {% csrf_token %}
