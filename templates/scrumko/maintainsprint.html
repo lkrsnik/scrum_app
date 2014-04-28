@@ -1,6 +1,29 @@
 {% extends 'scrumko/main.html' %}
 {% block body_block %}
 		
+		<script>
+			$(document).ready(function (){
+			 $('.target').click(function(e) {
+				 // get form associated with the button
+				 var form = $(this)
+	
+				var x;
+				var r=confirm("Do you really want to delete sprint?");
+				if (r==true)
+				  {
+				  x="You pressed OK!";
+				  }
+				else
+				  {
+				  e.preventDefault();
+				  x="You pressed Cancel!";
+				  }
+				document.getElementById("demo").innerHTML=x;
+			 });
+			});
+		</script>
+
+				
         <h1>Sprint edit</h1>
 		{% if request.user.is_staff %} <!-- only admin can see this -->
 			<table class=planingtable>
@@ -43,7 +66,7 @@
  							<a href="/scrumko/sprintedit" ><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 						
 						</td>	
 						<td>
-							<a href="sprintdelete/{{detail.id}}" id="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
+							<a href="sprintdelete/{{detail.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
 						</td>	
 				</tr>
 				{% endfor %}
