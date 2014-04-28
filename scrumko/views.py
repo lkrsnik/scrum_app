@@ -741,3 +741,21 @@ def poker_activate (request):
 	poker = Poker.objects.create(project=user_project[0], story = story, active = True)
 	
 	return HttpResponse("")	
+
+# function changes estimation of story
+def change_estimation (request):
+	
+	# get id where changing estimates
+	storyid = request.POST["storyid"];
+		
+	# find story to change estimate
+	story = Story.objects.filter (id = storyid);
+	
+	# check if this story exsist
+	if len (story) > 0:
+		# if ok repair value
+		story[0].estimate = request.POST["estimation"];
+		story[0].save();
+	
+	return HttpResponseRedirect('/scrumko/productbacklog/')
+	
