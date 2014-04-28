@@ -40,24 +40,7 @@
 	     {% for hidden in profile_form.hidden_fields %}
 		{{ hidden }}
 	    {% endfor %}
-	    {% for field in profile_form.visible_fields %}
-					<div>
-						<div class="fieldwrapper">
-							{{ field.label_tag }}
-						</div>
-						
-						<div class="fieldwrapper">
-							{{ field }}
-						</div>
-						
-						<div class="errorwrapper">
-							{{ field.errors.as_text }}
-							
-						</div>
-					</div>
-					<br/>
-					<br/>
-	    {% endfor %}
+	    
  
          
 			

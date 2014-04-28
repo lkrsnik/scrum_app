@@ -200,6 +200,14 @@ def sprintcreate(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 #@transaction.atomic
+
+def maintainsprint(request):
+	context = RequestContext(request)
+	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
+	sprint_data = {"sprint_detail" : sprint_info}
+    # Render the template depending on the context.
+	return render_to_response('scrumko/sprintcreate.html',sprint_data, context)
+	
 def projectcreate(request):
 
     # Like before, get the request's context.
@@ -286,10 +294,6 @@ def userdelete(request, id):
 	
 def maintainsprint(request):
 	context = RequestContext(request)
-	
-	#request.session['selected_project'] = int(request.GET.get('project_id', '0'))
-	#sprint.object.filter{project__id. = request.session{"selected_project"}
-	
 	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
 	sprint_data = {"sprint_detail" : sprint_info}
     # Render the template depending on the context.
@@ -297,8 +301,8 @@ def maintainsprint(request):
 	
 def sprintedit(request):
 	context = RequestContext(request)
-	sprint_info = Sprint.objects.all()
-	sprint_data = {"sprint_detail" : sprint_info}
+	sprint_form = Sprint.objects.all()
+	sprint_data = {"sprint_form" : sprint_form}
     # Render the template depending on the context.
 	return render_to_response('scrumko/sprintedit.html',sprint_data, context)
 
@@ -449,20 +453,21 @@ def edit(request):
         
 		user_form = UserEditForm(data=request.POST)
 		
-		
-		if user_form.is_valid() and profile_form.is_valid():			
+		if user_form.is_valid():			
 			username = request.POST['username']
-			email = request.POST['project_owner']
-			is_superuser = request.POST['project_name']
-			first_name = request.POST['project_name']
-			last_name = request.POST['project_name']
-			password = request.POST['project_name']
+			email = request.POST['email']
+			is_superuser = request.POST['is_superuser']
+			first_name = request.POST['first_name']
+			last_name = request.POST['last_name']
+			password = request.POST['password']
 			r.username = username
 			r.email = email			
 			r.is_superuser = is_superuser
 			r.first_name = first_name
 			r.last_name = last_name
-			r.password = password
+			if not len (password) == 0:
+
+				r.set_password(password)
 			r.save(); 
 			
 			registered = True	
@@ -470,7 +475,6 @@ def edit(request):
 		else:
 			print user_form.errors		
 			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
-
 	
 	else:
 		userid = int(request.GET.get('id', '0'))
@@ -765,3 +769,21 @@ def poker_activate (request):
 	poker = Poker.objects.create(project=user_project[0], story = story, active = True)
 	
 	return HttpResponse("")	
+
+# function changes estimation of story
+def change_estimation (request):
+	
+	# get id where changing estimates
+	storyid = request.POST["storyid"];
+		
+	# find story to change estimate
+	story = Story.objects.filter (id = storyid);
+	
+	# check if this story exsist
+	if len (story) > 0:
+		# if ok repair value
+		story[0].estimate = request.POST["estimation"];
+		story[0].save();
+	
+	return HttpResponseRedirect('/scrumko/productbacklog/')
+	
