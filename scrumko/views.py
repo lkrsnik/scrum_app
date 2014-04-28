@@ -498,6 +498,11 @@ def storyedit(request, id):
 	story_form = StoryEditForm(initial={'project_name': r.project_name, 'story_name': r.story_name, 'text': r.text, 'bussines_value': r.bussines_value, 'priority': r.priority, 'test_text': r.test_text})
 	
 	return render_to_response('scrumko/storyedit.html',{'story_form': story_form, 'registered': registered,'story_id': id}, context)
+
+def storydelete(request, id):
+	context = RequestContext(request)
+	Story.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/productbacklog")	
 	
 def edit(request):
 	context = RequestContext(request)	
