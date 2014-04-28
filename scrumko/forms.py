@@ -2,7 +2,7 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from scrumko.models import UserProfile, Sprint, Project, Story
+from scrumko.models import UserProfile, Sprint, Project, Story, NotificationPermission
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
@@ -70,6 +70,11 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('picture',)
 
+class NotificationPermissionForm(forms.ModelForm):
+	permission = forms.BooleanField(label = mark_safe(u'Allow story notifications'), required=False)
+	class Meta:
+		model= NotificationPermission
+		fields = ('permission',)
 		
 class ProjectCreateForm(forms.ModelForm):
 

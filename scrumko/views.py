@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -225,12 +225,13 @@ def projectcreate(request):
         # Note that we make use of both UserForm and UserProfileForm.
 		
   		project_form = ProjectCreateForm(data=request.POST)
+  		notification_form = NotificationPermissionForm(data=request.POST)
   		all_members = request.POST.get('all_members')
 		
 		
         # If the two forms are valid...
-		if project_form.is_valid():
-			
+		if project_form.is_valid() and notification_form.is_valid():
+						
             # Save the user's form data to the database.
 			scrum_master=User.objects.filter(id = int(request.POST.get('scrum_master')))
 			scrum_master.update(is_staff = True)
@@ -263,21 +264,25 @@ def projectcreate(request):
 				project_test[0].team.add(int(member_test[0].id))
 	
 			all_members=""
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
+			
+			
+			notification_permission = notification_form.save(commit=False)
+			notification_permission.project = project_test[0]
+			notification_permission.permission=request.POST['permission']
+			notification_permission.save()
+		
 		else:
 			print project_form.errors
-			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
+			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'notification_form': notification_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
 	
 	project_form = ProjectCreateForm()
-		
+	notification_form= NotificationPermissionForm()	
 		
     # Render the template depending on the context.
-	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
+	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'notification_form': notification_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
 def maintainuser(request):
 	context = RequestContext(request)
 	user_info = User.objects.all()
@@ -345,6 +350,7 @@ def editproject(request):
         # Note that we make use of both UserForm and UserProfileForm.
 		
 		project_form = ProjectEditForm(data=request.POST)
+		notification_form = NotificationPermissionForm(data=request.POST)
 		all_members = request.POST.get('all_members')
 		
 		
