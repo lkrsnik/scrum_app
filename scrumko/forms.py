@@ -2,7 +2,7 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from scrumko.models import UserProfile, Sprint, Project, Story, NotificationPermission
+from scrumko.models import UserProfile, Sprint, Project, Story, NotificationPermission, Task
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
@@ -299,6 +299,15 @@ class ProjectEditForm(forms.ModelForm):
 	class Meta:
 		model = Project
 	
+class TaskForm (forms.ModelForm):
+	
+	def __init__(self, project_id,*args,**kwargs):
+		super (TaskForm,self ).__init__(*args,**kwargs) # populates the post
+		self.fields['worker'].queryset = Project.objects.get(id=project_id).team
+		
+	
+	class Meta:
+		model = Task
 	
 
 

@@ -30,5 +30,8 @@ urlpatterns = patterns('',
 	url(r'^pokerstart/(?P<user_story_id>\w+)/$', views.startpoker, name='startpoker'),
 	url(r'^maintainproject/editproject/$', views.editproject, name='editproject'),
 	url(r'^change_estimation/$', views.change_estimation, name='change_estimation'),
+	#url(r'^taskcreate/$', views.taskcreate, name='taskcreate'),
+
+	
 	
 	)
