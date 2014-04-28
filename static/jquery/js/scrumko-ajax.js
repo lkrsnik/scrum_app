@@ -1,4 +1,5 @@
 $(document).ready(function (e) {
+	
 	//on Load
 	$(".item:first").hide();
 	loadMembers();
@@ -7,6 +8,7 @@ $(document).ready(function (e) {
 	function loadMembers(){
 		var text = $("#previous_members").text().split(" ");
 		text.forEach(function(entry) {
+			
 			if (entry!="")
 				addForm("form",entry);
 		})

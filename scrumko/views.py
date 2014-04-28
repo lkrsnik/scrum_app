@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -141,7 +141,17 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect('/scrumko/')
 
-
+@login_required
+def productbacklog(request):
+	#allStories = Story.objects.all()
+	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	#print "AAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaAAAAAAAAAAA"
+	#print allStories[0].story_name
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
+	context = RequestContext(request)
+	return render_to_response('scrumko/productbacklog.html', {'allStories': allStories}, context)
+	
 @login_required
 def sprintcreate(request):
 	# check permision to form and
@@ -185,7 +195,6 @@ def sprintcreate(request):
 		
     # Render the template depending on the context.
 	return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
-
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -260,7 +269,6 @@ def projectcreate(request):
 		
     # Render the template depending on the context.
 	return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
-	
 def maintainuser(request):
 	context = RequestContext(request)
 	user_info = User.objects.all()
@@ -314,12 +322,70 @@ def projectdelete(request, id):
 def editproject(request):
 	context = RequestContext(request)
 	# Render the template depending on the context.
-	if int(request.GET.get('id', '0'))>0:
+	
+	
+
+    # A boolean value for telling the template whether the registration was successful.
+    # Set to False initially. Code changes value to True when registration succeeds.
+	registered = False
+	all_members = "";
+	all_options=User.objects.all().order_by('username')
+	# If it's a HTTP POST, we're interested in processing form data.
+	if request.method == 'POST':
+		projectid = request.POST['proj_id']
+		project_info = Project.objects.filter(id = projectid)
+		r= project_info[0]
+        # Attempt to grab information from the raw form information.
+        # Note that we make use of both UserForm and UserProfileForm.
+		
+		project_form = ProjectEditForm(data=request.POST)
+		all_members = request.POST.get('all_members')
+		
+		
+        # If the two forms are valid...
+		if project_form.is_valid():
+			
+			scrum_master = request.POST['scrum_master']
+			project_owner = request.POST['project_owner']
+			project_name = request.POST['project_name']
+			
+			r.scrum_master=User.objects.get(id=scrum_master)
+			r.project_owner=User.objects.get(id=project_owner)			
+			r.project_name=project_name
+			r.save();
+			for team_member in r.team.all():	
+				project_info[0].team.remove(team_member)
+				
+			
+			for team_member in all_members.split(' '):
+				member_test=User.objects.filter(username = team_member)
+				project_info[0].team.add(int(member_test[0].id))	
+			
+
+			registered = True	
+			all_members=""
+		else:
+			print project_form.errors
+			return render_to_response('scrumko/editproject.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+
+	# Not a HTTP POST, so we render our form using two ModelForm instances.
+	# These forms will be blank, ready for user input.
+	else:
 		projectid = int(request.GET.get('id', '0'))
-	project_info = Project.objects.filter(id = projectid)
-	project_data = {"project_detail" : project_info}	
-	project_form = ProjectCreateForm(data=request.POST)
-	return render_to_response('scrumko/editproject.html', project_data, context)
+		project_info = Project.objects.filter(id = projectid)
+		r = project_info[0]
+	all_members=""
+	for team_member in r.team.all():
+		
+		team_member=team_member.username
+		all_members=all_members+" "+team_member
+		
+	#r = project_info[0]
+	
+	project_form = ProjectEditForm(initial={'project_name': r.project_name, 'project_owner': r.project_owner, 'scrum_master': r.scrum_master, 'team': r.team})
+	# Render the template depending on the context.
+	return render_to_response('scrumko/editproject.html',{'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+	
 
 @login_required
 
