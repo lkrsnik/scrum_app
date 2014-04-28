@@ -38,7 +38,11 @@
 			
 				<div  id="userdata">
 					<a href="/scrumko/logout/">Log out </a> &nbsp; &nbsp;
-					{{ user.username }}
+					
+					{{ user.username }}&nbsp; &nbsp;
+					
+					<a href="/scrumko/editmyprofile/{{ user.id }}/">Edit profile </a> 
+					
 					
 				</div>
 			{% endif %}
