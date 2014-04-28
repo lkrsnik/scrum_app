@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -430,31 +430,46 @@ def storycreate(request):
 	return render_to_response('scrumko/storycreate.html',{'story_form': story_form, 'registered': registered}, context)
 
 def edit(request):
-	#manjka: preko seje pridobi uporabnika!
-	context = RequestContext(request)
+	context = RequestContext(request)	
 	registered = False
+	
 	if request.method == 'POST':
-  		user_form = UserForm(data=request.POST)
-  		profile_form = UserProfileForm(data=request.POST)
+		userid = request.POST['us_id']
+		project_info = User.objects.filter(id = userid)
+		r= project_info[0]
+        
+		user_form = UserEditForm(data=request.POST)
 		
-		if user_form.is_valid() and profile_form.is_valid():	    
-			user = user_form.save()	    
-			user.set_password(user.password)
-			user.save()
-			profile = profile_form.save(commit=False)
-			profile.user = user
-
-			if 'picture' in request.FILES:
-				profile.picture = request.FILES['picture']
-			profile.save()
-			registered = True
+		
+		if user_form.is_valid() and profile_form.is_valid():			
+			username = request.POST['username']
+			email = request.POST['project_owner']
+			is_superuser = request.POST['project_name']
+			first_name = request.POST['project_name']
+			last_name = request.POST['project_name']
+			password = request.POST['project_name']
+			r.username = username
+			r.email = email			
+			r.is_superuser = is_superuser
+			r.first_name = first_name
+			r.last_name = last_name
+			r.password = password
+			r.save(); 
+			
+			registered = True	
+			
 		else:
-			print user_form.errors, profile_form.errors
-			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
+			print user_form.errors		
+			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
+
+	
 	else:
-		user_form = UserForm()
-		profile_form = UserProfileForm()
-	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered}, context)
+		userid = int(request.GET.get('id', '0'))
+		project_info = User.objects.filter(id = userid)
+		r = project_info[0]	
+	user_form = UserEditForm(initial={'username': r.username, 'email': r.email, 'is_superuser': r.is_superuser, 'first_name': r.first_name, 'last_name': r.last_name, 'password': r.password, 'password2': r.password })
+	
+	return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
 
 @login_required	
 def startpoker(request, user_story_id):

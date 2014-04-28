@@ -1,0 +1,47 @@
+{% extends 'scrumko/main.html' %}
+{% block body_block %}
+        <h1>Maintain projects</h1>
+
+	<table class=planingtable>
+	   	
+		
+		<tr>
+			<td>
+				Project name
+			</td>
+			<td>
+				Project owner
+			</td>
+			
+			<td>
+				Edit
+			</td>
+			<td>
+				Delete
+			</td>
+		</tr>
+		{% for detail in project_detail %}
+		<tr>
+			<td>
+				{{ detail.project_name }}
+			</td>
+		
+			<td>
+				{{ detail.project_owner }}
+			</td>
+			
+			<td>
+<<<<<<< HEAD
+			<a href="editproject?id={{detail.id}}"><img src="/static/images/edit.png" alt="edit" height="15" width="15">Uredi<a>						
+=======
+			<a href="editproject?/id={{detail.id}}"><img src="/static/images/edit.png" alt="edit" height="20" width="20"><a>						
+>>>>>>> 86a1268ee09aae39ba4b23ac2bd322087bac70d1
+			</td>	
+			<td>
+				<a href="projectdelete/{{detail.id}}" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
+			</td>		
+		</tr>
+	
+	{% endfor %}
+	</table>
+{% endblock %}
