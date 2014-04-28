@@ -1,0 +1,50 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+       <h1>Edit user: {{project_detail.0.username}}</h1>
+        {% if registered %}
+			<div class="succes_hold">
+				<div class="succes">
+					User was <strong>successfully  </strong>updated.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+		
+               <form id="user_form" method="post" action="/scrumko/editmyprofile/{{ user.id }}/"
+                enctype="multipart/form-data">
+			<input name="us_id" type="hidden" value="{{project_detail.0.id}}"/>
+            {% csrf_token %}
+            
+	    {% for hidden in user_form.hidden_fields %}
+		{{ hidden }}
+	    {% endfor %}
+	    {% for field in user_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+	    {% endfor %}
+	     {% for hidden in profile_form.hidden_fields %}
+		{{ hidden }}
+	    {% endfor %}
+	    
+ 
+         
+			
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Update" />
+        </form>
+{% endblock %}

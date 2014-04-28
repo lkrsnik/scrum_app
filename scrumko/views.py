@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, UserOrientedEditForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth import authenticate, login
@@ -554,7 +554,7 @@ def edit(request):
 			r.save()
 			
 			print user_form.errors		
-			return render_to_response('scrumko/edit.html',{ 'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
+			return render_to_response('scrumko/edit.html',{'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
 	
 	else:
 		userid = int(request.GET.get('id', '0'))
@@ -562,8 +562,59 @@ def edit(request):
 		r = project_info[0]	
 	user_form = UserEditForm(initial={'username': r.username, 'email': r.email, 'is_superuser': r.is_superuser, 'first_name': r.first_name, 'last_name': r.last_name, 'password': r.password, 'password2': r.password })
 	
-	return render_to_response('scrumko/edit.html',{ 'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
+	return render_to_response('scrumko/edit.html',{	'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
 
+@login_required
+def editmyprofile(request,id):
+	context = RequestContext(request)	
+	registered = False
+	print id
+	
+	if request.method == 'POST':
+		#userid = request.POST['us_id']
+		project_info = User.objects.filter(id = id)
+		r= project_info[0]
+        
+		oldusername = r.username
+		
+		r.username = ""
+		r.save()
+		
+		user_form = UserOrientedEditForm(data=request.POST)
+		
+		if user_form.is_valid():				
+			username = request.POST['username']
+			email = request.POST['email']
+			#is_superuser = request.POST['is_superuser']
+			first_name = request.POST['first_name']
+			last_name = request.POST['last_name']
+			password = request.POST['password']
+			r.username = username
+			r.email = email			
+			#r.is_superuser = is_superuser
+			r.first_name = first_name
+			r.last_name = last_name
+			if not len (password) == 0:
+
+				r.set_password(password)
+			r.save(); 
+			
+			registered = True	
+			
+		else:
+			r.username = oldusername
+			r.save()
+			print user_form.errors		
+			return render_to_response('scrumko/editmyprofile.html',{'user_form': user_form, 'registered': registered, "project_detail" : project_info}, context)
+	
+	else:
+		#userid = int(request.GET.get('id', '0'))
+		project_info = User.objects.filter(id = id)
+		r = project_info[0]	
+	user_form = UserOrientedEditForm(initial={'username': r.username, 'email': r.email, 'is_superuser': r.is_superuser, 'first_name': r.first_name, 'last_name': r.last_name, 'password': r.password, 'password2': r.password })
+	
+	return render_to_response('scrumko/editmyprofile.html',{'user_form': user_form, 'registered': registered, 'project_detail' : project_info}, context)
+	
 @login_required	
 def startpoker(request, user_story_id):
 	

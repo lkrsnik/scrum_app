@@ -64,7 +64,23 @@ class UserEditForm(forms.ModelForm):
 	#def validate_unique(self, *args, **kwargs):
 	#	return self
 	
+class UserOrientedEditForm(forms.ModelForm):
+	email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
+	is_superuser = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+	username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
+	first_name = forms.CharField(label = mark_safe(u'Ime'), error_messages=required_error)
+	last_name = forms.CharField(label = mark_safe(u'Priimek'), error_messages=required_error)
+	password = forms.CharField(required=False, widget=forms.PasswordInput(), label="Geslo", error_messages=required_error)
+	password2 = forms.CharField(required=False, widget=forms.PasswordInput(), label="Ponovite geslo", error_messages=required_error)
 
+	def clean_password(self):
+		if self.data['password'] != self.data['password2']:
+			raise forms.ValidationError('Gesli se ne ujemata.')
+		return self.data['password']
+
+	class Meta:
+		model = User
+		fields = ('first_name', 'last_name', 'username', 'email', 'is_superuser','password',)
 
     
 class UserProfileForm(forms.ModelForm):
