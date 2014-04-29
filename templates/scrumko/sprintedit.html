@@ -5,7 +5,7 @@
         {% if registered %}
 			<div class="succes_hold">
 				<div class="succes">
-					Sprint created successfully.
+					Sprint changed successfully.
 				</div>
 			</div>
 			<br/>
@@ -19,13 +19,10 @@
 		  <script>
 				$(function() {
 					$( "#id_finish_date" ).datepicker();
-				
-				});
-				
-				
+				});	
 		  </script>
         <h1>Sprint edit</h1>
-			<form id="sprint_form" method="post" action="/scrumko/sprintedit/"
+			<form id="sprint_form" method="post" action="/scrumko/sprintedit/{{sprint_id}}/"
 					enctype="multipart/form-data">
 
 				{% csrf_token %}
@@ -45,7 +42,6 @@
 						
 						<div class="errorwrapper">
 							{{ field.errors.as_text }}
-							
 						</div>
 					</div>
 					<br/>

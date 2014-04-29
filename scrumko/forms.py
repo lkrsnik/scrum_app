@@ -205,6 +205,82 @@ class SprintCreateForm(forms.ModelForm):
 	class Meta:
 		model = Sprint
 
+class SprintEditForm(forms.ModelForm):	
+	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())
+	start_date = forms.DateField(label = mark_safe(u'Begining'), error_messages=sprint_error)	
+	finish_date = forms.DateField(label = mark_safe(u'End'), error_messages=sprint_error)	
+	velocity = forms.IntegerField(label = mark_safe(u'Planned velocity'), error_messages=velocity_error, validators=[
+		RegexValidator(
+			regex='^[1-9][0-9]*$',
+			message='Please enter a positive integer.',
+			code='invalid_value'
+		),
+	])   
+    		
+    
+    # for validating date
+	def clean_start_date(self):
+		start_date = self.cleaned_data['start_date']
+		project_name_id = self.cleaned_data['project_name']
+		
+		print project_name_id
+	
+		#covering with the other sprint
+		covering = Sprint.objects.filter(start_date__lte=start_date, finish_date__gte=start_date, project_name=project_name_id)
+		
+		
+		print len(covering)
+		
+		if len(covering) > 0:
+			raise ValidationError("Date overlaps with another sprint.")
+			return
+		
+		# check if not in past
+		if start_date < date.today():
+			raise ValidationError("Do not enter past dates.")
+			return
+		
+		
+		
+								
+		return start_date
+		
+	def clean_finish_date(self):
+		end_date = self.cleaned_data['finish_date']
+		project_name_id = self.cleaned_data['project_name']
+		
+		#covering with the other sprint
+		covering = Sprint.objects.filter(start_date__lte=end_date, finish_date__gte=end_date, project_name=project_name_id)
+					
+		if len(covering) > 0:
+			raise ValidationError("Date overlaps with another sprint.")
+			return
+		
+		# check if not in past
+		if end_date < date.today():
+			raise ValidationError("Do not enter past dates.")
+			return
+			
+		# check if start berfore end
+		start_date = self.data.get('start_date')
+		
+		try:
+			start_date = datetime.strptime(start_date, "%m/%d/%Y").date()
+		except:
+			return end_date
+						
+		if end_date < start_date:
+			raise ValidationError("Begining date must be before end date.")
+			return 
+		
+								
+		return end_date
+		
+	
+	class Meta:
+		model = Sprint
+
+		
 class StoryForm (forms.ModelForm):
 	
 	project_name = forms.ModelChoiceField(queryset=Project.objects.all(), widget=forms.HiddenInput())

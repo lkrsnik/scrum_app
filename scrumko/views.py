@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, UserOrientedEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm
 from scrumko.forms import TaskForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -181,7 +181,9 @@ def sprintcreate(request):
 	if request.method == 'POST':
   		# get form inputs
   		sprint_form = SprintCreateForm(data=request.POST)
-  		  		 		
+		print "luuuuuuuuuuuukaaaaaaaaaaaaaaaaaaaaaa"
+  		print sprint_form  	
+		print "luuuuuuuuuuuukaaaaaaaaaaaaaaaaaaaaa22222222222a"		
         # If the forms is valid...
 		if sprint_form.is_valid():
 			
@@ -205,16 +207,65 @@ def sprintcreate(request):
 	return render_to_response('scrumko/sprintcreate.html',{'sprint_form': sprint_form, 'registered': registered}, context)
 
 @login_required
-@user_passes_test(lambda u: u.is_superuser)
 #@transaction.atomic
 
 def maintainsprint(request):
 	context = RequestContext(request)
 	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
-	sprint_data = {"sprint_detail" : sprint_info}
+	sprint_data = {'sprint_detail' : sprint_info}
     # Render the template depending on the context.
-	return render_to_response('scrumko/sprintcreate.html',sprint_data, context)
+	return render_to_response('scrumko/maintainsprint.html', sprint_data, context)
 	
+def sprintedit(request, id):
+	already_exist_message = ""
+	context = RequestContext(request)
+	
+	registered = False
+	
+	
+	
+	if request.method == 'POST':
+		
+		sprint_info =Sprint.objects.filter(id =id)
+		r= sprint_info[0]
+        # Attempt to grab information from the raw form information.
+        # Note that we make use of both UserForm and UserProfileForm.
+		
+		sprint_form = SprintEditForm(data=request.POST)		
+		
+        # If the two forms are valid...
+		if sprint_form.is_valid():
+			#change=True;
+			 
+			start_date = request.POST['start_date'] 
+			finish_date = request.POST['finish_date'] 
+			velocity = request.POST['velocity']
+			r.start_date=start_date
+			r.finish_date=finish_date
+			r.velocity=velocity
+			r.save();
+			registered=True
+		else:
+			print sprint_form.errors
+			return render_to_response('scrumko/sprintedit.html',{'sprint_form': sprint_form, 'registered': registered, 'sprint_id': id}, context)
+
+	# Not a HTTP POST, so we render our form using two ModelForm instances.
+	# These forms will be blank, ready for user input.
+	else:
+		sprint_info =Sprint.objects.filter(id =id)
+		r= sprint_info[0]
+	
+	
+
+
+	sprint_form = SprintEditForm(initial={'project_name': r.project_name, 'start_date': r.start_date, 'finish_date': r.finish_date, 'velocity': r.velocity})
+	# Render the template depending on the context.
+	return render_to_response('scrumko/sprintedit.html',{'sprint_form': sprint_form, 'registered': registered, 'sprint_id': id}, context)	
+
+def sprintdelete(request, sprint_id):
+	context = RequestContext(request)
+	sprint_info = Sprint.objects.get(id=sprint_id).delete()
+	return HttpResponseRedirect("/scrumko/maintainsprint")	
 def projectcreate(request):
 
     # Like before, get the request's context.
@@ -304,25 +355,7 @@ def userdelete(request, id):
 	user_info = User.objects.get(id=id).delete()
 	return HttpResponseRedirect("/scrumko/maintainuser")		
 	
-def maintainsprint(request):
-	context = RequestContext(request)
-	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
-	sprint_data = {"sprint_detail" : sprint_info}
-    # Render the template depending on the context.
-	return render_to_response('scrumko/maintainsprint.html',sprint_data, context)
-	
-def sprintedit(request):
-	context = RequestContext(request)
-	sprint_form = Sprint.objects.all()
-	sprint_data = {"sprint_form" : sprint_form}
-    # Render the template depending on the context.
-	return render_to_response('scrumko/sprintedit.html',sprint_data, context)
 
-
-def sprintdelete(request, sprint_id):
-	context = RequestContext(request)
-	sprint_info = Sprint.objects.get(id=sprint_id).delete()
-	return HttpResponseRedirect("/scrumko/maintainsprint")	
 
 def maintainproject(request):
 	context = RequestContext(request)
@@ -341,9 +374,6 @@ def editproject(request):
 	already_exist_message = ""
 	context = RequestContext(request)
 	# Render the template depending on the context.
-	
-	
-
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
 	registered = False
