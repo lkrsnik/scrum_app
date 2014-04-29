@@ -49,8 +49,15 @@ def home(request):
 	# if project not choose
 	else:
 		if not request.session.get('selected_project'):
-			request.session['selected_project'] = 0	
-			request.session['project_name'] = ''
+			# on begining select first project		
+			# if exsist any project
+			if len (project_info) > 0:
+				pr = project_info[0]
+				request.session['selected_project'] = pr.id
+				request.session['project_name'] = pr.project_name
+			else:	
+				request.session['selected_project'] = 0
+				request.session['project_name'] = ''
 	
 	# get information what roles user has on curent project
 	selected_project_id = request.session['selected_project']
@@ -94,60 +101,74 @@ def register(request):
 
 def index(request):
     # Like before, obtain the context for the user's request.
-    context = RequestContext(request)
-    success=True;
+	context = RequestContext(request)
+	success=True;
     # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
+	if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
-        username = request.POST['username']
-        password = request.POST['password']
+		username = request.POST['username']
+		password = request.POST['password']
+        
+		
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
-        user = authenticate(username=username, password=password)
+		user = authenticate(username=username, password=password)
 
         # If we have a User object, the details are correct.
         # If None (Python's way of representing the absence of a value), no user
         # with matching credentials was found.
-        if user is not None:
+		if user is not None:
             # Is the account active? It could have been disabled.
-            if user.is_active:
+			if user.is_active:
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
-                login(request, user)
-                return HttpResponseRedirect('/scrumko/home/')
-            else:
+				login(request, user)
+				
+				request.session['selected_project'] = 0
+				request.session['project_name'] = ''
+				
+				return HttpResponseRedirect('/scrumko/home/')
+			else:
                 # An inactive account was used - no logging in!
-                success=False;
-                return HttpResponse("Your Rango account is disabled.")
-        else:
+				success=False;
+				return HttpResponse("Your Rango account is disabled.")
+		else:
             # Bad login details were provided. So we can't log the user in.
-            print "Invalid login details: {0}, {1}".format(username, password)
-            success=False;
-            return render_to_response('scrumko/index.html', {'success': success}, context)
+			print "Invalid login details: {0}, {1}".format(username, password)
+			success=False;
+			return render_to_response('scrumko/index.html', {'success': success}, context)
             #return HttpResponse("Invalid login details supplied.")
 
     # The request is not a HTTP POST, so display the login form.
     # This scenario would most likely be a HTTP GET.
-    else:
+	else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render_to_response('scrumko/index.html', {'success': success}, context)
+		return render_to_response('scrumko/index.html', {'success': success}, context)
 
 
 # Use the login_required() decorator to ensure only those logged in can access the view.
 @login_required
 def user_logout(request):
-    # Since we know the user is logged in, we can now just log them out.
-    logout(request)
+	
+	request.session['selected_project'] = 0
+	request.session['project_name'] = ''
+	
+	# Since we know the user is logged in, we can now just log them out.
+	logout(request)
 
-    # Take the user back to the homepage.
-    return HttpResponseRedirect('/scrumko/')
+	# Take the user back to the homepage.
+	return HttpResponseRedirect('/scrumko/')
 
 @login_required
 def productbacklog(request):
-	#allStories = Story.objects.all()
+	context = RequestContext(request)
+	
+	if request.session['selected_project'] == 0:
+		return render_to_response ('scrumko/noprojectselected.html', {}, context)
+	
 	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
 	current_user = request.user.id
@@ -156,7 +177,7 @@ def productbacklog(request):
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
 	note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
 	note_permission = note_permission.permission
-	context = RequestContext(request)
+	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	return render_to_response('scrumko/productbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
@@ -170,7 +191,11 @@ def current_sprint(request):
 		
 @login_required
 def sprintbacklog(request):
-	#allStories = Story.objects.all()
+	context = RequestContext(request)
+
+	if request.session['selected_project'] == 0:
+		return render_to_response ('scrumko/noprojectselected.html', {}, context)
+
 	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
 	current_user = request.user.id
@@ -179,7 +204,7 @@ def sprintbacklog(request):
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
 	note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
 	note_permission = note_permission.permission
-	context = RequestContext(request)
+	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
