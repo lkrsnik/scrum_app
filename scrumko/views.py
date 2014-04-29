@@ -214,8 +214,21 @@ def sprintbacklog(request):
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	
 	status = int(request.GET.get('accept', '0'))
+	releasing = int(request.GET.get('release', '0'))
 	if status > 0:
-		print 'lala'
+		taskid = int(request.GET.get('task', '0'))
+		task = Task.objects.get(id=taskid);
+		task.status=1;
+		this_user=User.objects.get(id=current_user)
+		task.worker=this_user
+		task.save()		
+	if releasing > 0:
+		taskid = int(request.GET.get('task', '0'))
+		task = Task.objects.get(id=taskid);
+		task.status=0;
+		task.worker=None
+		task.save()
+		
 	
 	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 

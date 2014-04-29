@@ -101,9 +101,15 @@
 						</td>
 						<td class="column_status">
 							{% if task.status == 0 %}
-								<a href="?accept=1&story={{sprintstory.story}}&task={{task.id}}">Accept task</a>
+								
+								<a href="?accept=1&task={{task.id}}">Accept task</a>
 							{% elif task.status == 1 %}
+								{% if request.user.id == task.worker.id %}
+									<a href="?release=1&task={{task.id}}">Release task</a>
+								{% else %}
+								
 								Assigned
+								{% endif %}
 							{% elif task.status == 2 %}
 								Completed
 							{% endif %}
