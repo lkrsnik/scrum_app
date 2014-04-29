@@ -9,7 +9,7 @@
 		
 		{% for story in allStories %}
 		{% if  is_scrum_master%}
-			<a href="/scrumko/productbacklog/" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a> 							
+			<a href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a> 							
 		{% endif %}	
 		<div class="story_container">
 			

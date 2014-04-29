@@ -186,8 +186,25 @@ def addstorytosprint(request):
 	
 	# redirect back if user has not permision	
 	if len (user_project) == 0:	
+		print "petra"
 		return HttpResponseRedirect('/scrumko/home')
+	#start_date__lte=date.today
+	# check if story is in sprint
+	current_sprint = Story_Sprint.objects.filter(story__id = id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
+	print "petra2"
+	if len (current_sprint) == 0:
+		print "petra3"
+		return HttpResponseRedirect('/scrumko/home/')
+	print "petra4"
+	current_story = Story.objects.filter(story__id = id)
 
+	if not (len (current_sprint) == 0 and len(current_story) == 0):	
+		return HttpResponseRedirect('/scrumko/home')
+	else:	
+		context = RequestContext(request)
+		add = Sprint.objects.create(sprint=current_sprint[0], story = current_story[0], active = True)
+		
+		return HttpResponseRedirect("/scrumko/productbacklog")	
 
 @login_required
 def sprintcreate(request):
