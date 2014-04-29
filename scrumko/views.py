@@ -418,7 +418,7 @@ def projectcreate(request):
 			
 			notification_permission = notification_form.save(commit=False)
 			notification_permission.project = project_test[0]
-			notification_permission.permission=request.POST.get('is_private', False)
+			notification_permission.permission=request.POST.get('permission', False)
 			notification_permission.save()
 		
 		else:
