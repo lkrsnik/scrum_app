@@ -107,10 +107,8 @@ def index(request):
 	if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
-		username = request.POST['username']
-		password = request.POST['password']
-        
-		
+        username = request.POST['username']
+        password = request.POST['password']
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
@@ -191,6 +189,12 @@ def current_sprint(request):
 		
 @login_required
 def sprintbacklog(request):
+	#allStories = Story.objects.all()
+	print current_sprint(request).id
+	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+	print allStories
+	allTasks=Task.objects.all();
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	context = RequestContext(request)
 
 	if request.session['selected_project'] == 0:
@@ -206,7 +210,7 @@ def sprintbacklog(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
-	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 	
 @login_required
