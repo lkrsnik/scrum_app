@@ -7,10 +7,7 @@
 	
 	<h1> Sprint backlog </h1>   
 		
-		{% for sprintstory in allStories %}
-		{% if  is_scrum_master%}
-			<a href="/scrumko/productbacklog/" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a> 							
-		{% endif %}	
+		{% for sprintstory in allStories %}	
 		<div class="story_container">
 			
 			<div class="story_name_container">
@@ -117,8 +114,11 @@
 						<td class="column_remaining">
 							{{ task.duratino }}
 						</td>
-						<td>
-							
+						<td class="column_actions">
+							{% if not is_owner%}
+								<a href="/scrumko/storyedit/{{ sprintstory.story.id }}"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
+								<a href="/scrumko/storydelete/{{sprintstory.story.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 					
+							{% endif %}
 						</td>
 					</tr>
 					{% endif %}

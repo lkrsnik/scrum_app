@@ -201,7 +201,7 @@ def sprintbacklog(request):
 	if request.session['selected_project'] == 0:
 		return render_to_response ('scrumko/noprojectselected.html', {}, context)
 
-	allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
 	current_user = request.user.id
 	selected_project_id = request.session['selected_project']
