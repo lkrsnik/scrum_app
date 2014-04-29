@@ -37,13 +37,15 @@
 		
 				</div>
 				<div class="backlog_poker">
-					<a href="/scrumko/pokerstart/{{story.id}}" > Planing poker</a>
+					{% if  is_scrum_master %}
+						<a href="/scrumko/pokerstart/{{story.id}}" > Planing poker</a>
+					{% endif %}
 				</div>
 				
 				<div class="story_estimation">
 					<p style="float: left;  margin-top: 0;">Estimation: &nbsp;</p> <p class="est" style="float: left; margin-top: 0;">{{story.estimate}}</p> 
 					{% if  is_scrum_master %}
-					<a href="javascript: void(0)" class="edit_estimate" id="#opener" data-story="{{story.id}}" > Change</a>
+						<a href="javascript: void(0)" class="edit_estimate" id="#opener" data-story="{{story.id}}" > Change</a>
 					{% endif %}
 				</div>
 				
