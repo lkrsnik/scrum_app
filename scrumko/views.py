@@ -1045,6 +1045,18 @@ def add_notification (request):
 	else:
 		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/productbacklog/')
+def add_notification1 (request):
+	storyid = request.POST["storyid1"];
+		
+	story1 = Story.objects.filter (id = storyid);
+	
+	note1=StoryNotification.objects.filter(story__id = storyid)
+	if len (note1) > 0:
+		note1[0].notification=request.POST["note"]
+		note1[0].save()
+	else:
+		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
+	return HttpResponseRedirect('/scrumko/sprintbacklog/')
 def change_estimation (request):
 	
 	# get id where changing estimates
@@ -1060,6 +1072,21 @@ def change_estimation (request):
 		story[0].save();
 	
 	return HttpResponseRedirect('/scrumko/productbacklog/')
+def change_estimation1 (request):
+	
+	# get id where changing estimates
+	storyid = request.POST["storyid"];
+		
+	# find story to change estimate
+	story = Story.objects.filter (id = storyid);
+	
+	# check if this story exsist
+	if len (story) > 0:
+		# if ok repair value
+		story[0].estimate = request.POST["estimation"];
+		story[0].save();
+	
+	return HttpResponseRedirect('/scrumko/sprintbacklog/')
 	
 def taskcreate (request, id):
 	

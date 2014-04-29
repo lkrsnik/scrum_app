@@ -130,18 +130,18 @@
 		{% endfor %}
 	
 		<div id="dialog" title="Change estimate">
-		  <form action="/scrumko/change_estimation/" method="post" id="estimate_change">{% csrf_token %}
+		  <form action="/scrumko/change_estimation1/" method="post" id="estimate_change">{% csrf_token %}
 			<input type="hidden" id="storyid" name="storyid" />
 			<input type="text" id="estimation" name="estimation" style="float: left"/>
-			<input type="submit" id="submit" value="submit" style="float: left"/>
+			<input type="submit" id="submit" value="Submit" style="float: left"/>
 		  
 		  </form>
 		</div>
 		<div id="dialog_note" title="Add notification">
-		  <form action="/scrumko/add_notification/" method="post" id="add_note">{% csrf_token %}
+		  <form action="/scrumko/add_notification1/" method="post" id="add_note">{% csrf_token %}
 			<input type="hidden" id="storyid1" name="storyid1" />
 			<input type="text" id="note" name="note" style="float: left"/>
-			<input type="submit" id="submit1" value="submit1" style="float: left"/>
+			<input type="submit" id="submit1" value="Submit" style="float: left"/>
 		  
 		  </form>
 		</div>
