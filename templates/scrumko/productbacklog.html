@@ -39,8 +39,9 @@
 				
 				<div class="story_estimation">
 					<p style="float: left;  margin-top: 0;">Estimation: &nbsp;</p> <p class="est" style="float: left; margin-top: 0;">{{story.estimate}}</p> 
+					{% if  is_scrum_master %}
 					<a href="javascript: void(0)" class="edit_estimate" id="#opener" data-story="{{story.id}}" > Change</a>
-					
+					{% endif %}
 				</div>
 				
 				<br />
@@ -54,7 +55,7 @@
 			</div>
 			
 			
-			<div class="story_content_container" >				
+			<div class="story_acceptance_test_container" >				
 				{{ story.test_text }}
 			</div>
 			{% if note_permission %}
