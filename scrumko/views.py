@@ -1029,5 +1029,15 @@ def taskcreate (request, id):
        
 	# render page
 	return render_to_response ('scrumko/taskcreate.html', context_dict, context);
-       
+
+# this funcition return current sprint
+def current_sprint:
+	sprint = Sprint.objects.filter(project__id = request.session['selected_project'], start_date__lte = date.today(), finish_date__gte = date.today())
+	
+	if len (sprint ) == 0:
+		return None
+	else:
+		return sprint[0]
+	
+	       
    
