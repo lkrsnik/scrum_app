@@ -23,8 +23,7 @@ velocity_error = {
 
 
 class UserForm(forms.ModelForm):
-	
-    
+
     email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
     is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
     username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
@@ -163,11 +162,7 @@ class SprintCreateForm(forms.ModelForm):
 		# check if not in past
 		if start_date < date.today():
 			raise ValidationError("Do not enter past dates.")
-			return
-		
-		
-		
-								
+			return					
 		return start_date
 		
 	def clean_finish_date(self):
@@ -376,6 +371,29 @@ class ProjectEditForm(forms.ModelForm):
 		model = Project
 	
 class TaskForm (forms.ModelForm):
+	
+	story = forms.ModelChoiceField(widget=forms.HiddenInput(),queryset=Story.objects.all(), required=False)
+	duratino = forms.IntegerField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[
+		RegexValidator(
+			regex='^[1-9][0-9]*$',
+			message='Please enter a positive integer.',
+			code='invalid_value'
+		),
+	]) 
+	
+	status = forms.IntegerField (widget=forms.HiddenInput(), initial=0)
+	worker = forms.ModelChoiceField(queryset=User.objects.all(), label = mark_safe('Member'), required = False)
+	 
+	
+	def __init__(self, project_id,*args,**kwargs):
+		super (TaskForm,self ).__init__(*args,**kwargs) # populates the post
+		self.fields['worker'].queryset = Project.objects.get(id=project_id).team.order_by('username')
+			
+	
+	class Meta:
+		model = Task
+		
+class TaskEditForm (forms.ModelForm):
 	
 	story = forms.ModelChoiceField(widget=forms.HiddenInput(),queryset=Story.objects.all(), required=False)
 	duratino = forms.IntegerField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[

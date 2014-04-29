@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 
 from datetime import date, datetime
+import datetime
 
 from scrumko.models import User
 from scrumko.models import UserProfile, Task, Story_Sprint
@@ -318,16 +319,11 @@ def sprintedit(request, id):
 	already_exist_message = ""
 	context = RequestContext(request)
 	
-	registered = False
-	
-	
+	registered = False	
 	if request.method == 'POST':
-		
 		sprint_info =Sprint.objects.filter(id =id)
 		r= sprint_info[0]
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
-		
+	
 		sprint_form = SprintEditForm(data=request.POST)		
 		
         # If the two forms are valid...
@@ -337,8 +333,8 @@ def sprintedit(request, id):
 			start_date = request.POST['start_date'] 
 			finish_date = request.POST['finish_date'] 
 			velocity = request.POST['velocity']
-			r.start_date=start_date
-			r.finish_date=finish_date
+			r.start_date=datetime.datetime.strptime(start_date, '%m/%d/%Y')				
+			r.finish_date=datetime.datetime.strptime(finish_date, '%m/%d/%Y')
 			r.velocity=velocity
 			r.save();
 			registered=True
@@ -353,9 +349,9 @@ def sprintedit(request, id):
 		r= sprint_info[0]
 	
 	
+	#start_date_d = datetime.datetime.strptime(r.start_date, '%Y-%m-%d')
 
-
-	sprint_form = SprintEditForm(initial={'project_name': r.project_name, 'start_date': r.start_date, 'finish_date': r.finish_date, 'velocity': r.velocity})
+	sprint_form = SprintEditForm(initial={'project_name': r.project_name, 'start_date': r.start_date.strftime('%m/%d/%Y'), 'finish_date': r.finish_date.strftime('%m/%d/%Y'), 'velocity': r.velocity})
 	# Render the template depending on the context.
 	return render_to_response('scrumko/sprintedit.html',{'sprint_form': sprint_form, 'registered': registered, 'sprint_id': id}, context)	
 
@@ -788,16 +784,18 @@ def poker (request):
 	
 	# get active stoy on planing poker
 	active_poker = Poker.objects.filter (project__id = request.session['selected_project'])
-	active_poker = active_poker[len(active_poker) - 1]	
+	
 	
 	## add data to dictionary
 	
 	# if not active poker, then writeout this
-	if not active_poker:
+	if len (active_poker) == 0 :
 		context_dict.update ({'story_text' : 'There is not active planing pokers right now.'})
 	
 	#if data available write-out
 	else:
+		
+		active_poker = active_poker[len(active_poker) - 1]	
 		# write data for descriptions
 		story = active_poker.story
 		context_dict.update ({'story_text' : story.text, 'story_test' : story.test_text, 'story_name' : story.story_name})
@@ -1142,8 +1140,61 @@ def taskcreate (request, id):
 	# render page
 	return render_to_response ('scrumko/taskcreate.html', context_dict, context);
 
-# this funcition return current sprint
+@login_required
+def taskedit (request, id):
+	
+	context = RequestContext(request)
+	success=False;
+	context_dict = {};
+	
+	# check if story is in sprint
+	st_sp = Story_Sprint.objects.filter(story__id = id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
+	if len (st_sp) == 0:
+		return HttpResponseRedirect('/scrumko/home/')
+    
+    # check if story finished
+	sprint = Story.objects.filter(id = id, status = False)
+	if len (sprint) == 0:
+		return HttpResponseRedirect('/scrumko/home/')
+    
+	# get project id
+	project_id = request.session['selected_project']
+	context_dict['id'] = id
+	
+	# get all taskes and data for write out in papge
+	tasks = Task.objects.filter (id = id)
+	context_dict['tasks'] = tasks;
+	
+	
+	    
+	if request.method == 'POST':
+        
+		task_form = TaskEditForm(project_id, data=request.POST)    
+        
+		if task_form.is_valid():
+			task_form.save()			
+			
+			success=True;
+		else:				
+			print task_form.errors	
+			context_dict ['success'] = success
+			context_dict ['task_form'] = task_form	
+			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+    
+	# get form and add to dict
+	
+	task_form = TaskEditForm(project_id, initial={'story': id}) 
+	context_dict ['task_form'] = task_form
+	context_dict ['success'] = success
+       
+	   
+	# render page
+	return render_to_response ('scrumko/taskedit.html', context_dict, context);
 
+def taskdelete(request, id):
+	context = RequestContext(request)
+	Task.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/sprintbacklog")
 	
 	       
    

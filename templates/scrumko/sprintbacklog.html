@@ -3,7 +3,7 @@
 
 {% block body_block %}
 
-	<script type="text/javascript" src="{% static  'javascript/productbacklog.js' %}" ></script>
+	<script type="text/javascript" src="{% static  'javascript/sprintbacklog.js' %}" ></script>
 	
 	<h1> Sprint backlog </h1>   
 		
@@ -116,8 +116,8 @@
 						</td>
 						<td class="column_actions">
 							{% if not is_owner%}
-								<a href="/scrumko/storyedit/{{ sprintstory.story.id }}"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
-								<a href="/scrumko/storydelete/{{sprintstory.story.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 					
+								<a href="/scrumko/taskedit/{{ task.id }}/"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
+								<a href="/scrumko/taskdelete/{{ task.id }}/" class="target2" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 					
 							{% endif %}
 						</td>
 					</tr>
