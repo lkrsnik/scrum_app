@@ -922,7 +922,6 @@ def add_notification (request):
 		note1[0].save()
 	else:
 		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
-	print "ALO!"
 	return HttpResponseRedirect('/scrumko/productbacklog/')
 def change_estimation (request):
 	
