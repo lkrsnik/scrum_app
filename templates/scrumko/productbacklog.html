@@ -1,3 +1,4 @@
+
 {% extends 'scrumko/main.html' %}
 {% load static %}
 
@@ -8,11 +9,10 @@
 	<h1> Product backlog </h1>   
 		
 		{% for story in allStories %}
-		
-		
-					
 		{% if  is_scrum_master%}
-			<a href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a> 							
+			<a	{% for addStory in addStorytoSprint %} {% if addStory.story = story %} hidden=True {% endif %}{% endfor %} href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a>							
+			<!-- <a href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a>  -->
+			
 		{% endif %}	
 		<div class="story_container">
 			
@@ -78,7 +78,9 @@
 					{% endfor %}
 			{% endif %}
 		</div>
-		<br />	
+	
+			
+			<br />	
 		{% endfor %}
 	
 		<div id="dialog" title="Change estimate">

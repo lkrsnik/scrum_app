@@ -177,7 +177,8 @@ def productbacklog(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
-	return render_to_response('scrumko/productbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	addStorytoSprint = Story_Sprint.objects.filter(story__project_name__id = selected_project_id);
+	return render_to_response('scrumko/productbacklog.html', {'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 def current_sprint(request):
 	sprint = Sprint.objects.filter(project_name__id = request.session['selected_project'], start_date__lte = date.today(), finish_date__gte = date.today())
@@ -214,7 +215,8 @@ def sprintbacklog(request):
 
 	
 @login_required
-def addstorytosprint(request):
+def addstorytosprint(request, id):
+	storyinsprint = False
 	# get current user
 	current_user = request.user.id
 	
@@ -223,16 +225,14 @@ def addstorytosprint(request):
 	
 	# redirect back if user has not permision	
 	if len (user_project) == 0:	
-		print "petra"
 		return HttpResponseRedirect('/scrumko/home')
-	#start_date__lte=date.today
+	
 	# check if story is in sprint
 	current_sprintek = current_sprint(request)
-	print "petra2"
+	
 	if (current_sprintek) is None:
-		print "petra3"
 		return HttpResponseRedirect('/scrumko/home/')
-	print "petra4"
+	
 	current_story = Story.objects.filter(id = id)
 
 	# if current story is in current sprint
@@ -247,17 +247,12 @@ def addstorytosprint(request):
 			return HttpResponseRedirect('/scrumko/home')
 		else:	
 			print "zadeva dela"
-			# note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
-			# note_permission = note_permission.permission
-			# context = RequestContext(request)
-			# allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
-			# return render_to_response('scrumko/productbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
-
+			storyinsprint = True
+		
 			context = RequestContext(request)
 			add = Story_Sprint.objects.create(sprint=current_sprintek, story = current_story[0])
 			
 			return HttpResponseRedirect("/scrumko/productbacklog")	
-
 @login_required
 def sprintcreate(request):
 	# check permision to form and
