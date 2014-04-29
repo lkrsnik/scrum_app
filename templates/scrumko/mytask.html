@@ -1,0 +1,108 @@
+{% extends 'scrumko/main.html' %}
+{% load static %}
+
+{% block body_block %}
+
+	<script type="text/javascript" src="{% static  'javascript/sprintbacklog.js' %}" ></script>
+	
+	<h1> My tasks</h1>   
+		
+		{% for sprintstory in allStories %}	
+		<div class="story_container">
+			
+			<div class="story_name_container">
+				{{ sprintstory.story.story_name }}
+			</div>
+
+		
+			<div class="story_content_container" >		
+		
+			{{ sprintstory.story.text }}
+			</div>
+			
+			
+			<div class="story_acceptance_test_container" >				
+				{{ sprintstory.story.test_text }}
+			</div>
+			{% if note_permission %}
+				
+				
+					{% for notification in allNotifications %}
+						{% if notification.story = sprintstory.story %}
+						{% if not notification.notification = "" %}						
+						<div class="story_content_container">
+							<p class="notes">{{notification.notification}}</p> 
+						</div>
+						{% endif %}
+						{% endif %}
+					{% endfor %}
+				
+			{% endif %}
+			<div class="story_sprintbacklog_tasks_background">
+				<table class=backlogtasktable>
+	   	
+		
+					<tr>
+						<td class="column_tasks">
+							Tasks
+						</td>
+						<td class="column_status">
+							Status
+						</td>
+						<td class="column_member">
+							Member
+						</td>
+						<td class="column_remaining">
+							Remaining
+						</td>
+						
+					</tr>
+				{% for task in allTasks%}
+					{% if task.story == sprintstory.story%}
+					<tr>
+						<td class="column_tasks">
+							{{ task.text }}
+						</td>
+						<td class="column_status">
+							{% if task.status == 0 %}
+								Pending
+							{% elif task.status == 0 %}
+								Assigned
+							{% elif task.status == 0 %}
+								Completed
+							{% endif %}
+						</td>
+						<td class="column_member">
+							{{ task.worker }}
+						</td>
+						<td class="column_remaining">
+							{{ task.duratino }}
+						</td>
+						
+					</tr>
+					{% endif %}
+				{% endfor %}
+				</table>
+			</div>
+		</div>
+		<br />	
+		{% endfor %}
+	
+		<div id="dialog" title="Change estimate">
+		  <form action="/scrumko/change_estimation1/" method="post" id="estimate_change">{% csrf_token %}
+			<input type="hidden" id="storyid" name="storyid" />
+			<input type="text" id="estimation" name="estimation" style="float: left"/>
+			<input type="submit" id="submit" value="Submit" style="float: left"/>
+		  
+		  </form>
+		</div>
+		<div id="dialog_note" title="Add notification">
+		  <form action="/scrumko/add_notification1/" method="post" id="add_note">{% csrf_token %}
+			<input type="hidden" id="storyid1" name="storyid1" />
+			<input type="text" id="note" name="note" style="float: left"/>
+			<input type="submit" id="submit1" value="Submit" style="float: left"/>
+		  
+		  </form>
+		</div>
+	
+{% endblock %}
