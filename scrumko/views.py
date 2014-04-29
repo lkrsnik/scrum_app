@@ -107,8 +107,8 @@ def index(request):
 	if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
-        username = request.POST['username']
-        password = request.POST['password']
+		username = request.POST['username']
+		password = request.POST['password']
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
