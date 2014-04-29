@@ -23,8 +23,7 @@ velocity_error = {
 
 
 class UserForm(forms.ModelForm):
-	
-    
+
     email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
     is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
     username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
@@ -163,11 +162,7 @@ class SprintCreateForm(forms.ModelForm):
 		# check if not in past
 		if start_date < date.today():
 			raise ValidationError("Do not enter past dates.")
-			return
-		
-		
-		
-								
+			return					
 		return start_date
 		
 	def clean_finish_date(self):

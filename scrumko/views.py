@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 
 from datetime import date, datetime
+import datetime
 
 from scrumko.models import User
 from scrumko.models import UserProfile, Task, Story_Sprint
@@ -313,16 +314,11 @@ def sprintedit(request, id):
 	already_exist_message = ""
 	context = RequestContext(request)
 	
-	registered = False
-	
-	
+	registered = False	
 	if request.method == 'POST':
-		
 		sprint_info =Sprint.objects.filter(id =id)
 		r= sprint_info[0]
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
-		
+	
 		sprint_form = SprintEditForm(data=request.POST)		
 		
         # If the two forms are valid...
@@ -332,8 +328,8 @@ def sprintedit(request, id):
 			start_date = request.POST['start_date'] 
 			finish_date = request.POST['finish_date'] 
 			velocity = request.POST['velocity']
-			r.start_date=start_date
-			r.finish_date=finish_date
+			r.start_date=datetime.datetime.strptime(start_date, '%m/%d/%Y')				
+			r.finish_date=datetime.datetime.strptime(finish_date, '%m/%d/%Y')
 			r.velocity=velocity
 			r.save();
 			registered=True
@@ -348,9 +344,9 @@ def sprintedit(request, id):
 		r= sprint_info[0]
 	
 	
+	#start_date_d = datetime.datetime.strptime(r.start_date, '%Y-%m-%d')
 
-
-	sprint_form = SprintEditForm(initial={'project_name': r.project_name, 'start_date': r.start_date, 'finish_date': r.finish_date, 'velocity': r.velocity})
+	sprint_form = SprintEditForm(initial={'project_name': r.project_name, 'start_date': r.start_date.strftime('%m/%d/%Y'), 'finish_date': r.finish_date.strftime('%m/%d/%Y'), 'velocity': r.velocity})
 	# Render the template depending on the context.
 	return render_to_response('scrumko/sprintedit.html',{'sprint_form': sprint_form, 'registered': registered, 'sprint_id': id}, context)	
 
