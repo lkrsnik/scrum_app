@@ -301,14 +301,15 @@ class ProjectEditForm(forms.ModelForm):
 	
 class TaskForm (forms.ModelForm):
 	
-	story = forms.ModelMultipleChoiceField(widget=forms.HiddenInput(),queryset=Story.objects.none(), required=False)
+	story = forms.ModelChoiceField(widget=forms.HiddenInput(),queryset=Story.objects.all(), required=False)
 	duratino = forms.IntegerField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[
 		RegexValidator(
 			regex='^[1-9][0-9]*$',
 			message='Please enter a positive integer.',
 			code='invalid_value'
 		),
-	])   
+	]) 
+	 
 	
 	def __init__(self, project_id,*args,**kwargs):
 		super (TaskForm,self ).__init__(*args,**kwargs) # populates the post

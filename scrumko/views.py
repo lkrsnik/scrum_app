@@ -14,8 +14,10 @@ from django.db import transaction
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 
+from datetime import date, datetime
+
 from scrumko.models import User
-from scrumko.models import UserProfile
+from scrumko.models import UserProfile, Task, Story_Sprint
 from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification
 
 
@@ -943,11 +945,22 @@ def taskcreate (request, id):
 	context = RequestContext(request)
 	success=False;
 	context_dict = {};
+	
+	# check if story is in sprint
+	st_sp = Story_Sprint.objects.filter(story__id = id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
+	if len (st_sp) == 0:
+		return HttpResponseRedirect('/scrumko/home/')
+    
     
 	# get project id
 	project_id = request.session['selected_project']
-	context_dict ['success'] = success
-    
+	context_dict['id'] = id
+	
+	# get all taskes and data for write out in papge
+	tasks = Task.objects.filter (story__id = id)
+	context_dict['tasks'] = tasks;
+	
+	    
 	if request.method == 'POST':
         
 		task_form = TaskForm(project_id, data=request.POST)    
@@ -957,13 +970,16 @@ def taskcreate (request, id):
 			
 			success=True;
 		else:				
-			print task_form.errors		
+			print task_form.errors	
+			context_dict ['success'] = success
+			context_dict ['task_form'] = task_form	
 			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
     
 	# get form and add to dict
+	
 	task_form = TaskForm(project_id, initial={'story': id}) 
 	context_dict ['task_form'] = task_form
-	
+	context_dict ['success'] = success
        
 	# render page
 	return render_to_response ('scrumko/taskcreate.html', context_dict, context);

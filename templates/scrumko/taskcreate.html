@@ -3,8 +3,59 @@
 {% block body_block %}
 
 <div>
+		
+		<h1>Tasks</h1>
+		<h2> User story: story</h2>
+		
+		<table class="planingtable">
+			<tr>
+				
+				<td>
+					Task
+				</td>
+				<td>
+					Duration
+				</td>
+				
+				<td>
+					Member
+				</td>
+				
+			</tr>
+		
+			{% for task in tasks %}
+				<tr>
+					<td>
+						{{task.text}}
+					</td>
+					<td>
+						{{task.duratino}}
+					</td>
+					
+					<td>
+						{{task.worker.username}}
+					</td>
+				
+				</tr>
+			
+			{%endfor%}
+		
+		</table>
+	
+		<br/>
+	
+		{% if success %}
+			<div class="succes_hold">
+				<div class="succes">
+					Task added succesfully.
+				</div>
+			</div>
+			
+		{% endif %}
 
-			<form id="task_form" method="post" action="/scrumko/taskcreate/" enctype="multipart/form-data">
+		<h1>Create task</h1>
+
+			<form id="task_form" method="post" action="/scrumko/taskcreate/{{id}}/" enctype="multipart/form-data">
 
 				{% csrf_token %}
 				{% for hidden in task_form.hidden_fields %}
