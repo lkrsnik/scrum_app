@@ -31,7 +31,8 @@ urlpatterns = patterns('',
 	url(r'^maintainproject/editproject/$', views.editproject, name='editproject'),
 	url(r'^change_estimation/$', views.change_estimation, name='change_estimation'),
 	url(r'^taskcreate/(?P<id>\d+)/$', views.taskcreate, name='taskcreate'),
-
+	url(r'^change_estimation/$', views.change_estimation, name='change_estimation'),
+	url(r'^add_notification/$', views.add_notification, name='add_notification'),
 	
 	
 	)
