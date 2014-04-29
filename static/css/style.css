@@ -646,3 +646,58 @@ a
 {
 	color: red;
 }
+
+.story_sprintbacklog_tasks_background
+{
+	padding: 5px 5px 5px 5px;
+	margin-bottom:3px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.story_sprintbacklog_tasks_foreground
+{
+	
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.backlogtasktable
+{
+	/*background-color: rgba(255, 255, 255, 0.1);*/
+	width: 100%;
+	
+	/*padding: 10px 10px 10px 20px;*/
+	
+	border-radius: 15px;
+}
+
+.backlogtasktable tr
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+	
+	border-radius: 15px;
+}
+
+.backlogtasktable tr:first-child
+{
+	color: #4590ab;
+}
+
+.backlogtasktable td
+{
+	padding: 5px 5px 5px 5px;
+}
+
+.backlogtasktable table { border-collapse: separate; }
+
+.backlogtasktable tr:first-child td:first-child { border-top-left-radius: 10px; }
+.backlogtasktable tr:first-child td:last-child { border-top-right-radius: 10px; }
+.backlogtasktable tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+.backlogtasktable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+.column_tasks{ width: 60%; }
+.column_status{ width: 10%; }
+.column_member{ width: 20%; }
+.column_remaining{ width: 10%; }
