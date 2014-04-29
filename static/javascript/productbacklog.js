@@ -36,7 +36,25 @@ $(document).ready(function() {
 		
 		  $( "#dialog" ).dialog( "open" );
 		});
+		
+		$("#submit").click (function(e) {
+			val = $("#estimation").val();
+			
+			
+			
+			if(isNaN(parseFloat(val)))
+			{
+				
+				$("#warning").html("Please enter a positive integer.");
+				e.preventDefault();
+			}
+			
+			
+		});
+		
 	  });
+	  
+	  
 
 	$(function() {
 		$( "#dialog_note" ).dialog({
