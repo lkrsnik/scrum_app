@@ -783,16 +783,18 @@ def poker (request):
 	
 	# get active stoy on planing poker
 	active_poker = Poker.objects.filter (project__id = request.session['selected_project'])
-	active_poker = active_poker[len(active_poker) - 1]	
+	
 	
 	## add data to dictionary
 	
 	# if not active poker, then writeout this
-	if not active_poker:
+	if len (active_poker) == 0 :
 		context_dict.update ({'story_text' : 'There is not active planing pokers right now.'})
 	
 	#if data available write-out
 	else:
+		
+		active_poker = active_poker[len(active_poker) - 1]	
 		# write data for descriptions
 		story = active_poker.story
 		context_dict.update ({'story_text' : story.text, 'story_test' : story.test_text, 'story_name' : story.story_name})
