@@ -256,16 +256,16 @@ def addstorytosprint(request, id):
 
 	# if current story is in current sprint
 	sp_st = Story_Sprint.objects.filter(story = current_story, sprint = current_sprintek)
-	print "petra5"
+	
 	if len (sp_st) > 0:
-		print "petra6"
+		
 		return HttpResponseRedirect('/scrumko/home')
 	else:
-		print "petra7"
+		
 		if not current_sprintek or len(current_story) == 0:	
 			return HttpResponseRedirect('/scrumko/home')
 		else:	
-			print "zadeva dela"
+			
 			storyinsprint = True
 		
 			context = RequestContext(request)
@@ -1242,3 +1242,46 @@ def mytask(request):
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	return render_to_response('scrumko/mytask.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+
+@login_required	
+def addtasktocompleted(request, id):
+	#kodo napisi tako, da ko kliknes complete - to je vedno ko pride sem v funkcijo,
+#	se nastavi status na 2, kar pomeni complete
+	
+	#taskcompleted = False
+	# get current user
+	# current_user = request.user.id
+	
+	# # get selected project
+	# user_project =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	
+	# # redirect back if user has not permision	
+	# if len (user_project) == 0:	
+		# return HttpResponseRedirect('/scrumko/home')
+	
+	# # check if story is in sprint
+	# current_sprintek = current_sprint(request)
+	
+	# if (current_sprintek) is None:
+		# return HttpResponseRedirect('/scrumko/home/')
+	
+	# current_task = Task.objects.filter(id = id)
+
+	# if current story is in current sprint
+	# sp_st = Task.objects.filter(task = current_task)
+	# print "petra5"
+	# if len (sp_st) > 0:
+		# print "petra6"
+		# return HttpResponseRedirect('/scrumko/home')
+	# else:
+		# print "petra7"
+		# if not current_sprintek or len(current_story) == 0:	
+			# return HttpResponseRedirect('/scrumko/home')
+		# else:	
+			# print "zadeva dela"
+			taskcompleted = True
+			current_story = Story.objects.filter(id = id)
+			context = RequestContext(request)
+			add = Task.objects.create(status=2, story = current_story[0])
+			
+			return HttpResponseRedirect("/scrumko/mytask")	
