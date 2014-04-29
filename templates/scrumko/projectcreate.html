@@ -1,7 +1,11 @@
 {% extends 'scrumko/main.html' %}
 
+{% load static %}
+
 {% block body_block %}
-        <h1>Add Project</h1>
+	<script src="{% static  'javascript/project.js' %}"></script>
+        
+		<h1>Add Project</h1>
 		<p id="previous_members" hidden="true">{{ all_members }}</p>
         {% if registered %}
 			<div class="succes_hold">

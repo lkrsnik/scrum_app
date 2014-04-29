@@ -1,6 +1,9 @@
 {% extends 'scrumko/main.html' %}
+
+{% load static %}
+
 {% block body_block %}
-	
+		<script src="{% static  'javascript/project.js' %}"></script>
 	     <script>
 			$(document).ready(function (){
 			 $('.target').click(function(e) {

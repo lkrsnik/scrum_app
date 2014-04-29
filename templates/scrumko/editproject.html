@@ -1,6 +1,9 @@
 {% extends 'scrumko/main.html' %}
-{% block body_block %}
 
+{% load static %}
+
+{% block body_block %}
+	<script src="{% static  'javascript/project.js' %}"></script>
 		<h1>Edit project: {{project_detail.0.project_name}}</h1>
         {% if registered %}
 			<div class="succes_hold">
