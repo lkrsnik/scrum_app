@@ -55,6 +55,9 @@
 						<td class="column_remaining">
 							Remaining
 						</td>
+						<td class="column_remaining">
+							Complete
+						</td>
 						
 					</tr>
 				{% for task in allTasks%}
@@ -66,9 +69,9 @@
 						<td class="column_status">
 							{% if task.status == 0 %}
 								Pending
-							{% elif task.status == 0 %}
+							{% elif task.status == 1 %}
 								Assigned
-							{% elif task.status == 0 %}
+							{% elif task.status == 2 %}
 								Completed
 							{% endif %}
 						</td>
@@ -78,7 +81,17 @@
 						<td class="column_remaining">
 							{{ task.duratino }}
 						</td>
-						
+						<td>
+							{% if task.status == 0 %}
+								Can not complete
+							{% elif task.status == 1 %}
+								<a href="/scrumko/mytask/" class="link" >Complete</a>
+							{% elif task.status == 2 %}
+								Can not complete
+								 
+							{% endif %}
+												
+						</td>
 					</tr>
 					{% endif %}
 				{% endfor %}

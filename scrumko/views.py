@@ -293,9 +293,7 @@ def sprintcreate(request):
 	if request.method == 'POST':
   		# get form inputs
   		sprint_form = SprintCreateForm(data=request.POST)
-		print "luuuuuuuuuuuukaaaaaaaaaaaaaaaaaaaaaa"
-  		print sprint_form  	
-		print "luuuuuuuuuuuukaaaaaaaaaaaaaaaaaaaaa22222222222a"		
+
         # If the forms is valid...
 		if sprint_form.is_valid():
 			
