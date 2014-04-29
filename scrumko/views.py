@@ -1139,8 +1139,61 @@ def taskcreate (request, id):
 	# render page
 	return render_to_response ('scrumko/taskcreate.html', context_dict, context);
 
-# this funcition return current sprint
+@login_required
+def taskedit (request, id):
+	
+	context = RequestContext(request)
+	success=False;
+	context_dict = {};
+	
+	# check if story is in sprint
+	st_sp = Story_Sprint.objects.filter(story__id = id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
+	if len (st_sp) == 0:
+		return HttpResponseRedirect('/scrumko/home/')
+    
+    # check if story finished
+	sprint = Story.objects.filter(id = id, status = False)
+	if len (sprint) == 0:
+		return HttpResponseRedirect('/scrumko/home/')
+    
+	# get project id
+	project_id = request.session['selected_project']
+	context_dict['id'] = id
+	
+	# get all taskes and data for write out in papge
+	tasks = Task.objects.filter (id = id)
+	context_dict['tasks'] = tasks;
+	
+	
+	    
+	if request.method == 'POST':
+        
+		task_form = TaskEditForm(project_id, data=request.POST)    
+        
+		if task_form.is_valid():
+			task_form.save()			
+			
+			success=True;
+		else:				
+			print task_form.errors	
+			context_dict ['success'] = success
+			context_dict ['task_form'] = task_form	
+			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+    
+	# get form and add to dict
+	
+	task_form = TaskEditForm(project_id, initial={'story': id}) 
+	context_dict ['task_form'] = task_form
+	context_dict ['success'] = success
+       
+	   
+	# render page
+	return render_to_response ('scrumko/taskedit.html', context_dict, context);
 
+def taskdelete(request, id):
+	context = RequestContext(request)
+	Task.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/sprintbacklog")
 	
 	       
    

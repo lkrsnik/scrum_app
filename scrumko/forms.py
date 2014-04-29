@@ -397,6 +397,29 @@ class TaskForm (forms.ModelForm):
 	
 	class Meta:
 		model = Task
+		
+class TaskEditForm (forms.ModelForm):
+	
+	story = forms.ModelChoiceField(widget=forms.HiddenInput(),queryset=Story.objects.all(), required=False)
+	duratino = forms.IntegerField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[
+		RegexValidator(
+			regex='^[1-9][0-9]*$',
+			message='Please enter a positive integer.',
+			code='invalid_value'
+		),
+	]) 
+	
+	status = forms.IntegerField (widget=forms.HiddenInput(), initial=0)
+	worker = forms.ModelChoiceField(queryset=User.objects.all(), label = mark_safe('Member'), required = False)
+	 
+	
+	def __init__(self, project_id,*args,**kwargs):
+		super (TaskForm,self ).__init__(*args,**kwargs) # populates the post
+		self.fields['worker'].queryset = Project.objects.get(id=project_id).team.order_by('username')
+			
+	
+	class Meta:
+		model = Task
 	
 
 
