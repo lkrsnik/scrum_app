@@ -161,6 +161,19 @@ def productbacklog(request):
 	return render_to_response('scrumko/productbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 	
 @login_required
+def addstorytosprint(request):
+	# get current user
+	current_user = request.user.id
+	
+	# get selected project
+	user_project =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	
+	# redirect back if user has not permision	
+	if len (user_project) == 0:	
+		return HttpResponseRedirect('/scrumko/home')
+
+
+@login_required
 def sprintcreate(request):
 	# check permision to form and
 	# project permision check
@@ -221,7 +234,6 @@ def sprintedit(request, id):
 	context = RequestContext(request)
 	
 	registered = False
-	
 	
 	
 	if request.method == 'POST':

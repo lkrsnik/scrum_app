@@ -5,10 +5,7 @@
 
 	<script type="text/javascript" src="{% static  'javascript/productbacklog.js' %}" ></script>
 	
-	<h1> Product backlog </h1>
-		
-		
-	   	
+	<h1> Product backlog </h1>   	
 		{% for story in allStories %}
 		<div class="story_container">
 			<div class="story_name_container">
@@ -30,6 +27,10 @@
 					{% if  is_scrum_master or is_owner%}
 						<a href="/scrumko/storyedit/{{ story.id }}"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
 						<a href="/scrumko/storydelete/{{story.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 					
+					{% endif %}
+					{% if  is_scrum_master%}
+						<a href="/scrumko/storyedit/{{ story.id }}"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 							
+					<--!	{{story.active}}-->
 					{% endif %}
 		
 				</div>

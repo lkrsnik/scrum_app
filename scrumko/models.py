@@ -36,9 +36,6 @@ class Sprint(models.Model):
 
 	def __unicode__(self):
 		return str(self.project_name)
-		
-
-
 
 class Story (models.Model):
 	project_name = models.ForeignKey(Project)
@@ -83,7 +80,7 @@ class NotificationPermission (models.Model):
 class Story_Sprint (models.Model):
 	story = models.ForeignKey(Story)
 	sprint = models.ForeignKey(Sprint)
-	
+
 class Task (models.Model):
 	story = models.ForeignKey (Story)
 	text = models.CharField(max_length=1000, blank=False)
