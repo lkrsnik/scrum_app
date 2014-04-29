@@ -698,7 +698,7 @@ a
 .backlogtasktable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
 
 .column_tasks{ width: 50%; }
-.column_status{ width: 10%; }
+.column_status{ width: 15%; }
 .column_member{ width: 20%; }
 .column_remaining{ width: 10%; }
 .column_actions{ width: 10%; }

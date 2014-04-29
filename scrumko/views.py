@@ -211,6 +211,11 @@ def sprintbacklog(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	
+	status = int(request.GET.get('accept', '0'))
+	if status > 0:
+		print 'lala'
+	
 	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 	
