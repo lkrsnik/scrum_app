@@ -159,7 +159,15 @@ def productbacklog(request):
 	context = RequestContext(request)
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	return render_to_response('scrumko/productbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+
+def current_sprint(request):
+	sprint = Sprint.objects.filter(project_name__id = request.session['selected_project'], start_date__lte = date.today(), finish_date__gte = date.today())
 	
+	if len (sprint ) == 0:
+		return None
+	else:
+		return sprint[0]
+		
 @login_required
 def sprintbacklog(request):
 	#allStories = Story.objects.all()
@@ -190,21 +198,36 @@ def addstorytosprint(request):
 		return HttpResponseRedirect('/scrumko/home')
 	#start_date__lte=date.today
 	# check if story is in sprint
-	current_sprint = Story_Sprint.objects.filter(story__id = id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
+	current_sprintek = current_sprint(request)
 	print "petra2"
-	if len (current_sprint) == 0:
+	if (current_sprintek) is None:
 		print "petra3"
 		return HttpResponseRedirect('/scrumko/home/')
 	print "petra4"
-	current_story = Story.objects.filter(story__id = id)
+	current_story = Story.objects.filter(id = id)
 
-	if not (len (current_sprint) == 0 and len(current_story) == 0):	
+	# if current story is in current sprint
+	sp_st = Story_Sprint.objects.filter(story = current_story, sprint = current_sprintek)
+	print "petra5"
+	if len (sp_st) > 0:
+		print "petra6"
 		return HttpResponseRedirect('/scrumko/home')
-	else:	
-		context = RequestContext(request)
-		add = Sprint.objects.create(sprint=current_sprint[0], story = current_story[0], active = True)
-		
-		return HttpResponseRedirect("/scrumko/productbacklog")	
+	else:
+		print "petra7"
+		if not current_sprintek or len(current_story) == 0:	
+			return HttpResponseRedirect('/scrumko/home')
+		else:	
+			print "zadeva dela"
+			# note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
+			# note_permission = note_permission.permission
+			# context = RequestContext(request)
+			# allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+			# return render_to_response('scrumko/productbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+
+			context = RequestContext(request)
+			add = Story_Sprint.objects.create(sprint=current_sprintek, story = current_story[0])
+			
+			return HttpResponseRedirect("/scrumko/productbacklog")	
 
 @login_required
 def sprintcreate(request):
@@ -1064,13 +1087,7 @@ def taskcreate (request, id):
 	return render_to_response ('scrumko/taskcreate.html', context_dict, context);
 
 # this funcition return current sprint
-def current_sprint:
-	sprint = Sprint.objects.filter(project__id = request.session['selected_project'], start_date__lte = date.today(), finish_date__gte = date.today())
-	
-	if len (sprint ) == 0:
-		return None
-	else:
-		return sprint[0]
+
 	
 	       
    

@@ -8,6 +8,9 @@
 	<h1> Product backlog </h1>   
 		
 		{% for story in allStories %}
+		
+		
+					
 		{% if  is_scrum_master%}
 			<a href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a> 							
 		{% endif %}	
@@ -64,8 +67,6 @@
 				{{ story.test_text }}
 			</div>
 			{% if note_permission %}
-				
-				
 					{% for notification in allNotifications %}
 						{% if notification.story = story %}
 						{% if not notification.notification = "" %}						
@@ -75,7 +76,6 @@
 						{% endif %}
 						{% endif %}
 					{% endfor %}
-				
 			{% endif %}
 		</div>
 		<br />	
