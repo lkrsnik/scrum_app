@@ -337,6 +337,13 @@ def sprintedit(request, id):
 		sprint_info =Sprint.objects.filter(id =id)
 		r= sprint_info[0]
 	
+		oldstart_date = r.start_date
+		oldfinish_date = r.finish_date
+		
+		r.start_date = '1900-01-01'
+		r.finish_date = '1900-01-01'
+		r.save()
+		
 		sprint_form = SprintEditForm(data=request.POST)		
 		
         # If the two forms are valid...
@@ -352,6 +359,10 @@ def sprintedit(request, id):
 			r.save();
 			registered=True
 		else:
+			r.start_date = oldstart_date
+			r.finish_date = oldfinish_date
+			r.save()
+			
 			print sprint_form.errors
 			return render_to_response('scrumko/sprintedit.html',{'sprint_form': sprint_form, 'registered': registered, 'sprint_id': id}, context)
 
@@ -1209,5 +1220,27 @@ def taskdelete(request, id):
 	Task.objects.get(id=id).delete()
 	return HttpResponseRedirect("/scrumko/sprintbacklog")
 	
-	       
-   
+@login_required	
+def mytask(request):    
+	#allStories = Story.objects.all()
+	print current_sprint(request).id
+	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+	print allStories
+	allTasks=Task.objects.all();
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	context = RequestContext(request)
+
+	if request.session['selected_project'] == 0:
+		return render_to_response ('scrumko/noprojectselected.html', {}, context)
+
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
+	current_user = request.user.id
+	selected_project_id = request.session['selected_project']
+	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
+	note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
+	note_permission = note_permission.permission
+	
+	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	return render_to_response('scrumko/mytask.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
