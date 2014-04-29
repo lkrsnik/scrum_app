@@ -89,6 +89,7 @@ class Task (models.Model):
 	text = models.CharField(max_length=1000, blank=False)
 	duratino = models.DecimalField(max_digits=4, decimal_places=1, blank=False)
 	worker = models.ForeignKey(User, blank=True, null=True)
+	status = models.IntegerField(default=0)
 		
 
 

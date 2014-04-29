@@ -951,6 +951,10 @@ def taskcreate (request, id):
 	if len (st_sp) == 0:
 		return HttpResponseRedirect('/scrumko/home/')
     
+    # check if story finished
+	sprint = Story.objects.filter(id = id, status = False)
+	if len (sprint) == 0:
+		return HttpResponseRedirect('/scrumko/home/')
     
 	# get project id
 	project_id = request.session['selected_project']
@@ -959,6 +963,7 @@ def taskcreate (request, id):
 	# get all taskes and data for write out in papge
 	tasks = Task.objects.filter (story__id = id)
 	context_dict['tasks'] = tasks;
+	
 	
 	    
 	if request.method == 'POST':

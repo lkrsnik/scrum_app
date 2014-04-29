@@ -309,11 +309,14 @@ class TaskForm (forms.ModelForm):
 			code='invalid_value'
 		),
 	]) 
+	
+	status = forms.IntegerField (widget=forms.HiddenInput(), initial=0)
+	worker = forms.ModelChoiceField(queryset=User.objects.all(), label = mark_safe('Member'), required = False)
 	 
 	
 	def __init__(self, project_id,*args,**kwargs):
 		super (TaskForm,self ).__init__(*args,**kwargs) # populates the post
-		self.fields['worker'].queryset = Project.objects.get(id=project_id).team
+		self.fields['worker'].queryset = Project.objects.get(id=project_id).team.order_by('username')
 			
 	
 	class Meta:
