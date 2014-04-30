@@ -396,10 +396,10 @@ class TaskForm (forms.ModelForm):
 class TaskEditForm (forms.ModelForm):
 	
 	story = forms.ModelChoiceField(widget=forms.HiddenInput(),queryset=Story.objects.all(), required=False)
-	duratino = forms.IntegerField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[
+	duratino = forms.FloatField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[
 		RegexValidator(
-			regex='^[1-9][0-9]*$',
-			message='Please enter a positive integer.',
+			regex='^[1-9][0-9]*\.?[0-9]*$',
+			message='Please enter a positive float number.',
 			code='invalid_value'
 		),
 	]) 
@@ -409,7 +409,7 @@ class TaskEditForm (forms.ModelForm):
 	 
 	
 	def __init__(self, project_id,*args,**kwargs):
-		super (TaskForm,self ).__init__(*args,**kwargs) # populates the post
+		super (TaskEditForm,self ).__init__(*args,**kwargs) # populates the post
 		self.fields['worker'].queryset = Project.objects.get(id=project_id).team.order_by('username')
 			
 	
