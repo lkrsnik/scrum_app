@@ -702,3 +702,5 @@ a
 .column_member{ width: 20%; }
 .column_remaining{ width: 10%; }
 .column_actions{ width: 10%; }
+
+.link{text-decoration:underline}

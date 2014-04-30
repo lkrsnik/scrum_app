@@ -214,8 +214,21 @@ def sprintbacklog(request):
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	
 	status = int(request.GET.get('accept', '0'))
+	releasing = int(request.GET.get('release', '0'))
 	if status > 0:
-		print 'lala'
+		taskid = int(request.GET.get('task', '0'))
+		task = Task.objects.get(id=taskid);
+		task.status=1;
+		this_user=User.objects.get(id=current_user)
+		task.worker=this_user
+		task.save()		
+	if releasing > 0:
+		taskid = int(request.GET.get('task', '0'))
+		task = Task.objects.get(id=taskid);
+		task.status=0;
+		task.worker=None
+		task.save()
+		
 	
 	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
@@ -243,16 +256,16 @@ def addstorytosprint(request, id):
 
 	# if current story is in current sprint
 	sp_st = Story_Sprint.objects.filter(story = current_story, sprint = current_sprintek)
-	print "petra5"
+	
 	if len (sp_st) > 0:
-		print "petra6"
+		
 		return HttpResponseRedirect('/scrumko/home')
 	else:
-		print "petra7"
+		
 		if not current_sprintek or len(current_story) == 0:	
 			return HttpResponseRedirect('/scrumko/home')
 		else:	
-			print "zadeva dela"
+			
 			storyinsprint = True
 		
 			context = RequestContext(request)
@@ -280,9 +293,7 @@ def sprintcreate(request):
 	if request.method == 'POST':
   		# get form inputs
   		sprint_form = SprintCreateForm(data=request.POST)
-		print "luuuuuuuuuuuukaaaaaaaaaaaaaaaaaaaaaa"
-  		print sprint_form  	
-		print "luuuuuuuuuuuukaaaaaaaaaaaaaaaaaaaaa22222222222a"		
+
         # If the forms is valid...
 		if sprint_form.is_valid():
 			
@@ -324,6 +335,13 @@ def sprintedit(request, id):
 		sprint_info =Sprint.objects.filter(id =id)
 		r= sprint_info[0]
 	
+		oldstart_date = r.start_date
+		oldfinish_date = r.finish_date
+		
+		r.start_date = '1900-01-01'
+		r.finish_date = '1900-01-01'
+		r.save()
+		
 		sprint_form = SprintEditForm(data=request.POST)		
 		
         # If the two forms are valid...
@@ -339,6 +357,10 @@ def sprintedit(request, id):
 			r.save();
 			registered=True
 		else:
+			r.start_date = oldstart_date
+			r.finish_date = oldfinish_date
+			r.save()
+			
 			print sprint_form.errors
 			return render_to_response('scrumko/sprintedit.html',{'sprint_form': sprint_form, 'registered': registered, 'sprint_id': id}, context)
 
@@ -1247,5 +1269,70 @@ def taskdelete(request, id):
 	Task.objects.get(id=id).delete()
 	return HttpResponseRedirect("/scrumko/sprintbacklog")
 	
-	       
-   
+@login_required	
+def mytask(request):    
+	#allStories = Story.objects.all()
+	print current_sprint(request).id
+	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+	print allStories
+	allTasks=Task.objects.all();
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	context = RequestContext(request)
+
+	if request.session['selected_project'] == 0:
+		return render_to_response ('scrumko/noprojectselected.html', {}, context)
+
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
+	current_user = request.user.id
+	selected_project_id = request.session['selected_project']
+	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
+	note_permission = NotificationPermission.objects.get(project__id=selected_project_id)
+	note_permission = note_permission.permission
+	
+	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	return render_to_response('scrumko/mytask.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+
+@login_required	
+def addtasktocompleted(request, id):
+	#kodo napisi tako, da ko kliknes complete - to je vedno ko pride sem v funkcijo,
+#	se nastavi status na 2, kar pomeni complete
+	
+	#taskcompleted = False
+	# get current user
+	# current_user = request.user.id
+	
+	# # get selected project
+	# user_project =  Project.objects.filter(scrum_master__id = current_user, id = request.session['selected_project'])
+	
+	# # redirect back if user has not permision	
+	# if len (user_project) == 0:	
+		# return HttpResponseRedirect('/scrumko/home')
+	
+	# # check if story is in sprint
+	# current_sprintek = current_sprint(request)
+	
+	# if (current_sprintek) is None:
+		# return HttpResponseRedirect('/scrumko/home/')
+	
+	# current_task = Task.objects.filter(id = id)
+
+	# if current story is in current sprint
+	# sp_st = Task.objects.filter(task = current_task)
+	# print "petra5"
+	# if len (sp_st) > 0:
+		# print "petra6"
+		# return HttpResponseRedirect('/scrumko/home')
+	# else:
+		# print "petra7"
+		# if not current_sprintek or len(current_story) == 0:	
+			# return HttpResponseRedirect('/scrumko/home')
+		# else:	
+			# print "zadeva dela"
+			taskcompleted = True
+			current_story = Story.objects.filter(id = id)
+			context = RequestContext(request)
+			add = Task.objects.create(status=2, story = current_story[0])
+			
+			return HttpResponseRedirect("/scrumko/mytask")	
