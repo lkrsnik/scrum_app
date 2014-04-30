@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm, TaskEditForm
 from scrumko.forms import TaskForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -1267,7 +1267,8 @@ def taskedit (request, id):
 	context_dict['id'] = id
 	
 	# get all taskes and data for write out in papge
-	tasks = Task.objects.filter (id = id)
+	this_task = Task.objects.get(id = id);
+	tasks = Task.objects.filter (story__id = this_task.story.id)
 	context_dict['tasks'] = tasks;
 	
 	
@@ -1288,7 +1289,7 @@ def taskedit (request, id):
     
 	# get form and add to dict
 	
-	task_form = TaskEditForm(project_id, initial={'story': id}) 
+	task_form = TaskEditForm(project_id, initial={'story': this_task.story.id}) 
 	context_dict ['task_form'] = task_form
 	context_dict ['success'] = success
        
