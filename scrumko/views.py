@@ -19,7 +19,7 @@ import datetime
 
 from scrumko.models import User
 from scrumko.models import UserProfile, Task, Story_Sprint
-from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification
+from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time
 
 
 import json
@@ -1324,7 +1324,17 @@ def mytask(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
-	return render_to_response('scrumko/mytask.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	workTime = Work_Time.objects.filter(worker__id = current_user)
+	work={}
+	for w in workTime:
+		if w.has_key(w.task):
+			work[w.task.id]=w[w.task]+w.time
+		else:
+			work[w.task.id]=0
+		
+	
+	
+	return render_to_response('scrumko/mytask.html', {'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 @login_required	
 def addtasktocompleted(request, id):

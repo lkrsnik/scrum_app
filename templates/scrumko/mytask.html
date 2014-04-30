@@ -43,43 +43,42 @@
 	   	
 		
 					<tr>
-						<td class="column_tasks">
+						<td class="column_mytask">
 							Tasks
 						</td>
-						<td class="column_status">
-							Status
+						<td class="column_mytask">
+							Work done
 						</td>
-						<td class="column_member">
-							Member
+						<td class="column_mytask">
+							Work remaining
 						</td>
-						<td class="column_remaining">
-							Remaining
+						<td class="column_mytask">
+							Total work
 						</td>
-						<td class="column_remaining">
+						<td class="column_mytask">
 							Complete
+						</td>
+						<td class="column_mytask">
+							Add work time
 						</td>
 						
 					</tr>
 				{% for task in allTasks%}
 					{% if task.story == sprintstory.story%}
+					{% if request.user.id == task.worker.id %}
 					<tr>
-						<td class="column_tasks">
+						<td class="column_mytask">
 							{{ task.text }}
 						</td>
-						<td class="column_status">
-							{% if task.status == 0 %}
-								Pending
-							{% elif task.status == 1 %}
-								Assigned
-							{% elif task.status == 2 %}
-								Completed
-							{% endif %}
+						<td class="column_mytask">
+							{% for work in work%}
+							{% endfor %}
 						</td>
-						<td class="column_member">
-							{{ task.worker }}
+						<td class="column_mytask">
+							{{ task.duratino }} &nbsp;h
 						</td>
-						<td class="column_remaining">
-							{{ task.duratino }}
+						<td class="column_mytask">
+							
 						</td>
 						<td>
 							{% if task.status == 0 %}
@@ -92,7 +91,9 @@
 							{% endif %}
 												
 						</td>
+						<td><img src="/static/images/add.png" alt="yes" height="17" width="17"></td>
 					</tr>
+					{% endif %}
 					{% endif %}
 				{% endfor %}
 				</table>
