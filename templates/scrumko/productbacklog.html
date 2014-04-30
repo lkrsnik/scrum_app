@@ -7,8 +7,88 @@
 	<script type="text/javascript" src="{% static  'javascript/productbacklog.js' %}" ></script>
 	
 	<h1> Product backlog </h1>   
+		<br/>
 		
-		{% for story in allStories %}
+		<div class="productbacklogbut">
+			<div class="selected">
+				<a href="/scrumko/productbacklog">Unfinished stories</a>
+			</div>
+			<div>
+				<a href="/scrumko/productbacklog_fin">Finished stories</a>
+			</div>
+		</div>
+		
+		<br/><br/>
+		
+		<h2>Stories in current sprint</h2>
+		
+		{% for story in stroyinsprint %}
+		
+		<div class="story_container">
+			
+			<div class="story_name_container">
+				{{ story.story_name }}
+			</div>
+			<div class="story_actions_container">
+				<div class="story_priority">
+					Priority: {{ story.priority }}
+				</div>
+				<div class="story_business">
+					Buisness value: {{ story.bussines_value }}
+				</div>
+				<div class="story_edit">
+					
+					{% if note_permission %}
+					<a href="javascript: void(0)" class="edit_note" id="#opener1" data-story="{{story.id}}"><img src="/static/images/note.png" alt="yes" height="20" width="20"></a>
+					 <p class="est" style="float: left; margin-top: 0;"></p> 
+					{% endif %}
+					
+					
+		
+				</div>
+				
+				
+				<div class="story_estimation">
+					<p style="float: left;  margin-top: 0;">Estimation: &nbsp;</p> <p class="est" style="float: left; margin-top: 0;">{{story.estimate}}</p> 
+					
+				</div>
+				
+				<br />
+				
+			  
+			</div>
+		
+			<div class="story_content_container" >		
+		
+			{{ story.text }}
+			</div>
+			
+			
+			<div class="story_acceptance_test_container" >				
+				{{ story.test_text }}
+			</div>
+			<div class="note_content_container">
+			{% if note_permission %}
+					{% for notification in allNotifications %}
+						{% if notification.story = story %}
+						{% if not notification.notification = "" %}						
+						
+							<p class="notes">{{notification.notification}}</p> 
+						
+						{% endif %}
+						{% endif %}
+					{% endfor %}
+			{% endif %}
+			</div>
+		</div>
+	
+			
+			<br />	
+		{% endfor %}
+		
+		<h2>Other stories</h2>
+		
+		{% for story in stroynotinsprint %}
 		{% if  is_scrum_master%}
 			{% if story.estimate > 0 and story.status = False %}
 			<a	{% for addStory in addStorytoSprint %} {% if addStory.story = story %} hidden=True {% endif %}{% endfor %} href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a>							
@@ -67,17 +147,19 @@
 			<div class="story_acceptance_test_container" >				
 				{{ story.test_text }}
 			</div>
+			<div class="note_content_container">
 			{% if note_permission %}
 					{% for notification in allNotifications %}
 						{% if notification.story = story %}
 						{% if not notification.notification = "" %}						
-						<div class="story_content_container">
+						
 							<p class="notes">{{notification.notification}}</p> 
-						</div>
+						
 						{% endif %}
 						{% endif %}
 					{% endfor %}
 			{% endif %}
+			</div>
 		</div>
 	
 			

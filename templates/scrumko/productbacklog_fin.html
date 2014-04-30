@@ -1,0 +1,99 @@
+
+{% extends 'scrumko/main.html' %}
+{% load static %}
+
+{% block body_block %}
+
+	<script type="text/javascript" src="{% static  'javascript/productbacklog.js' %}" ></script>
+	
+	<h1> Product backlog </h1>   
+		<br/>
+		
+		<div class="productbacklogbut">
+			<div>
+				<a href="/scrumko/productbacklog">Unfinished stories</a>
+			</div>
+			<div class="selected">
+				<a href="/scrumko/productbacklog_fin">Finished stories</a>
+			</div>
+		</div>
+		
+		<br/><br/>
+		
+		{% for story in allStories %}
+		
+		<div class="story_container">
+			
+			<div class="story_name_container">
+				{{ story.story_name }}
+			</div>
+			<div class="story_actions_container">
+				<div class="story_priority">
+					Priority: {{ story.priority }}
+				</div>
+				<div class="story_business">
+					Buisness value: {{ story.bussines_value }}
+				</div>
+				
+				<div class="backlog_poker">
+					
+				</div>
+				
+				<div class="story_estimation">
+					<p style="float: left;  margin-top: 0;">Estimation: &nbsp;</p> <p class="est" style="float: left; margin-top: 0;">{{story.estimate}}</p> 
+					
+				</div>
+				
+				<br />
+				
+			  
+			</div>
+		
+			<div class="story_content_container" >		
+		
+			{{ story.text }}
+			</div>
+			
+			
+			<div class="story_acceptance_test_container" >				
+				{{ story.test_text }}
+			</div>
+			<div class="note_content_container">
+			{% if note_permission %}
+					{% for notification in allNotifications %}
+						{% if notification.story = story %}
+						{% if not notification.notification = "" %}						
+						
+							<p class="notes">{{notification.notification}}</p> 
+						
+						{% endif %}
+						{% endif %}
+					{% endfor %}
+			{% endif %}
+			</div>
+		</div>
+	
+			
+			<br />	
+		{% endfor %}
+	
+		<div id="dialog" title="Change estimate">
+		  <form action="/scrumko/change_estimation/" method="post" id="estimate_change">{% csrf_token %}
+			<input type="hidden" id="storyid" name="storyid" />
+			<input type="text" id="estimation" name="estimation" style="float: left"/>
+			<input type="submit" id="submit" value="Submit" style="float: left"/>
+			<br/>
+			<p id="warning" ></p>
+		  
+		  </form>
+		</div>
+		<div id="dialog_note" title="Add notification">
+		  <form action="/scrumko/add_notification/" method="post" id="add_note">{% csrf_token %}
+			<input type="hidden" id="storyid1" name="storyid1" />
+			<input type="text" id="note" name="note" style="float: left"/>
+			<input type="submit" id="submit1" value="Submit" style="float: left"/>
+		  
+		  </form>
+		</div>
+	
+{% endblock %}

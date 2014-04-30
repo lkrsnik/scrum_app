@@ -616,7 +616,22 @@ a
 	padding:15px 15px 15px 15px;
 	background-color: rgba(255, 255, 255, 0.1);
 	color: white;
+	
+	
 }
+
+.note_content_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+	
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+}
+
+
 .story_acceptance_test_container
 {
 	margin-bottom:3px;
@@ -704,3 +719,31 @@ a
 .column_actions{ width: 10%; }
 
 .link{text-decoration:underline}
+
+.productbacklogbut div
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	
+	width: 275px;
+	height: 30px;
+	
+	border-radius: 15px;
+	float: left;
+	
+	margin: 0 15px 0 15px;
+	padding: 15px;
+	text-align: center;
+	
+}
+
+.productbacklogbut
+{
+	height: 60px;
+}
+
+.productbacklogbut .selected a
+{
+	color: #4590ab;
+}
+
+.
