@@ -194,7 +194,7 @@ def sprintbacklog(request):
 	#allStories = Story.objects.all()
 	print current_sprint(request).id
 	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
-	print allStories
+
 	allTasks=Task.objects.all();
 	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	context = RequestContext(request)
