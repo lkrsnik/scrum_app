@@ -27,7 +27,9 @@
 	{% if scrummaster %}
 		
 		{% if activeround %}
-			<button type="button" id="endround">End round</button>
+			{% if enableend %}
+				<button type="button" id="endround">End round</button>
+			{% endif %}
 		{% else %}
 			<button type="button" id="startround">Start new round</button>
 			

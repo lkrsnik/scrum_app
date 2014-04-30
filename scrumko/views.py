@@ -762,6 +762,31 @@ def startpoker(request, user_story_id):
 	# redirect back if story doesent exsist	
 	if len (story) == 0:
 		return HttpResponseRedirect('/scrumko/home')
+		
+	## check if everyone voted in previous poker
+	# get active stoy on planing poker
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True)
+	
+	if len (active_poker) > 0:
+		
+		# all users on project
+		team = Project.objects.get (id = request.session['selected_project']).team.all()
+		scrum_m = Project.objects.get (id = request.session['selected_project']).scrum_master
+				
+		# check if scrum master in team 
+		inteam = 1
+		for t in team:
+			if t.id == scrum_m.id:
+				inteam = 0
+		
+		numofmember = len (team) + inteam
+		
+		# get all estimates in poker
+		estimates_p = Poker_estimates.objects.filter (poker = active_poker[0])
+		
+		if not len (estimates_p) == numofmember:		
+			return HttpResponseRedirect('/scrumko/poker')
+		
 	
 	# close older stories
 	older_opened = Poker.objects.filter(project=user_project[0], active = True)
@@ -790,11 +815,10 @@ def poker (request):
 	
 	# if not active poker, then writeout this
 	if len (active_poker) == 0 :
-		context_dict.update ({'story_text' : 'There is not active planing pokers right now.'})
+		context_dict.update ({'story_text' : 'There is no active planning poker right now.'})
 	
 	#if data available write-out
-	else:
-		
+	else:		
 		active_poker = active_poker[len(active_poker) - 1]	
 		# write data for descriptions
 		story = active_poker.story
@@ -847,11 +871,15 @@ def get_poker_data (project_id, story, current_user):
 			estimate_value[i] = []
 			emty_row_num = emty_row_num + 1			
 		else:
-			estimate_value[i][j+2] = avg / num
+			estimate_value[i][j+2] = '%.2f' % (avg / num)
 			
-		# check if last planing poker has no my submision
-		my_last = Poker_estimates.objects.filter (poker = pokers[i], user__id = current_user)
-		last_estimate = len (my_last ) == 0
+	# check if last planing poker has no my submision
+	my_last = Poker_estimates.objects.filter (poker = pokers[i], user__id = current_user)
+	last_estimate = len (my_last ) == 0
+		
+	# delete last row if no my submision
+	if last_estimate:
+		estimate_value[i:i+1] = []
 		
 	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate	}
 
@@ -877,9 +905,32 @@ def get_button_poker_data (project_id, story, current_user):
 	active_poker = Poker.objects.filter (project__id = project_id, active = True)
 	
 	if len (active_poker) > 0:
+		## check if everyone voted
+		
+		# all users on project
+		team = Project.objects.get (id = project_id).team.all()
+		scrum_m = Project.objects.get (id = project_id).scrum_master
+				
+		# check if scrum master in team 
+		inteam = 1
+		for t in team:
+			if t.id == scrum_m.id:
+				inteam = 0
+		
+		numofmember = len (team) + inteam
+		
+		# get all estimates in poker
+		estimates_p = Poker_estimates.objects.filter (poker = active_poker[0])
+		
+		if len (estimates_p) == numofmember:		
+			button_dict.update ({'enableend' : True })
+		else:
+			button_dict.update ({'enableend' : False })
+			
 		button_dict.update ({'activeround' : True })
 	else:
 		button_dict.update ({'activeround' : False })
+		button_dict.update ({'enableend' : False })
 
 	## estimated from this user?
 	
@@ -1002,8 +1053,8 @@ def calc_avg_est (est):
 	total = 0
 	for e in est:
 		total = total + e.estimate
-	
-	return total
+		
+	return total / len(est)
 	
 	
 # function start ne round of planing poker
