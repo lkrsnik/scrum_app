@@ -1283,8 +1283,12 @@ def taskedit (request, id):
 			this_task.text=request.POST['text']
 			this_task.duratino=request.POST['duratino']
 			if request.POST['worker'] != "":
-				this_task.worker=User.objects.get(id = request.POST['worker'])
+				new_worker=User.objects.get(id = request.POST['worker'])
+				if this_task.worker != new_worker:
+					this_task.status=0
+					this_task.worker = new_worker;
 			else:
+				this_task.status=0
 				this_task.worker=None
 			this_task.save();
 			success=True;
