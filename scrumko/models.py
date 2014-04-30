@@ -88,6 +88,12 @@ class Task (models.Model):
 	worker = models.ForeignKey(User, blank=True, null=True)
 	status = models.IntegerField(default=0)
 		
+class Work_Time (models.Model): 
+	task = models.ForeignKey (Task)
+	worker = models.ForeignKey(User)
+	day = models.DateField(blank=False)
+	time = models.DecimalField(max_digits=4, decimal_places=1, blank=False)
+	
 
 
 
