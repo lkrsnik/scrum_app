@@ -4,7 +4,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.core.validators import MinValueValidator
 from django.core import validators
-from scrumko.models import UserProfile, Sprint, Project, Story, NotificationPermission, Task
+from scrumko.models import UserProfile, Sprint, Project, Story, NotificationPermission, Task, Work_Time
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.template.defaultfilters import mark_safe
@@ -415,6 +415,15 @@ class TaskEditForm (forms.ModelForm):
 	
 	class Meta:
 		model = Task
+
+class Work_Time_Edit_Form (forms.ModelForm) :
+	task = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+	worker = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+	day = forms.DateField(label = mark_safe(u'Day'))
+	time = forms.DecimalField(max_digits=4, decimal_places=1, label = mark_safe(u'Working time'), required=True)
+	
+	class Meta:
+		model = Work_Time
 	
 
 

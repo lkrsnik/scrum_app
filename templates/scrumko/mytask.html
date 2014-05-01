@@ -4,7 +4,11 @@
 {% block body_block %}
 
 	<script type="text/javascript" src="{% static  'javascript/sprintbacklog.js' %}" ></script>
-	
+	<script>
+				$(function() {
+					$( "#id_day" ).datepicker();
+				});
+		  </script>
 	<h1> My tasks</h1>   
 		
 		{% for sprintstory in allStories %}	
@@ -57,9 +61,7 @@
 						<td class="column_mytask">
 							Complete
 						</td>
-						<td class="column_mytask">
-							Add work time
-						</td>
+						
 						
 					</tr>
 				{% for task in allTasks%}
@@ -75,22 +77,30 @@
 							{% for k, v in work.items %}
 								{% if k = task.id %}
 								{{ v }}
+								{% if not v = "" %}
+								  &nbsp;h
+								{%	endif %}
 								{% endif %}
 							{% endfor %}
-							 &nbsp;h
 							
+							<a href="/scrumko/mytask?id={{ task.id }}"> <img src="/static/images/edit.png" alt="yes" class="timeedit" height="17" width="17"></a>
 						</td>
 						<td class="column_mytask">
-							{{ task.duratino }} &nbsp;h
-							
+			
+							<p class="dur" style="float: left; margin: 0px;"> {{ task.duratino }} </p> &nbsp;h
+								<a href="javascript: void(0)" class="edit_remaining" id="#opener2" data-story="{{task.id}}" >
+							 <img src="/static/images/edit.png" alt="yes" class="timeedit" height="17" width="17">
+							 </a>
 						</td>
 						<td class="column_mytask">
 							{% for k, v in total.items %}
 								{% if k = task.id %}
-								{{ v }}
-								{% endif %}
+								{{ v }} 
+									&nbsp;h
+								{% endif %}								
 							{% endfor %}
-							 &nbsp;h 
+						
+							 </td>
 						</td>
 						<td>
 							{% if task.status == 0 %}
@@ -103,7 +113,7 @@
 							{% endif %}
 												
 						</td>
-						<td><img src="/static/images/add.png" alt="yes" height="17" width="17"></td>
+						
 					</tr>
 					
 					{% endif %}
@@ -111,9 +121,65 @@
 				</table>
 			</div>
 		</div>
+		{% if change %}
+		<div class="time_change">
+				Add working time for {{ currenttask.text }}: </div><br/>
+					<form id="time_form" method="post" action="/scrumko/mytask/"
+					enctype="multipart/form-data">
+
+				{% csrf_token %}
+				{% for hidden in wtime_form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+
+				{% for field in wtime_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
+				
+				<div class="fieldwrapper">	Add time </div>
+				<div class="errorwrapper"><input type="radio" name="addtype" value="plus"></div></br></br>
+				<div class="fieldwrapper">	Remove time	</div>
+				<div class="errorwrapper"><input type="radio" name="addtype" value="minus"></div>
+				
+				<div class="fieldwrapper">
+						<input type="submit" name="submit" value="Change time" />
+						</div>
+				
+			</form>
+			<br /><br />
+				<div class="time_change">
+				History: </div>
+				{% for w in workdays %}
+					<p class="time_history">{{w.day}}: <strong>{{w.time}} h</strong></p>
+				{% endfor %}
+		{% else %}
 		<br />	
+		{% endif %}
 		{% endfor %}
-	
+		
+		<div id="dialogremaining" title="Change remaining time">
+		  <form action="/scrumko/change_remaining/" method="post" id="estimate_change">{% csrf_token %}
+			<input type="hidden" id="taskid" name="taskid" />
+			<input type="text" id="duration" name="duration" style="float: left"/>
+			<input type="submit" id="submit2" value="Submit" style="float: left"/>
+		  
+		  </form>
+		</div>
 		
 	
 {% endblock %}
