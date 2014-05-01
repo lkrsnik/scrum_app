@@ -977,7 +977,7 @@ def get_button_poker_data (project_id, story, current_user):
 		# get all estimates in poker
 		estimates_p = Poker_estimates.objects.filter (poker = active_poker[0])
 		
-		if len (estimates_p) == numofmember:		
+		if len (estimates_p) >= numofmember:		
 			button_dict.update ({'enableend' : True })
 		else:
 			button_dict.update ({'enableend' : False })
