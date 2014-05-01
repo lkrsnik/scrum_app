@@ -41,6 +41,7 @@ urlpatterns = patterns('',
 	url(r'^change_estimation/$', views.change_estimation, name='change_estimation'),
 	url(r'^add_notification/$', views.add_notification, name='add_notification'),
 	url(r'^change_estimation1/$', views.change_estimation1, name='change_estimation1'),
+	url(r'^change_remaining/$', views.change_remaining, name='change_remaining'),
 	url(r'^add_notification1/$', views.add_notification1, name='add_notification1'),
 	
 	

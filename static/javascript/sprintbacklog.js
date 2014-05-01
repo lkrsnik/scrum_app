@@ -95,4 +95,42 @@ $(document).ready(function() {
 		  $( "#dialog_note" ).dialog( "open" );
 		});
 	  });
+	  $(function() {
+		$( "#dialogremaining" ).dialog({
+		  autoOpen: false,
+		  show: {
+			effect: "fade",
+			duration: 1000
+		  },
+		  hide: {
+			effect: "fade",
+			duration: 1000
+		  },
+		  width: 400
+		});
+	 
+		$( ".edit_remaining" ).click(function() {
+			$('#taskid').val ($(this).attr('data-story'));
+		
+			$('#duration').val ($(this).parents('.column_mytask').find('.dur').html());
+		
+		  $( "#dialogremaining" ).dialog( "open" );
+		});
+		
+		$("#submit2").click (function(e) {
+			val = $("#duration").val();
+			
+			
+			
+			if(isNaN(parseFloat(val)))
+			{
+				
+				$("#warning").html("Please enter a positive decimal number.");
+				e.preventDefault();
+			}
+			
+			
+		});
+		
+	  });
 });

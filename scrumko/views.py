@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm, TaskEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm, TaskEditForm, Work_Time_Edit_Form
 from scrumko.forms import TaskForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -1221,7 +1221,21 @@ def change_estimation1 (request):
 		story[0].save();
 	
 	return HttpResponseRedirect('/scrumko/sprintbacklog/')
+def change_remaining (request):
 	
+	# get id where changing estimates
+	taskid = request.POST["taskid"];
+		
+	# find story to change estimate
+	task = Task.objects.filter (id = taskid);
+	
+	# check if this story exsist
+	if len (task) > 0:
+		# if ok repair value
+		task[0].duratino = request.POST["duration"];
+		task[0].save();
+	
+	return HttpResponseRedirect('/scrumko/mytask/')
 def taskcreate (request, id):
 	
 	context = RequestContext(request)
@@ -1381,12 +1395,31 @@ def mytask(request):
 		else:
 			work[w.task.id]=w.time
 	total={}
-	for key in work.keys():
-		t=Task.objects.get(id=key)
-		total[key]=work[key]+t.duratino
-	print 'tukajsmo'
-	print work[5]
-	return render_to_response('scrumko/mytask.html', {'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	tasks = Task.objects.filter(worker = current_user);
+	for t in tasks:
+		if not work.has_key(t.id):
+			work[t.id]=0
+	for t in tasks:
+		if work.has_key(t.id):
+			total[t.id] = work[t.id]+t.duratino
+	#for key in work.keys():
+	#	t=Task.objects.get(id=key)
+	#	total[key]=work[key]+t.duratino
+	#print 'tukajsmo'
+	#print work[5]
+	change=False
+	workdays = {}
+	currenttask = {}
+	wtime_form = {}
+	if int(request.GET.get('id', '0'))>0:
+		change=True
+		currenttask=Task.objects.get(id=request.GET.get('id', '0'))
+		workdays = Work_Time.objects.filter(worker__id = current_user, task__id = request.GET.get('id', '0'))
+		if request.method == 'POST':
+			sprint_form = SprintEditForm(data=request.POST)
+		
+		wtime_form = Work_Time_Edit_Form()
+	return render_to_response('scrumko/mytask.html', {'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 @login_required	
 def addtasktocompleted(request, id):
