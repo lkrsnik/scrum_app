@@ -354,7 +354,17 @@ def sprintcreate(request):
 def maintainsprint(request):
 	context = RequestContext(request)
 	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
-	sprint_data = {'sprint_detail' : sprint_info}
+		
+	current = [[0 for x in range (2)] for x in range (len (sprint_info))]	
+	for i in range (len (sprint_info)):
+		
+		current[i][0] = sprint_info[i]
+		if sprint_info[i].start_date <= date.today():
+			current[i][1] = True
+		else:
+			current[i][1] = False
+	
+	sprint_data = { 'current' : current}
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html', sprint_data, context)
 	
