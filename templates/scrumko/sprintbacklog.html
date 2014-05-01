@@ -27,8 +27,10 @@
 					 <p class="est" style="float: left; margin-top: 0;"></p> 
 					{% endif %}
 					{% if  is_scrum_master or is_owner%}
-						<a href="/scrumko/storyedit/{{ sprintstory.story.id }}"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
-						<a href="/scrumko/storydelete/{{sprintstory.story.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 					
+					{% if not sprintstory.story.status %}
+						<!--<a href="/scrumko/storyedit/{{ sprintstory.story.id }}"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
+						<a href="/scrumko/storydelete/{{sprintstory.story.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 		-->			
+					{% endif %}
 					{% endif %}
 					
 		
@@ -94,11 +96,11 @@
 				
 				{% for task in allTasks%}
 					{% if task.story == sprintstory.story%}
-					<tr>
-						<td class="column_tasks">
+					<tr class="backlogtasktable_unassigned">
+						<td class="column_tasks {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 1 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 3 %} backlogtasktable_active {% endif %}">
 							{{ task.text }}
 						</td>
-						<td class="column_status">
+						<td class="column_status {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 1 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 3 %} backlogtasktable_active {% endif %}">
 							{% if task.status == 0 %}
 								
 								<a href="?accept=1&task={{task.id}}">Accept task</a>
@@ -113,13 +115,13 @@
 								Completed
 							{% endif %}
 						</td>
-						<td class="column_member">
+						<td class="column_member {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 1 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 3 %} backlogtasktable_active {% endif %}">
 							{{ task.worker }}
 						</td>
-						<td class="column_remaining">
+						<td class="column_remaining {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 1 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 3 %} backlogtasktable_active {% endif %}">
 							{{ task.duratino }}
 						</td>
-						<td class="column_actions">
+						<td class="column_actions {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 1 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 3 %} backlogtasktable_active {% endif %}">
 							{% if not is_owner%}
 								<a href="/scrumko/taskedit/{{ task.id }}/"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
 								{% if task.status == 0%}
