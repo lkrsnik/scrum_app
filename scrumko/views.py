@@ -234,6 +234,8 @@ def sprintbacklog(request):
 	if request.session['selected_project'] == 0:
 		return render_to_response ('scrumko/noprojectselected.html', {}, context)
 
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
 	current_user = request.user.id
 	selected_project_id = request.session['selected_project']
 	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
@@ -1236,6 +1238,7 @@ def taskcreate (request, id):
 			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
     
 	# get form and add to dict
+	
 	task_form = TaskForm(project_id, initial={'story': id}) 
 	context_dict ['task_form'] = task_form
 	context_dict ['success'] = success
@@ -1314,16 +1317,28 @@ def taskdelete(request, id):
 	
 @login_required	
 def mytask(request):    
+	current_user = request.user.id	
 	this_sprint=current_sprint(request)
 	if this_sprint!=None:
 		allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
 	else:
 		allStories = None
-	allTasks=Task.objects.all();
+	allTasks=Task.objects.filter(worker = current_user);
+	stories = [];
+	for story in allStories:
+		for task in allTasks:
+			if task.story.id == story.id:
+				stories.append(story)
+				break
+			
+	allStories=stories
+
 	context = RequestContext(request)
 
 	if request.session['selected_project'] == 0:
 		return render_to_response ('scrumko/noprojectselected.html', {}, context)
+
+	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
 	current_user = request.user.id
 	selected_project_id = request.session['selected_project']
@@ -1336,14 +1351,17 @@ def mytask(request):
 	workTime = Work_Time.objects.filter(worker__id = current_user)
 	work={}
 	for w in workTime:
-		if w.has_key(w.task):
+		if work.has_key(w.task):
 			work[w.task.id]=w[w.task]+w.time
 		else:
-			work[w.task.id]=0
-		
-	
-	
-	return render_to_response('scrumko/mytask.html', {'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+			work[w.task.id]=w.time
+	total={}
+	for key in work.keys():
+		t=Task.objects.get(id=key)
+		total[key]=work[key]+t.duratino
+	print 'tukajsmo'
+	print work[5]
+	return render_to_response('scrumko/mytask.html', {'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 @login_required	
 def addtasktocompleted(request, id):
