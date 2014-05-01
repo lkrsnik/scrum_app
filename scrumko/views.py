@@ -1304,11 +1304,20 @@ def taskdelete(request, id):
 @login_required	
 def mytask(request):    
 	#allStories = Story.objects.all()
+	current_user = request.user.id
 	print current_sprint(request).id
 	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
 	print allStories
-	allTasks=Task.objects.all();
-	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	allTasks=Task.objects.filter(worker = current_user);
+	stories = [];
+	for story in allStories:
+		for task in allTasks:
+			if task.story.id == story.id:
+				stories.append(story)
+				break
+			
+	allStories=stories
+
 	context = RequestContext(request)
 
 	if request.session['selected_project'] == 0:
@@ -1316,7 +1325,7 @@ def mytask(request):
 
 	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
-	current_user = request.user.id
+	
 	selected_project_id = request.session['selected_project']
 	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
@@ -1327,14 +1336,17 @@ def mytask(request):
 	workTime = Work_Time.objects.filter(worker__id = current_user)
 	work={}
 	for w in workTime:
-		if w.has_key(w.task):
+		if work.has_key(w.task):
 			work[w.task.id]=w[w.task]+w.time
 		else:
-			work[w.task.id]=0
-		
-	
-	
-	return render_to_response('scrumko/mytask.html', {'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+			work[w.task.id]=w.time
+	total={}
+	for key in work.keys():
+		t=Task.objects.get(id=key)
+		total[key]=work[key]+t.duratino
+	print 'tukajsmo'
+	print work[5]
+	return render_to_response('scrumko/mytask.html', {'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 @login_required	
 def addtasktocompleted(request, id):
