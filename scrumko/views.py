@@ -1063,8 +1063,11 @@ def poker_estimate (request):
 	# get user
 	user = request.user
 	
-	print estimate
-		
+	#check if est exsist
+	estimate_model = Poker_estimates.objects.filter(poker = active_poker, user = user)
+	if len (estimate_model) > 0:
+		return HttpResponse("")
+				
 	Poker_estimates.objects.create(poker = active_poker, user = user, estimate = estimate)
 	
 	return HttpResponse("")
@@ -1106,10 +1109,13 @@ def poker_uselast (request):
 # function calculate avarage of estimates
 def calc_avg_est (est):
 	total = 0
+	num  = 0
 	for e in est:
-		total = total + e.estimate
+		if e >= 0:
+			total = total + e.estimate
+			num = num + 1
 		
-	return total / len(est)
+	return total / num
 	
 	
 # function start ne round of planing poker
