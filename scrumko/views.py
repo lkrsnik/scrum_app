@@ -354,7 +354,17 @@ def sprintcreate(request):
 def maintainsprint(request):
 	context = RequestContext(request)
 	sprint_info = Sprint.objects.filter(project_name__id=request.session['selected_project'])
-	sprint_data = {'sprint_detail' : sprint_info}
+		
+	current = [[0 for x in range (2)] for x in range (len (sprint_info))]	
+	for i in range (len (sprint_info)):
+		
+		current[i][0] = sprint_info[i]
+		if sprint_info[i].start_date <= date.today():
+			current[i][1] = True
+		else:
+			current[i][1] = False
+	
+	sprint_data = { 'current' : current}
     # Render the template depending on the context.
 	return render_to_response('scrumko/maintainsprint.html', sprint_data, context)
 	
@@ -936,7 +946,7 @@ def get_poker_data (project_id, story, current_user):
 	if last_estimate:
 		estimate_value[i:i+1] = []
 		
-	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate	}
+	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate, 'cellwidth' : 75 / len (users)	}
 
 # function wich tell what to show in poker (eg. butttons and other)
 def get_button_poker_data (project_id, story, current_user):
@@ -977,7 +987,7 @@ def get_button_poker_data (project_id, story, current_user):
 		# get all estimates in poker
 		estimates_p = Poker_estimates.objects.filter (poker = active_poker[0])
 		
-		if len (estimates_p) == numofmember:		
+		if len (estimates_p) >= numofmember:		
 			button_dict.update ({'enableend' : True })
 		else:
 			button_dict.update ({'enableend' : False })
@@ -999,7 +1009,7 @@ def get_button_poker_data (project_id, story, current_user):
 	else:
 		button_dict.update ({'estimates' : True })
 	
-	print button_dict['scrummaster']
+	
 	
 	# return data from dict
 	
@@ -1063,8 +1073,11 @@ def poker_estimate (request):
 	# get user
 	user = request.user
 	
-	print estimate
-		
+	#check if est exsist
+	estimate_model = Poker_estimates.objects.filter(poker = active_poker, user = user)
+	if len (estimate_model) > 0:
+		return HttpResponse("")
+				
 	Poker_estimates.objects.create(poker = active_poker, user = user, estimate = estimate)
 	
 	return HttpResponse("")
@@ -1106,10 +1119,13 @@ def poker_uselast (request):
 # function calculate avarage of estimates
 def calc_avg_est (est):
 	total = 0
+	num  = 0
 	for e in est:
-		total = total + e.estimate
+		if e >= 0:
+			total = total + e.estimate
+			num = num + 1
 		
-	return total / len(est)
+	return total / num
 	
 	
 # function start ne round of planing poker

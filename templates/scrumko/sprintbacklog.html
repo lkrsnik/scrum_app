@@ -34,14 +34,13 @@
 		
 				</div>
 				<div class="backlog_poker">
-					<a href="/scrumko/pokerstart/{{sprintstory.story.id}}" > Planing poker</a>
+					<a href="/scrumko/taskcreate/{{ sprintstory.story.id }}">Create tasks</a> 	
 				</div>
 				
 				<div class="story_estimation">
 					<p style="float: left;  margin-top: 0;">Estimation: &nbsp;</p> <p class="est" style="float: left; margin-top: 0;">{{sprintstory.story.estimate}}</p> 
-					{% if  is_scrum_master %}
-					<a href="javascript: void(0)" class="edit_estimate" id="#opener" data-story="{{sprintstory.story.id}}" > Change</a>
-					{% endif %}
+					
+				
 				</div>
 				
 				<br />
@@ -146,7 +145,7 @@
 		  
 		  </form>
 		</div>
-		<div id="dialog_note" title="Add notification">
+		<div id="dialog_note" title="Add note">
 		  <form action="/scrumko/add_notification1/" method="post" id="add_note">{% csrf_token %}
 			<input type="hidden" id="storyid1" name="storyid1" />
 			<input type="text" id="note" name="note" style="float: left"/>
