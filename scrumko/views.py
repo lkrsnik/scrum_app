@@ -934,7 +934,7 @@ def get_poker_data (project_id, story, current_user):
 	if last_estimate:
 		estimate_value[i:i+1] = []
 		
-	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate	}
+	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate, 'cellwidth' : 75 / len (users)	}
 
 # function wich tell what to show in poker (eg. butttons and other)
 def get_button_poker_data (project_id, story, current_user):
@@ -997,7 +997,7 @@ def get_button_poker_data (project_id, story, current_user):
 	else:
 		button_dict.update ({'estimates' : True })
 	
-	print button_dict['scrummaster']
+	
 	
 	# return data from dict
 	

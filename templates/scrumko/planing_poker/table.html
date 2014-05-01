@@ -3,17 +3,17 @@
 	<table class="planingtable">
 	   			
 		<tr>
-			<td>
+			<td width="10%">
 				Index
 			</td>
 			
 			{% for user in users_value %}
-			<td>
+			<td width="{{cellwidth}}%">
 				{{ user }}
 			</td>
 			{% endfor %}
 			
-			<td>
+			<td width="15%">
 				Average
 			</td>
 		</tr>
