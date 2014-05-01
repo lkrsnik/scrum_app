@@ -5,7 +5,7 @@
 <div>
 		
 		<h1>Tasks</h1>
-		<h2> User story: story</h2>
+		<h2> User story: {{ this_task.story.story_name }}</h2>
 		
 		<table class="planingtable">
 			<tr>
@@ -47,15 +47,15 @@
 		{% if success %}
 			<div class="succes_hold">
 				<div class="succes">
-					Task added succesfully.
+					Task edited succesfully.
 				</div>
 			</div>
 			
 		{% endif %}
 
-		<h1>Create task</h1>
+		<h1>Edit task: {{ this_task.text }}</h1>
 
-			<form id="task_form" method="post" action="/scrumko/taskcreate/{{id}}/" enctype="multipart/form-data">
+			<form id="task_form" method="post" action="/scrumko/taskedit/{{this_task.id}}/" enctype="multipart/form-data">
 
 				{% csrf_token %}
 				{% for hidden in task_form.hidden_fields %}
@@ -83,7 +83,7 @@
 				
 				
 				<!-- Provide a button to click to submit the form. -->
-				<input type="submit" name="submit" value="Add task" />
+				<input type="submit" name="submit" value="Edit task" />
 			</form>
 				
 </div>

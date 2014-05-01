@@ -1,5 +1,11 @@
 $(document).ready(function() {
-
+	//hides all "Task" headers that don't have any tasks under
+	var elems = document.getElementsByClassName('backlogtasktable');
+	for(i=0;i<elems.length;i++) {
+		if(elems[i].getElementsByTagName("tr").length < 2)
+			elems[i].style.display = 'none';
+	}
+	
 	$('.target').click(function(e) {
 		 // get form associated with the button
 		var form = $(this)

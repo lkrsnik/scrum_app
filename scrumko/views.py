@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm
+from scrumko.forms import UserForm, UserProfileForm, SprintCreateForm, ProjectCreateForm, StoryForm, ProjectEditForm, UserEditForm, NotificationPermissionForm, StoryEditForm, SprintEditForm, UserOrientedEditForm, TaskEditForm
 from scrumko.forms import TaskForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -222,12 +222,13 @@ def current_sprint(request):
 		
 @login_required
 def sprintbacklog(request):
-	#allStories = Story.objects.all()
-	print current_sprint(request).id
-	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
-
+	this_sprint=current_sprint(request)
+	if this_sprint!=None:
+		allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+	else:
+		allStories = None
 	allTasks=Task.objects.all();
-	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
+	
 	context = RequestContext(request)
 
 	if request.session['selected_project'] == 0:
@@ -259,7 +260,7 @@ def sprintbacklog(request):
 		task.status=0;
 		task.worker=None
 		task.save()
-		
+	
 	
 	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
@@ -1252,22 +1253,26 @@ def taskedit (request, id):
 	success=False;
 	context_dict = {};
 	
+	# get task and data for write out in papge
+	this_task = Task.objects.get(id = id);
+	context_dict['this_task'] = this_task
 	# check if story is in sprint
-	st_sp = Story_Sprint.objects.filter(story__id = id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
+	st_sp = Story_Sprint.objects.filter(story__id = this_task.story.id, sprint__start_date__lte = date.today(), sprint__finish_date__gte = date.today())
 	if len (st_sp) == 0:
 		return HttpResponseRedirect('/scrumko/home/')
     
     # check if story finished
-	sprint = Story.objects.filter(id = id, status = False)
+	sprint = Story.objects.filter(id = this_task.story.id, status = False)
 	if len (sprint) == 0:
 		return HttpResponseRedirect('/scrumko/home/')
     
 	# get project id
 	project_id = request.session['selected_project']
-	context_dict['id'] = id
+	context_dict['id'] = this_task.story.id
 	
-	# get all taskes and data for write out in papge
-	tasks = Task.objects.filter (id = id)
+	
+	
+	tasks = Task.objects.filter (story__id = this_task.story.id)
 	context_dict['tasks'] = tasks;
 	
 	
@@ -1277,18 +1282,27 @@ def taskedit (request, id):
 		task_form = TaskEditForm(project_id, data=request.POST)    
         
 		if task_form.is_valid():
-			task_form.save()			
-			
+			#task_form.save()
+			this_task.text=request.POST['text']
+			this_task.duratino=request.POST['duratino']
+			if request.POST['worker'] != "":
+				new_worker=User.objects.get(id = request.POST['worker'])
+				if this_task.worker != new_worker:
+					this_task.status=0
+					this_task.worker = new_worker;
+			else:
+				this_task.status=0
+				this_task.worker=None
+			this_task.save();
 			success=True;
 		else:				
 			print task_form.errors	
 			context_dict ['success'] = success
 			context_dict ['task_form'] = task_form	
-			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+			return render_to_response ('scrumko/taskedit.html', context_dict, context);
     
 	# get form and add to dict
-	
-	task_form = TaskEditForm(project_id, initial={'story': id}) 
+	task_form = TaskEditForm(project_id, initial={'story': this_task.story.id, 'text': this_task.text, 'duratino': this_task.duratino, 'worker': this_task.worker}) 
 	context_dict ['task_form'] = task_form
 	context_dict ['success'] = success
        
@@ -1303,11 +1317,12 @@ def taskdelete(request, id):
 	
 @login_required	
 def mytask(request):    
-	#allStories = Story.objects.all()
-	current_user = request.user.id
-	print current_sprint(request).id
-	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
-	print allStories
+	current_user = request.user.id	
+	this_sprint=current_sprint(request)
+	if this_sprint!=None:
+		allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+	else:
+		allStories = None
 	allTasks=Task.objects.filter(worker = current_user);
 	stories = [];
 	for story in allStories:
@@ -1325,7 +1340,7 @@ def mytask(request):
 
 	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
-	
+	current_user = request.user.id
 	selected_project_id = request.session['selected_project']
 	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
