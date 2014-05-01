@@ -810,7 +810,7 @@ def editmyprofile(request,id):
 	
 @login_required	
 def startpoker(request, user_story_id):
-	
+		
 	# get current user
 	current_user = request.user.id
 	
@@ -830,7 +830,7 @@ def startpoker(request, user_story_id):
 		
 	## check if everyone voted in previous poker
 	# get active stoy on planing poker
-	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True)
+	active_poker = Poker.objects.filter (project__id = request.session['selected_project'], active = True, story = story)
 	
 	if len (active_poker) > 0:
 		
@@ -866,6 +866,8 @@ def startpoker(request, user_story_id):
 
 @login_required	
 def poker (request):
+	print "ncjasnfdasfdsnfkdasfjkldshfkjdshfkjdashjfkjhfkjdshfkdsjfkjdashfkjdshfkjdshfkjdshfkjdshfkjdashflkjashflkjdashfkjdashfkj"
+	
 	# get context
 	context = RequestContext(request)
 	
@@ -946,7 +948,12 @@ def get_poker_data (project_id, story, current_user):
 	if last_estimate:
 		estimate_value[i:i+1] = []
 		
-	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate, 'cellwidth' : 75 / len (users)	}
+	if len (users) > 0:
+		cell =  75 / len (users)
+	else:
+		cell = 0
+		
+	return {'estimate_value' : estimate_value, 'users_value' : users_value, 'last_round' : last_estimate, 'cellwidth' : cell	}
 
 # function wich tell what to show in poker (eg. butttons and other)
 def get_button_poker_data (project_id, story, current_user):
@@ -1006,8 +1013,10 @@ def get_button_poker_data (project_id, story, current_user):
 	
 	if len (estimates) > 0 or len (active_poker) == 0:
 		button_dict.update ({'estimates' : False })
+		
 	else:
 		button_dict.update ({'estimates' : True })
+		
 	
 	
 	

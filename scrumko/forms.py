@@ -399,7 +399,7 @@ class TaskEditForm (forms.ModelForm):
 	duratino = forms.FloatField(label = mark_safe(u'Planned duration'), error_messages=velocity_error, validators=[
 		RegexValidator(
 			regex='^[1-9][0-9]*\.?[0-9]*$',
-			message='Please enter a positive float number.',
+			message='Please enter a positive number.',
 			code='invalid_value'
 		),
 	]) 
