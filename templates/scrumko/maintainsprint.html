@@ -10,9 +10,7 @@
 		{% if request.user.is_staff %} <!-- only admin can see this -->
 			<table class=planingtable>
 				<tr>
-						<td>
-							Project name
-						</td>
+						
 						<td>
 							Sprint start
 						</td>
@@ -32,9 +30,7 @@
 				</tr>
 				{% for detail in sprint_detail %}
 				<tr>
-						<td>
-							{{ detail.project_name }}
-						</td>
+					
 						<td>
 							{{ detail.start_date }}
 						</td>
