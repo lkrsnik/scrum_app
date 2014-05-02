@@ -1268,8 +1268,11 @@ def taskcreate (request, id):
         
 		if task_form.is_valid():
 			task = task_form.save()			
-			print task.worker
-			
+			if task.worker == None:
+				task.status = 0
+			else:
+				task.status = 3
+			task.save()
 			
 			success=True;
 		else:				
