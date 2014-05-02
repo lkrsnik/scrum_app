@@ -1267,7 +1267,12 @@ def taskcreate (request, id):
 		task_form = TaskForm(project_id, data=request.POST)    
         
 		if task_form.is_valid():
-			task_form.save()			
+			task = task_form.save()			
+			if task.worker == None:
+				task.status = 0
+			else:
+				task.status = 3
+			task.save()
 			
 			success=True;
 		else:				
@@ -1314,8 +1319,7 @@ def taskedit (request, id):
 	tasks = Task.objects.filter (story__id = this_task.story.id)
 	context_dict['tasks'] = tasks;
 	
-	
-	    
+
 	if request.method == 'POST':
         
 		task_form = TaskEditForm(project_id, data=request.POST)    
@@ -1353,6 +1357,13 @@ def taskdelete(request, id):
 	context = RequestContext(request)
 	Task.objects.get(id=id).delete()
 	return HttpResponseRedirect("/scrumko/sprintbacklog")
+	
+def taskdelete_createlist(request, id):
+	context = RequestContext(request)
+	storyid = Task.objects.get(id=id).story.id
+		
+	Task.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/taskcreate/" + str(storyid) + "/")
 	
 @login_required	
 def mytask(request):    

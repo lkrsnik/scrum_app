@@ -20,6 +20,9 @@
 				<td>
 					Member
 				</td>
+				<td width="13%">
+					
+				</td>
 				
 			</tr>
 		
@@ -34,6 +37,15 @@
 					
 					<td>
 						{{task.worker.username}}
+					</td>
+					
+					<td>
+						{% if task.status == 0 or task.status == 3 %}
+								<a href="/scrumko/taskedit/{{ task.id }}/"><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
+								
+								<a href="/scrumko/taskdelete_createlist/{{ task.id }}/" class="target2" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 					
+						{% endif %}
+					
 					</td>
 				
 				</tr>

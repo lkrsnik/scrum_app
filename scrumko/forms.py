@@ -405,7 +405,7 @@ class TaskEditForm (forms.ModelForm):
 	]) 
 	
 	status = forms.IntegerField (widget=forms.HiddenInput(), initial=0)
-	worker = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=User.objects.all(), required = False)
+	worker = forms.ModelChoiceField(queryset=User.objects.all(), label = mark_safe('Member'), required = False)
 	 
 	
 	def __init__(self, project_id,*args,**kwargs):
