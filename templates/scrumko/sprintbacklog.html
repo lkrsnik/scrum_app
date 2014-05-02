@@ -36,7 +36,7 @@
 		
 				</div>
 				<div class="backlog_poker">
-					<a href="/scrumko/taskcreate/{{ sprintstory.story.id }}">Create tasks</a> 	
+					 	
 				</div>
 				
 				<div class="story_estimation">
@@ -134,6 +134,9 @@
 				{% endfor %}
 				
 				</table>
+				{% if not is_owner %}
+					<a href="/scrumko/taskcreate/{{ sprintstory.story.id }}"> &nbsp;&nbsp;<img src="/static/images/add.png" alt="yes" height="15" width="15"/> &nbsp; Add new task</a> 					
+				{% endif %}
 			</div>
 		</div>
 		<br />	
