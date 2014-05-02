@@ -42,12 +42,13 @@ $(document).ready(function() {
 			
 			
 			
-			if(isNaN(parseFloat(val)))
+			var pattern=/^\d+(\.\d+)?$/;
+			if(!pattern.test(val))
 			{
-				
-				$("#warning").html("Please enter a positive integer.");
+				$("#warning").html("Please enter a positive value.");
 				e.preventDefault();
 			}
+						
 			
 			
 		});
