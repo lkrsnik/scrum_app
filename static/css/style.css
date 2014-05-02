@@ -718,7 +718,7 @@ a
 
 .backlogtasktable_assigned
 {
-	background-color: rgba(127, 127, 0, 0.1);
+	background-color: rgba(127, 90, 0, 0.1);
 }
 
 .backlogtasktable_completed
@@ -728,7 +728,7 @@ a
 
 .backlogtasktable_active
 {
-	background-color: rgba(127, 184, 0, 0.1);
+	background-color: rgba(127, 160, 0, 0.1);
 }
 
 .backlogtasktable td

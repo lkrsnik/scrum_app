@@ -1314,8 +1314,7 @@ def taskedit (request, id):
 	tasks = Task.objects.filter (story__id = this_task.story.id)
 	context_dict['tasks'] = tasks;
 	
-	
-	    
+
 	if request.method == 'POST':
         
 		task_form = TaskEditForm(project_id, data=request.POST)    
