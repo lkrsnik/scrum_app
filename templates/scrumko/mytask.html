@@ -5,11 +5,68 @@
 
 	<script type="text/javascript" src="{% static  'javascript/sprintbacklog.js' %}" ></script>
 	<script>
-				$(function() {
-					$( "#id_day" ).datepicker();
-				});
-		  </script>
+		$(function() {
+			$( "#id_day" ).datepicker();
+		});
+	</script>
 	<h1> My tasks</h1>   
+		{% if update %}
+			<div class="succes_hold">
+				<div class="succes">
+					Work time was <strong>successfully  </strong>updated.
+				</div>
+			</div>
+			<br/>
+		{% endif %}
+		{% if change %}
+		<div class="time_change">
+				Add working time for {{ currenttask.text }}: </div><br/>
+					<form id="time_form" method="post" action="/scrumko/mytask/"
+					enctype="multipart/form-data">
+					{% csrf_token %}
+					{% for hidden in wtime_form.hidden_fields %}
+						{{ hidden }}
+					{% endfor %}
+
+					{% for field in wtime_form.visible_fields %}
+					<div>
+						<div class="fieldwrapper">
+							{{ field.label_tag }}
+						</div>
+						
+						<div class="fieldwrapper">
+							{{ field }}
+						</div>
+						
+						<div class="errorwrapper">
+							{{ field.errors.as_text }}
+							
+						</div>
+					</div>
+					<br/>
+					<br/>
+				{% endfor %}
+				
+				<div class="fieldwrapper">	Add time </div>
+				<div class="errorwrapper"><input type="radio" id="add" name="addtype" value="1" required="required"></div></br></br>
+				<div class="fieldwrapper">	Reduce time	</div>
+				<div class="errorwrapper"><input type="radio" name="addtype" value="0" required="required"></div></br></br>
+				<div class="fieldwrapper">&nbsp;</div>
+				<div class="fieldwrapper">
+					<input type="hidden" id="taskid" name="taskid" value="{{currenttask.id}}"/>
+				<input type="submit" name="submit" value="Change time" />
+						</div>
+				
+			</form>
+			<br /><br />
+				<div class="time_change">
+				History: </div>
+				{% for w in workdays %}
+					<p class="time_history">{{w.day}}: <strong>{{w.time}} h</strong></p>
+				{% endfor %}
+		<br />
+
+		{% endif %}
 		
 		{% for sprintstory in allStories %}	
 		<div class="story_container">
@@ -121,55 +178,7 @@
 				</table>
 			</div>
 		</div>
-		{% if change %}
-		<div class="time_change">
-				Add working time for {{ currenttask.text }}: </div><br/>
-					<form id="time_form" method="post" action="/scrumko/mytask/"
-					enctype="multipart/form-data">
-
-				{% csrf_token %}
-				{% for hidden in wtime_form.hidden_fields %}
-					{{ hidden }}
-				{% endfor %}
-
-				{% for field in wtime_form.visible_fields %}
-					<div>
-						<div class="fieldwrapper">
-							{{ field.label_tag }}
-						</div>
-						
-						<div class="fieldwrapper">
-							{{ field }}
-						</div>
-						
-						<div class="errorwrapper">
-							{{ field.errors.as_text }}
-							
-						</div>
-					</div>
-					<br/>
-					<br/>
-				{% endfor %}
-				
-				<div class="fieldwrapper">	Add time </div>
-				<div class="errorwrapper"><input type="radio" name="addtype" value="plus"></div></br></br>
-				<div class="fieldwrapper">	Remove time	</div>
-				<div class="errorwrapper"><input type="radio" name="addtype" value="minus"></div>
-				
-				<div class="fieldwrapper">
-						<input type="submit" name="submit" value="Change time" />
-						</div>
-				
-			</form>
-			<br /><br />
-				<div class="time_change">
-				History: </div>
-				{% for w in workdays %}
-					<p class="time_history">{{w.day}}: <strong>{{w.time}} h</strong></p>
-				{% endfor %}
-		{% else %}
-		<br />	
-		{% endif %}
+		<br />
 		{% endfor %}
 		
 		<div id="dialogremaining" title="Change remaining time">

@@ -417,10 +417,10 @@ class TaskEditForm (forms.ModelForm):
 		model = Task
 
 class Work_Time_Edit_Form (forms.ModelForm) :
-	task = forms.IntegerField(widget=forms.HiddenInput(), required=True)
-	worker = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+	task = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Task.objects.all(), required = True)
+	worker = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=User.objects.all(), required = True)
 	day = forms.DateField(label = mark_safe(u'Day'))
-	time = forms.DecimalField(max_digits=4, decimal_places=1, label = mark_safe(u'Working time'), required=True)
+	time = forms.DecimalField(max_digits=4, decimal_places=1, label = mark_safe(u'Working time (in hours)'), required=True)
 	
 	class Meta:
 		model = Work_Time

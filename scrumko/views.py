@@ -1356,6 +1356,7 @@ def taskdelete(request, id):
 	
 @login_required	
 def mytask(request):    
+	update=False;
 	current_user = request.user.id	
 	this_sprint=current_sprint(request)
 	if this_sprint!=None:
@@ -1366,10 +1367,10 @@ def mytask(request):
 	stories = [];
 	for story in allStories:
 		for task in allTasks:
-			if task.story.id == story.id:
+			if task.story.id == story.story.id:
 				stories.append(story)
 				break
-			
+		
 	allStories=stories
 
 	context = RequestContext(request)
@@ -1379,7 +1380,7 @@ def mytask(request):
 
 	#allStories = Story.objects.filter(project_name__id=request.session['selected_project'])
 	
-	current_user = request.user.id
+	
 	selected_project_id = request.session['selected_project']
 	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
@@ -1402,11 +1403,6 @@ def mytask(request):
 	for t in tasks:
 		if work.has_key(t.id):
 			total[t.id] = work[t.id]+t.duratino
-	#for key in work.keys():
-	#	t=Task.objects.get(id=key)
-	#	total[key]=work[key]+t.duratino
-	#print 'tukajsmo'
-	#print work[5]
 	change=False
 	workdays = {}
 	currenttask = {}
@@ -1415,11 +1411,46 @@ def mytask(request):
 		change=True
 		currenttask=Task.objects.get(id=request.GET.get('id', '0'))
 		workdays = Work_Time.objects.filter(worker__id = current_user, task__id = request.GET.get('id', '0'))
-		if request.method == 'POST':
-			sprint_form = SprintEditForm(data=request.POST)
-		
-		wtime_form = Work_Time_Edit_Form()
-	return render_to_response('scrumko/mytask.html', {'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+		this_user=User.objects.get(id=current_user)
+		wtime_form = Work_Time_Edit_Form(initial={'worker': current_user , 'task': currenttask })	
+	if request.method == 'POST':
+		wtime_form = Work_Time_Edit_Form(data=request.POST)		
+		if wtime_form.is_valid():
+			
+			newdate = request.POST.get('day')
+			taskid = request.POST.get('taskid')
+			add = request.POST.get('addtype')
+	
+			print add
+			newdate = datetime.datetime.strptime(newdate, '%m/%d/%Y')	
+			workrecord = Work_Time.objects.filter(worker__id = current_user, task__id = taskid, day = newdate)
+			
+			if len(workrecord)>0:
+				r=workrecord[0]
+				if add == '1':
+					r.time=float(r.time)+float(request.POST.get('time'))
+				else:
+					r.time=float(r.time)-float(request.POST.get('time'))
+				r.save();
+			else:
+				if add == '1':
+					newtime = wtime_form.save()
+					newtime.save()
+				else:
+					newtime = wtime_form.save()
+					t=0-float(request.POST.get('time'))
+					newtime.time = t
+					
+					newtime.save()
+				   
+			change=False;
+			update=True;
+		else:
+			print wtime_form.errors
+			change=True;
+			return render_to_response('scrumko/mytask.html', {'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
+	
+	return render_to_response('scrumko/mytask.html', {'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 @login_required	
 def addtasktocompleted(request, id):
