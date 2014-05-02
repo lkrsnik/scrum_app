@@ -1267,7 +1267,9 @@ def taskcreate (request, id):
 		task_form = TaskForm(project_id, data=request.POST)    
         
 		if task_form.is_valid():
-			task_form.save()			
+			task = task_form.save()			
+			print task.worker
+			
 			
 			success=True;
 		else:				
