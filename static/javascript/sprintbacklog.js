@@ -110,7 +110,7 @@ $(document).ready(function() {
 		});
 	 
 		$( ".edit_remaining" ).click(function() {
-			$('#taskid').val ($(this).attr('data-story'));
+			$('#taskid1').val ($(this).attr('data-story'));
 		
 			$('#duration').val ($(this).parents('.column_mytask').find('.dur').html());
 		

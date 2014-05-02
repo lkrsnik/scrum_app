@@ -1224,10 +1224,10 @@ def change_estimation1 (request):
 def change_remaining (request):
 	
 	# get id where changing estimates
-	taskid = request.POST["taskid"];
+	taskid1 = request.POST["taskid1"];
 		
 	# find story to change estimate
-	task = Task.objects.filter (id = taskid);
+	task = Task.objects.filter (id = taskid1);
 	
 	# check if this story exsist
 	if len (task) > 0:
@@ -1401,9 +1401,13 @@ def mytask(request):
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
 	workTime = Work_Time.objects.filter(worker__id = current_user)
 	work={}
+	print 'bbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 	for w in workTime:
-		if work.has_key(w.task):
-			work[w.task.id]=w[w.task]+w.time
+		print w.time
+		print w.task.id
+		if work.has_key(w.task.id):
+			print 
+			work[w.task.id]=work[w.task.id]+w.time
 		else:
 			work[w.task.id]=w.time
 	total={}
