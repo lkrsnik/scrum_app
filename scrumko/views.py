@@ -1358,6 +1358,13 @@ def taskdelete(request, id):
 	Task.objects.get(id=id).delete()
 	return HttpResponseRedirect("/scrumko/sprintbacklog")
 	
+def taskdelete_createlist(request, id):
+	context = RequestContext(request)
+	storyid = Task.objects.get(id=id).story.id
+		
+	Task.objects.get(id=id).delete()
+	return HttpResponseRedirect("/scrumko/taskcreate/" + str(storyid) + "/")
+	
 @login_required	
 def mytask(request):    
 	current_user = request.user.id	
