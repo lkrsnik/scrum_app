@@ -101,8 +101,7 @@
 							{{ task.text }}
 						</td>
 						<td class="column_status {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 3 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 1 %} backlogtasktable_active {% endif %}">
-							{% if task.status == 0 %}
-								
+							{% if task.status == 0 %}								
 								<a href="?accept=1&task={{task.id}}">Accept task</a>
 							{% elif task.status == 1 %}
 								{% if request.user.id == task.worker.id %}
@@ -113,6 +112,12 @@
 								{% endif %}
 							{% elif task.status == 2 %}
 								Completed
+							{% elif task.status == 3 %}
+								{% if request.user.id == task.worker.id %}
+								<a href="?accept=1&task={{task.id}}">Accept task</a>
+								{% else %}
+								Pending
+								{% endif %}
 							{% endif %}
 						</td>
 						<td class="column_member {% if task.status == 0 %} backlogtasktable_unassigned {% elif task.status == 3 %} backlogtasktable_assigned {% elif task.status == 2 %} backlogtasktable_completed {% elif task.status == 1 %} backlogtasktable_active {% endif %}">

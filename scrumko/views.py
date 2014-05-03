@@ -1382,7 +1382,7 @@ def mytask(request):
 	stories = [];
 	for story in allStories:
 		for task in allTasks:
-			if task.story.id == story.story.id:
+			if task.story.id == story.story.id and task.status == 1:
 				stories.append(story)
 				break
 		

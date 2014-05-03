@@ -76,6 +76,7 @@
 		{% endif %}
 		
 		{% for sprintstory in allStories %}	
+		
 		<div class="story_container">
 			
 			<div class="story_name_container">
@@ -129,6 +130,7 @@
 						
 					</tr>
 				{% for task in allTasks%}
+				{% if task.status == 1 %}
 					{% if task.story == sprintstory.story%}
 					
 					<tr>
@@ -181,6 +183,7 @@
 					</tr>
 					
 					{% endif %}
+				{% endif %}
 				{% endfor %}
 				</table>
 			</div>
