@@ -39,6 +39,12 @@
 						</div>
 						
 						<div class="errorwrapper">
+							{% if not insprint and forloop.counter = 1 %}
+								{{ error_sprint }}
+							{% endif %}
+							{% if not intime and forloop.counter = 2 %}
+								{{ error_time }}
+							{% endif %}
 							{{ field.errors.as_text }}
 							
 						</div>
@@ -61,8 +67,9 @@
 			<br /><br />
 				<div class="time_change">
 				History: </div>
-				{% for w in workdays %}
-					<p class="time_history">{{w.day}}: <strong>{{w.time}} h</strong></p>
+				{% for w in workdays %}{% if w.time > 0 %}
+					<p class="time_history">{{w.day}}: <strong> {{w.time}} h </strong></p>
+					{% endif %}
 				{% endfor %}
 		<br />
 
@@ -186,8 +193,9 @@
 			<input type="hidden" id="taskid1" name="taskid1" />
 			<input type="text" id="duration" name="duration" style="float: left"/>
 			<input type="submit" id="submit2" value="Submit" style="float: left"/>
-		  
+		 
 		  </form>
+		   <p id="warning1" ></p>
 		</div>
 		
 	

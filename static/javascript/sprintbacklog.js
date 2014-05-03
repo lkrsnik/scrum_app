@@ -93,9 +93,11 @@ $(document).ready(function() {
 			$('#note').val ($(this).parents('.story_container').find('.notes').html());
 		
 		  $( "#dialog_note" ).dialog( "open" );
+		  
 		});
 	  });
 	  $(function() {
+		 
 		$( "#dialogremaining" ).dialog({
 		  autoOpen: false,
 		  show: {
@@ -108,25 +110,24 @@ $(document).ready(function() {
 		  },
 		  width: 400
 		});
-	 
+	
 		$( ".edit_remaining" ).click(function() {
 			$('#taskid1').val ($(this).attr('data-story'));
 		
-			$('#duration').val ($(this).parents('.column_mytask').find('.dur').html());
+			$('#duration').val($(this).parents('.column_mytask').find('.dur').html());
 		
 		  $( "#dialogremaining" ).dialog( "open" );
 		});
 		
-		$("#submit2").click (function(e) {
-			val = $("#duration").val();
-			
-			
+		$("#submit2").click (function(ee) {
+			val = $("#duration").val();			
 			
 			if(isNaN(parseFloat(val)))
-			{
-				
-				$("#warning").html("Please enter a positive decimal number.");
-				e.preventDefault();
+			{		
+					
+				document.getElementById("warning1").innerHTML="Please enter a positive number!";				
+				ee.preventDefault();
+			
 			}
 			
 			
