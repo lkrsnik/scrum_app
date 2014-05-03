@@ -1331,7 +1331,7 @@ def taskedit (request, id):
 			if request.POST['worker'] != "":
 				new_worker=User.objects.get(id = request.POST['worker'])
 				if this_task.worker != new_worker:
-					this_task.status=0
+					this_task.status=3
 					this_task.worker = new_worker;
 			else:
 				this_task.status=0
