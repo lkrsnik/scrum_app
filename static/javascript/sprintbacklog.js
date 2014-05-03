@@ -119,16 +119,16 @@ $(document).ready(function() {
 		  $( "#dialogremaining" ).dialog( "open" );
 		});
 		
-		$("#submit2").click (function(ee) {
+		$("#submit2").click (function(e) {
 			val = $("#duration").val();			
 			
-			if(isNaN(parseFloat(val)))
-			{		
-					
-				document.getElementById("warning1").innerHTML="Please enter a positive number!";				
-				ee.preventDefault();
-			
+			var pattern=/^\d+(\.\d+)?$/;
+			if(!pattern.test(val))
+			{
+				document.getElementById("warning").innerHTML="Please enter a positive number!";
+				e.preventDefault();
 			}
+			
 			
 			
 		});
