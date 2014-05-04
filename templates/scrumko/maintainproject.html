@@ -47,7 +47,7 @@
 			</td>
 		</tr>
 		{% for detail in project_detail %}
-		{% if request.user.is_superuser or not request.user.is_superuser and detail.scrum_master.id == request.user.id %}
+		{% if request.user.is_superuser or not request.user.is_superuser and detail.scrum_master.id == request.user.id or detail.project_owner.id == request.user.id%}
 		<tr>
 			<td>
 				{{ detail.project_name }}

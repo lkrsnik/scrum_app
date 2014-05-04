@@ -64,9 +64,9 @@ def home(request):
 	selected_project_id = request.session['selected_project']
 	is_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
-	
+	is_project_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	# Construct a dictionary to pass to the template engine as its context.
-	context_dict.update( {'is_owner':is_owner, 'is_scrum_master': is_scrum_master});	
+	context_dict.update( {'is_project_owner':is_project_owner, 'is_owner':is_owner, 'is_scrum_master': is_scrum_master});	
 				
 	return render_to_response('scrumko/home.html', context_dict, context)
 
@@ -534,6 +534,7 @@ def editproject(request):
 	# Render the template depending on the context.
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
+   
 	registered = False
 	all_members = "";
 	all_options=User.objects.all().order_by('username')
@@ -562,7 +563,8 @@ def editproject(request):
 				if not already_exist.id == r.id:
 					change=False;
 					already_exist_message = "Username already exists!"
-					return render_to_response('scrumko/editproject.html',{'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+					is_scrum_master = len (Project.objects.filter(scrum_master__id = request.user.id, id = projectid)) > 0
+					return render_to_response('scrumko/editproject.html',{'is_scrum_master': is_scrum_master, 'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 			if(change):
 				r.scrum_master=User.objects.get(id=scrum_master)
 				r.project_owner=User.objects.get(id=project_owner)			
@@ -586,7 +588,8 @@ def editproject(request):
 
 		else:
 			print project_form.errors
-			return render_to_response('scrumko/editproject.html',{'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+			is_scrum_master = len (Project.objects.filter(scrum_master__id = request.user.id, id = projectid)) > 0
+			return render_to_response('scrumko/editproject.html',{'is_scrum_master': is_scrum_master, 'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 
 	# Not a HTTP POST, so we render our form using two ModelForm instances.
 	# These forms will be blank, ready for user input.
@@ -601,12 +604,12 @@ def editproject(request):
 		all_members=all_members+" "+team_member
 		
 
-	print r.id
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = request.user.id, id = projectid)) > 0
 	notif_perm=NotificationPermission.objects.filter(project__id=r.id)
 	project_form = ProjectEditForm(initial={'project_name': r.project_name, 'project_owner': r.project_owner, 'scrum_master': r.scrum_master, 'team': r.team})
 	notification_form = NotificationPermissionForm(initial={'permission': notif_perm[0].permission})
 	# Render the template depending on the context.
-	return render_to_response('scrumko/editproject.html',{'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
+	return render_to_response('scrumko/editproject.html',{'is_scrum_master': is_scrum_master, 'notification_form': notification_form, 'already_exist_message': already_exist_message, 'project_form': project_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options, "project_detail" : project_info}, context)
 	
 
 @login_required

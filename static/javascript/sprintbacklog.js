@@ -89,8 +89,11 @@ $(document).ready(function() {
 	 
 		$( ".edit_note" ).click(function() {
 			$('#storyid1').val ($(this).attr('data-story'));
-		
-			$('#note').val ($(this).parents('.story_container').find('.notes').html());
+			var elem = document.getElementById("note");
+			//var encoded = $('#note').val ($(this).parents('.story_container').find('.notes').html());
+			var div = document.createElement('div');
+			div.innerHTML = $(this).parents('.story_container').find('.notes').html();
+			elem.value=div.firstChild.nodeValue;
 		
 		  $( "#dialog_note" ).dialog( "open" );
 		  

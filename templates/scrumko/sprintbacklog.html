@@ -66,6 +66,7 @@
 						{% if notification.story = sprintstory.story %}
 						{% if not notification.notification = "" %}						
 						<div class="story_content_container">
+					
 							<p class="notes">{{notification.notification}}</p> 
 						</div>
 						{% endif %}
@@ -115,6 +116,7 @@
 							{% elif task.status == 3 %}
 								{% if request.user.id == task.worker.id %}
 								<a href="?accept=1&task={{task.id}}">Accept task</a>
+								<a href="?release=1&task={{task.id}}">Release task</a>
 								{% else %}
 								Pending
 								{% endif %}
