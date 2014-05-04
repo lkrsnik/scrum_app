@@ -45,12 +45,12 @@
 						</td>	
 						<td>
 							{% if not c.1 %}
-								<a href="/scrumko/sprintedit/{{sprint_detail.i.id}}/" ><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
+								<a href="/scrumko/sprintedit/{{c.0.id}}/" ><img src="/static/images/edit.png" alt="yes" height="20" width="20"></a> 	
 							{% endif %}					
 						</td>	
 						<td>
 							{% if not c.1 %}
-								<a href="sprintdelete/{{sprint_detail.i.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
+								<a href="sprintdelete/{{c.0.id}}" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20"></a> 
 							{% endif %}	
 						</td>	
 				</tr>
