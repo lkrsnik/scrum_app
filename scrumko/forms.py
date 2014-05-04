@@ -29,15 +29,15 @@ class UserForm(forms.ModelForm):
 
     email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
     is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
-    username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
-    first_name = forms.CharField(label = mark_safe(u'Ime'), error_messages=required_error)
-    last_name = forms.CharField(label = mark_safe(u'Priimek'), error_messages=required_error)
-    password = forms.CharField(widget=forms.PasswordInput(), label="Geslo", error_messages=required_error)
-    password2 = forms.CharField(widget=forms.PasswordInput(), label="Ponovite geslo", error_messages=required_error)
+    username = 	forms.CharField(label = mark_safe(u'Username'), error_messages=required_error)
+    first_name = forms.CharField(label = mark_safe(u'Name'), error_messages=required_error)
+    last_name = forms.CharField(label = mark_safe(u'Surname'), error_messages=required_error)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Password", error_messages=required_error)
+    password2 = forms.CharField(widget=forms.PasswordInput(), label="Repeat password", error_messages=required_error)
 
     def clean_password(self):
         if self.data['password'] != self.data['password2']:
-            raise forms.ValidationError('Gesli se ne ujemata.')
+            raise forms.ValidationError('Passwords do not match.')
         return self.data['password']
 	
     class Meta:
@@ -48,15 +48,15 @@ class UserEditForm(forms.ModelForm):
 
 	email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
 	is_superuser = forms.BooleanField(label = mark_safe(u'Administrator'), required=False)
-	username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
-	first_name = forms.CharField(label = mark_safe(u'Ime'), error_messages=required_error)
-	last_name = forms.CharField(label = mark_safe(u'Priimek'), error_messages=required_error)
-	password = forms.CharField(required=False, widget=forms.PasswordInput(), label="Geslo", error_messages=required_error)
-	password2 = forms.CharField(required=False, widget=forms.PasswordInput(), label="Ponovite geslo", error_messages=required_error)
+	username = 	forms.CharField(label = mark_safe(u'Username'), error_messages=required_error)
+	first_name = forms.CharField(label = mark_safe(u'Name'), error_messages=required_error)
+	last_name = forms.CharField(label = mark_safe(u'Surname'), error_messages=required_error)
+	password = forms.CharField(required=False, widget=forms.PasswordInput(), label="Password", error_messages=required_error)
+	password2 = forms.CharField(required=False, widget=forms.PasswordInput(), label="Repeat password", error_messages=required_error)
 
 	def clean_password(self):
 		if self.data['password'] != self.data['password2']:
-			raise forms.ValidationError('Gesli se ne ujemata.')
+			raise forms.ValidationError('Passwords do not match.')
 		return self.data['password']
 
 	class Meta:
@@ -69,15 +69,15 @@ class UserEditForm(forms.ModelForm):
 class UserOrientedEditForm(forms.ModelForm):
 	email = forms.EmailField(label = mark_safe(u'Email'), error_messages=required_error)
 	is_superuser = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-	username = 	forms.CharField(label = mark_safe(u'Uporabniško ime'), error_messages=required_error)
-	first_name = forms.CharField(label = mark_safe(u'Ime'), error_messages=required_error)
-	last_name = forms.CharField(label = mark_safe(u'Priimek'), error_messages=required_error)
-	password = forms.CharField(required=False, widget=forms.PasswordInput(), label="Geslo", error_messages=required_error)
-	password2 = forms.CharField(required=False, widget=forms.PasswordInput(), label="Ponovite geslo", error_messages=required_error)
+	username = 	forms.CharField(label = mark_safe(u'Username'), error_messages=required_error)
+	first_name = forms.CharField(label = mark_safe(u'Name'), error_messages=required_error)
+	last_name = forms.CharField(label = mark_safe(u'Surname'), error_messages=required_error)
+	password = forms.CharField(required=False, widget=forms.PasswordInput(), label="Password", error_messages=required_error)
+	password2 = forms.CharField(required=False, widget=forms.PasswordInput(), label="Repeat password", error_messages=required_error)
 
 	def clean_password(self):
 		if self.data['password'] != self.data['password2']:
-			raise forms.ValidationError('Gesli se ne ujemata.')
+			raise forms.ValidationError('Passwords do not match.')
 		return self.data['password']
 
 	class Meta:
