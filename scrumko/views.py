@@ -1545,3 +1545,8 @@ def addtasktocompleted(request, id):
 			add = Task.objects.create(status=2, story = current_story[0])
 			
 			return HttpResponseRedirect("/scrumko/mytask")	
+
+@login_required
+def documentation(request):
+		context = RequestContext(request)
+		return render_to_response ('scrumko/documentation.html', context)

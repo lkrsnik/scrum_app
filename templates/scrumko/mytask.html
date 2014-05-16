@@ -194,7 +194,7 @@
 		<div id="dialogremaining" title="Change remaining time">
 		  <form action="/scrumko/change_remaining/" method="post" id="estimate_change">{% csrf_token %}
 			<input type="hidden" id="taskid1" name="taskid1" />
-			<input type="text" id="duration" name="duration" style="float: left"/>
+			<textarea rows="4" cols="50" type="text" id="duration" name="duration" style="float: left"/>
 			<input type="submit" id="submit2" value="Submit" style="float: left"/>
 		 
 		  </form>

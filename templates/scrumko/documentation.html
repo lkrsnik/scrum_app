@@ -1,0 +1,35 @@
+{% extends 'scrumko/main.html' %}
+
+{% block body_block %}
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+<link type="text/css" rel="stylesheet" href="/static/jQuery-TE_v.1.4.0/jquery-te-1.4.0.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+<div class="textedit">
+<h1>Documentation</h1>
+
+<!--<button class="status">Toggle jQTE</button>-->
+
+<!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
+
+<textarea name="textarea" class="jqte-test">Lep pozdrav vsem, ki se nahajate na tej strani.<br> Še posebej Petri, Primožu in Luku :)</textarea>
+
+</div>
+<script>
+	$('.jqte-test').jqte();
+	
+	// settings of status
+	var jqteStatus = true;
+	$(".status").click(function()
+	{
+		jqteStatus = jqteStatus ? false : true;
+		$('.jqte-test').jqte({"status" : jqteStatus})
+	});
+</script>
+
+{% endblock %}
+

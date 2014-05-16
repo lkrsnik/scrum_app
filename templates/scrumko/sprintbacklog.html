@@ -159,12 +159,17 @@
 		  </form>
 		</div>
 		<div id="dialog_note" title="Add note">
+			<pre><textarea rows="5" cols="60" id="note" name="note" name="comment" form="add_note">
+				</textarea></pre>
 		  <form action="/scrumko/add_notification1/" method="post" id="add_note">{% csrf_token %}
 			<input type="hidden" id="storyid1" name="storyid1" />
-			<input type="text" id="note" name="note" style="float: left"/>
-			<input type="submit" id="submit1" value="Submit" style="float: left"/>
+
+			
+		
+						<input type="submit" id="submit1" value="Submit" />
 		  
 		  </form>
+		  
 		</div>
 	
 {% endblock %}
