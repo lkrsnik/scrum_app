@@ -785,3 +785,16 @@ a
 {
 	width: 90%;
 }
+
+input.cb
+{
+	width:19px;
+    height:19px;
+	background-color: red;
+}
+.tabcb
+{
+	width: 80%;
+	padding:1px;
+	
+}

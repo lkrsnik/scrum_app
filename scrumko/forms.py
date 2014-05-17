@@ -424,8 +424,6 @@ class Work_Time_Edit_Form (forms.ModelForm) :
 	
 	class Meta:
 		model = Work_Time
-	
-
 
 
 

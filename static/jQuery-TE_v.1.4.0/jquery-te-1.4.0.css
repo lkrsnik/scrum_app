@@ -338,8 +338,8 @@
 .jqte_editor, .jqte_source {
 	padding:10px;
 	background:#FFF;
-	min-height:100px;
-	max-height:900px;
+	min-height:370px;
+	max-height:370px;
 	overflow:auto;
 	outline:none;
 	word-wrap:break-word; -ms-word-wrap:break-word;

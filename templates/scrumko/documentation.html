@@ -12,13 +12,29 @@
 <div class="textedit">
 <h1>Documentation</h1>
 
-<!--<button class="status">Toggle jQTE</button>-->
-
 <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
 
-<textarea name="textarea" class="jqte-test">Lep pozdrav vsem, ki se nahajate na tej strani.<br> Še posebej Petri, Primožu in Luku :)</textarea>
-
+<p name="textarea" class="jqte-test">Lep pozdrav vsem, ki se nahajate na tej strani.<br> Še posebej Petri, Primožu in Luku :)</p>
+<button class="status">Change</button><button class="status">Commit</button>
 </div>
+</br>
+
+<h2>Import story:</h2>
+<form action="">
+	<select id="id_Customer" name="Customer">
+{% for x in all_stories %}
+    <option value="{{ x.id }}">{{ x.story_name }}</option>
+{% endfor %}
+</select></br></br>
+<table class="tabcb"><tr>
+<td><input class="cb" type="checkbox" name="title" value="1">Title</td>
+<td><input class="cb" type="checkbox" name="description" value="1">Description</td>
+<td><input class="cb" type="checkbox" name="test" value="1">Acceptance test</td>
+<td><input class="cb" type="checkbox" name="notes" value="1">Notifications</td>
+
+</tr></table> </br>
+<input type="submit" value="Import">
+</form>
 <script>
 	$('.jqte-test').jqte();
 	
@@ -29,6 +45,7 @@
 		jqteStatus = jqteStatus ? false : true;
 		$('.jqte-test').jqte({"status" : jqteStatus})
 	});
+	
 </script>
 
 {% endblock %}

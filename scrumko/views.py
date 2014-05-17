@@ -1549,4 +1549,7 @@ def addtasktocompleted(request, id):
 @login_required
 def documentation(request):
 		context = RequestContext(request)
-		return render_to_response ('scrumko/documentation.html', context)
+		selected_project_id = request.session['selected_project']
+		all_stories = Story.objects.filter(project_name__id = selected_project_id)
+		all_notification = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+		return render_to_response ('scrumko/documentation.html', {'all_stories': all_stories, 'all_notification': all_notification}, context)
