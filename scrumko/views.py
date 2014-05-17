@@ -1370,19 +1370,32 @@ def taskdelete_createlist(request, id):
 	
 @login_required	
 def mytask(request): 
+	completing = int(request.GET.get('complete', '0'))
+		
 	insprint = True
 	inday = True   
 	error_time=""
 	error_sprint=""
 	update=False;
+	notasks=True;
 	current_user = request.user.id	
 	this_sprint=current_sprint(request)
+	context = RequestContext(request)
+	
 	if this_sprint!=None:
 		allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+		notasks=False;
 	else:
-		allStories = None
+		# ce ni taskov, te vrze na home
+		allStories = None;
+		notasks=True;
+		return render_to_response ('scrumko/notaskselected.html', {}, context)
 	allTasks=Task.objects.filter(worker = current_user);
 	stories = [];
+	
+	# if allTasks == None:
+		 # return HttpResponseRedirect("/scrumko/sprintbacklog")
+		
 	for story in allStories:
 		for task in allTasks:
 			if task.story.id == story.story.id and task.status == 1:
@@ -1391,7 +1404,7 @@ def mytask(request):
 		
 	allStories=stories
 
-	context = RequestContext(request)
+	
 
 	if request.session['selected_project'] == 0:
 		return render_to_response ('scrumko/noprojectselected.html', {}, context)
@@ -1406,6 +1419,15 @@ def mytask(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	#check if it is completeted
+	if completing > 0:
+
+		taskid = int(request.GET.get('task', '0'))
+		task = Task.objects.get(id=taskid);
+		task.status=2;
+		#task.worker=None
+		task.save()
+		return HttpResponseRedirect("/scrumko/mytask")
 	workTime = Work_Time.objects.filter(worker__id = current_user)
 	work={}
 	for w in workTime:
@@ -1523,7 +1545,7 @@ def mytask(request):
 			else: 
 				change=True
 				if taskid == '' :
-						taskid=float(request.POST.get('task'))
+					taskid=float(request.POST.get('task'))
 				currenttask=Task.objects.get(id=taskid)
 				workdays = Work_Time.objects.filter(worker__id = current_user, task__id = taskid)
 				this_user=User.objects.get(id=current_user)
@@ -1534,17 +1556,19 @@ def mytask(request):
 			change=True;
 			return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time,'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
 	
-	return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+		
+		
+	return render_to_response('scrumko/mytask.html', {'notasks': notasks, 'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
-@login_required	
-def addtasktocompleted(request, id):
+# @login_required	
+# def addtasktocompleted(request, id):
 
-			taskcompleted = True
-			current_story = Story.objects.filter(id = id)
-			context = RequestContext(request)
-			add = Task.objects.create(status=2, story = current_story[0])
+			# taskcompleted = True
+			# current_story = Story.objects.filter(id = id)
+			# context = RequestContext(request)
+			# add = Task.objects.create(status=2, story = current_story[0])
 			
-			return HttpResponseRedirect("/scrumko/mytask")	
+			# return HttpResponseRedirect("/scrumko/mytask")	
 
 @login_required
 def documentation(request):
