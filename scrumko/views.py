@@ -1425,6 +1425,7 @@ def mytask(request):
 		taskid = int(request.GET.get('task', '0'))
 		task = Task.objects.get(id=taskid);
 		task.status=2;
+		task.duratino=0;
 		#task.worker=None
 		task.save()
 		return HttpResponseRedirect("/scrumko/mytask")
