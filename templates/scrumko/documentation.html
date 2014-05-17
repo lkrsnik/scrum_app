@@ -18,21 +18,23 @@
 <button class="status">Change</button><button class="status">Commit</button>
 </div>
 </br>
-
+{{ storyid }}
 <h2>Import story:</h2>
-<form action="">
-	<select id="id_Customer" name="Customer">
+        <form id="document_form" method="post" action="/scrumko/documentation/"
+					enctype="multipart/form-data">
+					{% csrf_token %}
+	<select id="id_story" name="story">
 {% for x in all_stories %}
     <option value="{{ x.id }}">{{ x.story_name }}</option>
 {% endfor %}
 </select></br></br>
-<table class="tabcb"><tr>
-<td><input class="cb" type="checkbox" name="title" value="1">Title</td>
-<td><input class="cb" type="checkbox" name="description" value="1">Description</td>
-<td><input class="cb" type="checkbox" name="test" value="1">Acceptance test</td>
-<td><input class="cb" type="checkbox" name="notes" value="1">Notifications</td>
 
-</tr></table> </br>
+
+<input class="cb" type="checkbox" name="checks" value="1">Title
+<input class="cb" type="checkbox" name="checks" value="2">Description
+<input class="cb" type="checkbox" name="checks" value="3">Acceptance test
+<input class="cb" type="checkbox" name="checks" value="4">Notifications
+ </br> </br>
 <input type="submit" value="Import">
 </form>
 <script>
