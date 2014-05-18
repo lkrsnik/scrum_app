@@ -11,7 +11,7 @@
 		{% if  sprintstory.story.status == False %}
 		{% if  is_owner %}
 				{% if  sprintstory.story.status == False %}
-					<a href=""><img src="/static/images/confirm.png" alt="yes" height="20" width="20"> Mark as realized story</a>
+					<a href="/scrumko/addstorytofinished2/{{ sprintstory.story.id }}" class="addstorytosprint"><img src="/static/images/confirm.png" alt="yes" height="20" width="20"> Mark as realized story</a>
 					<a href=""><img src="/static/images/remove.png" alt="yes" height="20" width="20"> Discard story</a>
 				{% endif %}
 				{% if  sprintstory.story.status == True %}

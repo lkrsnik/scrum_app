@@ -34,6 +34,7 @@ def home(request):
 	
 	# get current user
 	current_user = request.user.id
+	current_user = request.user.id
 	
 	# Request the context of the request.
    	context = RequestContext(request)
@@ -179,6 +180,8 @@ def productbacklog(request):
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)	
 	addStorytoSprint = Story_Sprint.objects.filter(story__project_name__id = selected_project_id)
+	addStorytoFinished = Story.objects.filter(project_name__id = selected_project_id)
+
 	
 	# get story sprint data for current project where story in current sprint
 	story_sp = Story_Sprint.objects.filter(story__project_name__id = selected_project_id, sprint = current_sprint(request))
@@ -190,7 +193,7 @@ def productbacklog(request):
 	stroynotinsprint = Story.objects.filter(project_name__id=request.session['selected_project'],  status = False).exclude(id__in = story_sp.values_list('story_id', flat=True))
 		
 	
-	return render_to_response('scrumko/productbacklog.html', {'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stroyinsprint, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	return render_to_response('scrumko/productbacklog.html', {'addStorytoFinished': addStorytoFinished,'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stroyinsprint, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 def productbacklog_fin(request):
 	context = RequestContext(request)
@@ -244,6 +247,7 @@ def sprintbacklog(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	addStorytoFinished2 = Story.objects.filter(project_name__id = selected_project_id)
 	
 	status = int(request.GET.get('accept', '0'))
 	releasing = int(request.GET.get('release', '0'))
@@ -262,7 +266,7 @@ def sprintbacklog(request):
 		task.save()
 	
 	
-	return render_to_response('scrumko/sprintbacklog.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	return render_to_response('scrumko/sprintbacklog.html', {'addStorytoFinished2': addStorytoFinished2, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
 	
 @login_required
@@ -1419,6 +1423,8 @@ def mytask(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+
+	
 	#check if it is completeted
 	if completing > 0:
 
@@ -1591,3 +1597,22 @@ def progress (request):
 	cont_dict = {};
 	
 	return render_to_response ('scrumko/progress.html', cont_dict, context)
+	
+	
+@login_required
+def addstorytofinished(request, id):
+	context = RequestContext(request)
+	current_story = Story.objects.get(id = id)
+	print current_story.status
+	current_story.status=True
+	current_story.save()
+	return HttpResponseRedirect("/scrumko/productbacklog")	
+	
+@login_required
+def addstorytofinished2(request, id):
+	context = RequestContext(request)
+	current_story = Story.objects.get(id = id)
+	print current_story.status
+	current_story.status=True
+	current_story.save()
+	return HttpResponseRedirect("/scrumko/sprintbacklog")	
