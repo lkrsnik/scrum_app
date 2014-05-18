@@ -89,12 +89,12 @@
 		<h2>Other stories</h2>
 		
 		{% for story in stroynotinsprint %}
-		{% if  is_scrum_master%}
-			{% if story.estimate > 0 and story.status = False %}
-			<a	{% for addStory in addStorytoSprint %} {% if addStory.story = story %} hidden=True {% endif %}{% endfor %} href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a>							
-			 
+			{% if  is_scrum_master%}
+				{% if story.estimate > 0 and story.status = False %}
+				<a	{% for addStory in addStorytoSprint %} {% if addStory.story = story %} hidden=True {% endif %}{% endfor %} href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a>							
+				 
+				{% endif %}	
 			{% endif %}	
-		{% endif %}	
 		<div class="story_container">
 			
 			<div class="story_name_container">

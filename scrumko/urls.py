@@ -46,6 +46,6 @@ urlpatterns = patterns('',
 	url(r'^change_remaining/$', views.change_remaining, name='change_remaining'),
 	url(r'^add_notification1/$', views.add_notification1, name='add_notification1'),
 	url(r'^documentation/$', views.documentation, name='documentation'),
-	
+	url(r'^progress/$', views.progress, name='progress'),
 	
 	)
