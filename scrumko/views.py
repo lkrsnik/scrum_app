@@ -1601,11 +1601,53 @@ def progress (request):
 	
 @login_required
 def addstorytofinished(request, id):
-	context = RequestContext(request)
+	allcompleted=True
+	noTask=True
 	current_story = Story.objects.get(id = id)
-	print current_story.status
-	current_story.status=True
-	current_story.save()
+	#story = Story.objects.get(id = id)
+	current_user = request.user.id
+	this_sprint=current_sprint(request)
+	# if this_sprint!=None:
+	allStories = Story_Sprint.objects.filter(sprint__id = current_sprint(request).id)
+		# notasks=False;
+	# else:
+		# # ce ni taskov, te vrze na home
+		# allStories = None;
+		# notasks=True;
+		# return render_to_response ('scrumko/notaskselected.html', {}, context)
+	allTasks=Task.objects.filter(story__id = current_story.id);
+
+	# stories = [];
+	
+	if allTasks == None:
+		 return HttpResponseRedirect("/scrumko/home")
+
+	for task in allTasks:
+		print task.text 
+		if task.story.id == current_story.id:
+			if task.status == 0:
+				#print 'accept task'  + task.text
+				allcompleted=False
+				noTask=False
+			if  task.status == 1:	
+				#print 'asigned'  + task.text
+				allcompleted=False
+				noTask=False
+			if  task.status == 2:	
+				print 'completed'  + task.text
+				noTask=False
+			if  task.status == 3:	
+				#print 'pending' + task.text
+				allcompleted=False
+				noTask=False
+					
+				#prever ce se nima taskov
+	print allcompleted	
+				
+	if allcompleted == True and noTask == False:
+		current_story.status=True
+		current_story.save()
+	
 	return HttpResponseRedirect("/scrumko/productbacklog")	
 	
 @login_required
@@ -1616,3 +1658,12 @@ def addstorytofinished2(request, id):
 	current_story.status=True
 	current_story.save()
 	return HttpResponseRedirect("/scrumko/sprintbacklog")	
+	
+@login_required
+def discardstory(request, id):
+	context = RequestContext(request)
+	current_story = Story.objects.get(id = id)
+	current_story.estimation=0
+	current_story.status=False
+	current_story.save()
+	return HttpResponseRedirect("/scrumko/productbacklog")

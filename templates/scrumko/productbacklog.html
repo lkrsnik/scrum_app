@@ -26,7 +26,7 @@
 		 {% if  is_owner %}
 				{% if  story.status == False %}
 					<a href="/scrumko/addstorytofinished/{{ story.id }}" class="addstorytosprint"><img src="/static/images/confirm.png" alt="yes" height="20" width="20"> Mark as realized story</a>
-					<a href=""><img src="/static/images/remove.png" alt="yes" height="20" width="20"> Discard story</a>
+					<a href="/scrumko/discardstory/{{ story.id }}" class="addstorytosprint"><img src="/static/images/remove.png" alt="yes" height="20" width="20"> Discard story</a>
 				{% endif %}
 				{% if  story.status == True %}
 					<a href=""><img src="/static/images/yes.png" alt="yes" height="15" width="15"> Realized story</a>
