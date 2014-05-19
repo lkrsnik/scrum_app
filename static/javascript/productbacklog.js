@@ -42,10 +42,10 @@ $(document).ready(function() {
 			
 			
 			
-			var pattern=/^\d+(\.\d+)?$/;
+			var pattern=/^\d{1,2}(\.\d+)?$/;
 			if(!pattern.test(val))
 			{
-				$("#warning").html("Please enter a positive value.");
+				$("#warning").html("Please enter a positive value less than 1000.");
 				e.preventDefault();
 			}
 						
