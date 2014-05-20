@@ -101,6 +101,8 @@ class Post (models.Model):
 	
 class Post_Comment (models.Model):
 	post = models.ForeignKey(Post)
+	comment_time = models.DateTimeField(auto_now_add=True)
+	commenter = models.ForeignKey(User)
 	comment = models.CharField(max_length=1000, blank=False)
 	
 	
