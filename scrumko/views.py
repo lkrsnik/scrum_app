@@ -1576,7 +1576,20 @@ def mytask(request):
 			# add = Task.objects.create(status=2, story = current_story[0])
 			
 			# return HttpResponseRedirect("/scrumko/mytask")	
-
+@login_required
+def discussion(request):
+	context = RequestContext(request)
+	storyid=""
+	check=[];
+	selected_project_id = request.session['selected_project']
+	all_stories = Story.objects.filter(project_name__id = selected_project_id)
+	all_notification = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	if request.method == 'POST':
+		storyid = request.POST['story']
+		check = request.POST.getlist('checks')
+		
+	return render_to_response ('scrumko/discussion.html', {'all_stories': all_stories, 'all_notification': all_notification}, context)			
+			
 @login_required
 def documentation(request):
 	context = RequestContext(request)

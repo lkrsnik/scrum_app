@@ -1,0 +1,49 @@
+
+{% extends 'scrumko/main.html' %}
+{% load static %}
+
+{% block body_block %}
+
+	<script type="text/javascript" src="{% static  'javascript/productbacklog.js' %}" ></script>
+	
+	<h1> Project Wall </h1>   
+		<br/>
+		
+		<div class="productbacklogbut">
+			<div class="selected">
+				<a href="/scrumko/discussion">Discussion</a>
+			</div>
+			<div>
+				<a href="/scrumko/documentation">Documentation</a>
+			</div>
+		</div>
+		
+		<br/><br/>
+		
+		<h2>Stories in current sprint</h2>
+		
+		
+	
+		<div id="dialog" title="Change estimate">
+		  <form action="/scrumko/change_estimation/" method="post" id="estimate_change">{% csrf_token %}
+			<input type="hidden" id="storyid" name="storyid" />
+			<input type="text" id="estimation" name="estimation" style="float: left"/>
+			<input type="submit" id="submit" value="Change" style="float: left"/>
+			<br/>
+			<p id="warning" ></p>
+		  
+		  </form>
+		</div>
+		
+		<div id="dialog_note" title="Add note">
+						<textarea rows="5" cols="60" id="note" name="note" name="comment" form="add_note">
+				</textarea>
+		  <form action="/scrumko/add_notification/" method="post" id="add_note">{% csrf_token %}
+			<input type="hidden" id="storyid1" name="storyid1" />
+			
+			<input type="submit" id="submit1" value="Submit" style="float: left"/>
+		  
+		  </form>
+		</div>
+	
+{% endblock %}
