@@ -94,6 +94,16 @@ class Work_Time (models.Model):
 	day = models.DateField(blank=False)
 	time = models.DecimalField(max_digits=4, decimal_places=1, blank=False)
 	
+class Post (models.Model):
+	poster = models.ForeignKey(User)
+	post_time = models.DateTimeField(auto_now_add=True)
+	content = models.CharField(max_length=1000, blank=False)
+	
+class Post_Comment (models.Model):
+	post = models.ForeignKey(Post)
+	comment = models.CharField(max_length=1000, blank=False)
+	
+	
 
 
 
