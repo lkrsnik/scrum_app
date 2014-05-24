@@ -19,7 +19,7 @@ import datetime
 
 from scrumko.models import User
 from scrumko.models import UserProfile, Task, Story_Sprint
-from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time
+from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time, Post, Post_Comment
 
 
 import json
@@ -1185,6 +1185,18 @@ def add_notification (request):
 		note1[0].save()
 	else:
 		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
+	return HttpResponseRedirect('/scrumko/productbacklog/')# function changes estimation of story
+def add_notification (request):
+	storyid = request.POST["storyid1"];
+		
+	story1 = Story.objects.filter (id = storyid);
+	
+	note1=StoryNotification.objects.filter(story__id = storyid)
+	if len (note1) > 0:
+		note1[0].notification=request.POST["note"]
+		note1[0].save()
+	else:
+		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/productbacklog/')
 def add_notification1 (request):
 	storyid = request.POST["storyid1"];
@@ -1579,17 +1591,27 @@ def mytask(request):
 @login_required
 def discussion(request):
 	context = RequestContext(request)
-	storyid=""
-	check=[];
-	selected_project_id = request.session['selected_project']
-	all_stories = Story.objects.filter(project_name__id = selected_project_id)
-	all_notification = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
-	if request.method == 'POST':
-		storyid = request.POST['story']
-		check = request.POST.getlist('checks')
+	allPosts = Post.objects.filter(project__id=request.session['selected_project']).order_by('-id')
+	return render_to_response ('scrumko/discussion.html', {'allPosts': allPosts}, context)	
+	
+
+def add_new_post(request):
+	print request.POST['new_post']
+	project1=Project.objects.get(id = request.session['selected_project'])
+	poster1=User.objects.get(id = request.user.id)
+	Post.objects.create(project = project1, poster = poster1, content = request.POST['new_post'])
+	#new_post_text = request.POST['new_post'];
+	#print new_post_text
+#	story1 = Story.objects.filter (id = storyid);
+#	
+#	note1=StoryNotification.objects.filter(story__id = storyid)
+#	if len (note1) > 0:
+#		note1[0].notification=request.POST["note"]
+#		note1[0].save()
+#	else:
+#		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
+	return HttpResponseRedirect('/scrumko/discussion/')
 		
-	return render_to_response ('scrumko/discussion.html', {'all_stories': all_stories, 'all_notification': all_notification}, context)			
-			
 @login_required
 def documentation(request):
 	context = RequestContext(request)

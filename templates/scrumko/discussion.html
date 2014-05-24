@@ -4,7 +4,7 @@
 
 {% block body_block %}
 
-	<script type="text/javascript" src="{% static  'javascript/productbacklog.js' %}" ></script>
+	<script type="text/javascript" src="{% static  'javascript/discussion.js' %}" ></script>
 	
 	<h1> Project Wall </h1>   
 		<br/>
@@ -20,29 +20,43 @@
 		
 		<br/><br/>
 		
-		<h2>Stories in current sprint</h2>
+		<a href="javascript: void(0)" class="add_post" id="#opener1" ><img src="/static/images/add.png" alt="yes" height="20" width="20">&nbsp; Add new post</a>
+		<br /><br />
 		
+		<!-- OD KLELE!!!!!!!!!!!!!!!!!!!!!!!! -->
 		
-	
-		<div id="dialog" title="Change estimate">
-		  <form action="/scrumko/change_estimation/" method="post" id="estimate_change">{% csrf_token %}
-			<input type="hidden" id="storyid" name="storyid" />
-			<input type="text" id="estimation" name="estimation" style="float: left"/>
-			<input type="submit" id="submit" value="Change" style="float: left"/>
-			<br/>
-			<p id="warning" ></p>
-		  
-		  </form>
-		</div>
+		{% for post in allPosts %}
+		<div class="post_container">
+			<div class="post_poster_container">
+				{{ post.poster }}
+			</div>
+			<div class="post_date_container">
+				{{ post.post_time }}
+			  
+			</div>
 		
-		<div id="dialog_note" title="Add note">
-						<textarea rows="5" cols="60" id="note" name="note" name="comment" form="add_note">
-				</textarea>
-		  <form action="/scrumko/add_notification/" method="post" id="add_note">{% csrf_token %}
-			<input type="hidden" id="storyid1" name="storyid1" />
+			<div class="post_content_container" >		
+		
+				{{ post.content }}
+			</div>
 			
-			<input type="submit" id="submit1" value="Submit" style="float: left"/>
-		  
+			
+			<div class="comment_content_container" >				
+				
+			</div>
+		</div>
+		<br \>
+		{% endfor %}
+		<!-- DO KLELE!!!!!!!!!!!!!!!!!!!!!!!! -->
+		
+		<div id="dialog_add_post" title="Add new post">
+				<textarea rows="5" cols="60" id="new_post" name="new_post" name="comment" form="add_post"> 
+				</textarea>
+		  <form action="/scrumko/add_new_post/" method="post" id="add_post">{% csrf_token %}
+			<input type="hidden" id="storyid1" name="storyid1" />
+			<input type="submit" id="submit" value="Submit" style="float: left"/>
+			<br />
+			<p id="warning" ></p>
 		  </form>
 		</div>
 	
