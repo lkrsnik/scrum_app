@@ -1592,15 +1592,24 @@ def mytask(request):
 def discussion(request):
 	context = RequestContext(request)
 	allPosts = Post.objects.filter(project__id=request.session['selected_project']).order_by('-id')
-	return render_to_response ('scrumko/discussion.html', {'allPosts': allPosts}, context)	
+	allComments = Post_Comment.objects.filter();
+	return render_to_response ('scrumko/discussion.html', {'allPosts': allPosts,'allComments': allComments}, context)	
 	
 
 def add_new_post(request):
-	print request.POST['new_post']
 	project1=Project.objects.get(id = request.session['selected_project'])
 	poster1=User.objects.get(id = request.user.id)
 	Post.objects.create(project = project1, poster = poster1, content = request.POST['new_post'])
-	#new_post_text = request.POST['new_post'];
+	return HttpResponseRedirect('/scrumko/discussion/')
+	
+
+def add_new_comment(request):
+	#print request.POST['postId']
+	#print request.POST['new_comment']
+	post1=Post.objects.get(id = request.POST['postId'])
+	commenter1=User.objects.get(id = request.user.id)
+	Post_Comment.objects.create(post = post1, commenter = commenter1, comment = request.POST['new_comment'])
+	#new_post_text = request.POST['new_comment'];
 	#print new_post_text
 #	story1 = Story.objects.filter (id = storyid);
 #	
@@ -1611,7 +1620,7 @@ def add_new_post(request):
 #	else:
 #		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/discussion/')
-		
+	
 @login_required
 def documentation(request):
 	context = RequestContext(request)

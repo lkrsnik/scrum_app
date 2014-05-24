@@ -689,6 +689,11 @@ a
 	color: red;
 }
 
+#warningCom
+{
+	color: red;
+}
+
 .story_sprintbacklog_tasks_background
 {
 	padding: 5px 5px 5px 5px;
@@ -840,30 +845,6 @@ input.cb
 	background-color: rgba(255, 255, 255, 0.1);
 	font-size: 13px;
 }
-.story_priority,.story_business
-{
-	width: 20%;
-	text-align: center;
-	padding-right:15px;
-	float: left;
-}
-.story_estimation,.story_edit,.backlog_poker
-{
-	
-	text-align: center;
-	padding-left:10px;
-	float: right;
-}
-
-.story_estimation
-{
-	width: 25%;
-}
-
-.story_edit
-{
-	width: 12%;
-}
 
 .post_content_container
 {
@@ -877,22 +858,37 @@ input.cb
 
 .comment_content_container
 {
+	padding: 5px 5px 5px 5px;
 	margin-bottom:3px;
-	padding:15px 15px 15px 15px;
 	background-color: rgba(255, 255, 255, 0.1);
-	color: white;
-	
-	border-bottom-left-radius: 15px;
-	border-bottom-right-radius: 15px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
-
-.story_acceptance_test_container
+.comment_commenter_container
 {
 	margin-bottom:3px;
-	padding:15px 15px 15px 15px;
+	padding:5px 10px 5px 10px;
 	background-color: rgba(255, 255, 255, 0.1);
-	/*border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 10px;*/
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #4590ab;
 }
 
+.comment_comment_container
+{
+	margin-bottom:3px;
+	padding:5px 10px 5px 10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+}
+
+.comment_date_container
+{
+	padding:1px 10px 1px 10px;
+	margin-bottom:10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}

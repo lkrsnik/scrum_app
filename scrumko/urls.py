@@ -50,6 +50,7 @@ urlpatterns = patterns('',
 	url(r'^add_notification1/$', views.add_notification1, name='add_notification1'),
 	url(r'^discussion/$', views.discussion, name='discussion'),
 	url(r'^add_new_post/$', views.add_new_post, name='add_new_post'),
+	url(r'^add_new_comment/$', views.add_new_comment, name='add_new_comment'),
 	url(r'^documentation/$', views.documentation, name='documentation'),
 	url(r'^progress/$', views.progress, name='progress'),
 	

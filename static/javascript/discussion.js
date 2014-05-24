@@ -25,6 +25,19 @@ $(document).ready(function() {
 		  },
 		  width: 600
 		});
+		
+		$( "#dialog_add_comment" ).dialog({
+		  autoOpen: false,
+		  show: {
+			effect: "fade",
+			duration: 1000
+		  },
+		  hide: {
+			effect: "fade",
+			duration: 1000
+		  },
+		  width: 600
+		});
 	 
 		$( ".add_post" ).click(function() {
 			$('#storyid1').val ($(this).attr('data-story'));
@@ -33,7 +46,6 @@ $(document).ready(function() {
 		
 		  $( "#dialog_add_post" ).dialog( "open" );$('#storyid1').val ("Juhuhu");
 			var elem = document.getElementById("new_post");
-			//var encoded = $('#new_post').val ($(this).parents('.story_container').find('.notes').html());
 			var div = document.createElement('div');
 			div.innerHTML = $(this).parents('.story_container').find('.notes').html();
 			console.log(div.innerHTML);
@@ -47,6 +59,24 @@ $(document).ready(function() {
 			
 		});
 		
+		$( ".add_comment" ).click(function() {
+			$('#postId').val($(this).parents('.post_container').find('.theValue').html());
+			$('#new_comment').val ($(this).parents('.story_container').find('.notes').html());
+		
+		  $( "#dialog_add_comment" ).dialog( "open" );
+			var elem = document.getElementById("new_comment");		
+			var text = "";
+			var decoded = $('#new_comment').html(text).text();
+			elem.value=decoded;
+		
+			var varTitle = $('<div />').html(text).text();
+			$('#new_comment').text(varTitle);
+			
+		});
+		
+		
+		
+		
 		$("#submit").click (function(e) {
 			val = $("#new_post").val();
 
@@ -55,6 +85,21 @@ $(document).ready(function() {
 			if(!pattern.test(val))
 			{
 				$("#warning").html("Please enter a post text.");
+				e.preventDefault();
+			}
+		
+			
+			
+		});
+		
+		$("#submitCom").click (function(e) {
+			val = $("#new_comment").val();
+
+			
+			var pattern=/^(?!\s*$).+/;
+			if(!pattern.test(val))
+			{
+				$("#warningCom").html("Please enter a comment text.");
 				e.preventDefault();
 			}
 		

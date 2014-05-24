@@ -23,8 +23,6 @@
 		<a href="javascript: void(0)" class="add_post" id="#opener1" ><img src="/static/images/add.png" alt="yes" height="20" width="20">&nbsp; Add new post</a>
 		<br /><br />
 		
-		<!-- OD KLELE!!!!!!!!!!!!!!!!!!!!!!!! -->
-		
 		{% for post in allPosts %}
 		<div class="post_container">
 			<div class="post_poster_container">
@@ -41,13 +39,28 @@
 			</div>
 			
 			
-			<div class="comment_content_container" >				
+			<div class="comment_content_container" >
+				<p class="theValue" hidden=true>{{ post.id }}</p>
 				
+				{% for comment in allComments %}
+					{% if comment.post = post %}
+						<div class="comment_commenter_container" >
+							{{comment.commenter }}
+						</div>
+						<div class="comment_comment_container" >
+							{{comment.comment }}
+						</div>
+						<div class="comment_date_container" >
+							{{comment.comment_time }}
+						</div>
+					{% endif %}
+				{% endfor %}
+				
+				<a href="javascript: void(0)" class="add_comment" id="#opener1" ><img src="/static/images/add.png" alt="yes" height="20" width="20">&nbsp; Add new comment</a>
 			</div>
 		</div>
 		<br \>
 		{% endfor %}
-		<!-- DO KLELE!!!!!!!!!!!!!!!!!!!!!!!! -->
 		
 		<div id="dialog_add_post" title="Add new post">
 				<textarea rows="5" cols="60" id="new_post" name="new_post" name="comment" form="add_post"> 
@@ -57,6 +70,17 @@
 			<input type="submit" id="submit" value="Submit" style="float: left"/>
 			<br />
 			<p id="warning" ></p>
+		  </form>
+		</div>
+		
+		<div id="dialog_add_comment" title="Add new comment">
+				<textarea rows="5" cols="60" id="new_comment" name="new_comment" name="comment" form="add_comment"> 
+				</textarea>
+		  <form action="/scrumko/add_new_comment/" method="post" id="add_comment">{% csrf_token %}
+			<input type="hidden" id="postId" name="postId" />
+			<input type="submit" id="submitCom" value="Submit" style="float: left"/>
+			<br />
+			<p id="warningCom" ></p>
 		  </form>
 		</div>
 	
