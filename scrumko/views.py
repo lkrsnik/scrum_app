@@ -1625,7 +1625,11 @@ def commentdelete(request, comment_id):
 	context = RequestContext(request)
 	comment_info = Post_Comment.objects.get(id=comment_id).delete()
 	return HttpResponseRedirect("/scrumko/discussion")
-	
+
+def postdelete(request, post_id):
+	context = RequestContext(request)
+	post_info = Post.objects.get(id=post_id).delete()
+	return HttpResponseRedirect("/scrumko/discussion")
 @login_required
 def documentation(request):
 	context = RequestContext(request)
