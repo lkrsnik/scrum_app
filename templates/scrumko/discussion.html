@@ -46,6 +46,7 @@
 					{% if comment.post = post %}
 						<div class="comment_commenter_container" >
 							{{comment.commenter }}
+							<a href="commentdelete/{{comment.id}}" class="target2" align=right ><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete comment</a> 
 						</div>
 						<div class="comment_comment_container" >
 							{{comment.comment }}
@@ -58,7 +59,7 @@
 				
 				<a href="javascript: void(0)" class="add_comment" id="#opener1" ><img src="/static/images/add.png" alt="yes" height="20" width="20">&nbsp; Add new comment</a>
 				
-				<a href="" class="target" ><img src="/static/images/delete.png" alt="yes" height="20" width="20">Delete comment</a> 
+				
 			</div>
 		</div>
 		<br \>

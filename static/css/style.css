@@ -892,3 +892,8 @@ input.cb
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
 }
+.target2
+{
+	font-size: 13px;
+	padding:1px 200px 1px 10px;
+}

@@ -1620,6 +1620,11 @@ def add_new_comment(request):
 #	else:
 #		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/discussion/')
+
+def commentdelete(request, comment_id):
+	context = RequestContext(request)
+	comment_info = Post_Comment.objects.get(id=comment_id).delete()
+	return HttpResponseRedirect("/scrumko/discussion")
 	
 @login_required
 def documentation(request):
