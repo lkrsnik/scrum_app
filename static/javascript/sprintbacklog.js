@@ -86,27 +86,36 @@ $(document).ready(function() {
 		  },
 		  width: 600
 		});
-		$( ".edit_note" ).click(function() {
-			$('#storyid1').val ($(this).attr('data-story'));		
-			$('#note').val ($(this).parents('.story_container').find('.notes').html());		
-		  $( "#dialog_note" ).dialog( "open" );
-		});		
-		$("#submit1").click (function(e) {
-			val = $("#note").val();
-		});
 	 
-		/*$( ".edit_note" ).click(function() {
+		$( ".edit_note" ).click(function() {
 			$('#storyid1').val ($(this).attr('data-story'));
+		
+			$('#note').val ($(this).parents('.story_container').find('.notes').html());
+		
+		  $( "#dialog_note" ).dialog( "open" );
+		  $('#storyid1').val ($(this).attr('data-story'));
 			var elem = document.getElementById("note");
 			//var encoded = $('#note').val ($(this).parents('.story_container').find('.notes').html());
 			var div = document.createElement('div');
 			div.innerHTML = $(this).parents('.story_container').find('.notes').html();
-			elem.value=div.firstChild.nodeValue;
+			console.log(div.innerHTML)			
+			var text = div.innerHTML
+			console.log(text);
+			var decoded = $('#note').html(text).text();
+			decoded = replaceAll(decoded, "<br>", "\n");
+			console.log(decoded)
+			elem.value=decoded;
+			
 		
-		  $( "#dialog_note" ).dialog( "open" );
-		  
-		});*/
+			var varTitle = $('<div />').html(text).text();
+			$('#note').text(varTitle);
+			
+		});
 	  });
+	  		
+function replaceAll(txt, replace, with_this) {   
+	return txt.replace(new RegExp(replace, 'g'),with_this); 
+	}
 	  $(function() {
 		 
 		$( "#dialogremaining" ).dialog({
