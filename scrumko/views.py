@@ -1609,21 +1609,9 @@ def add_new_post(request):
 	
 
 def add_new_comment(request):
-	#print request.POST['postId']
-	#print request.POST['new_comment']
 	post1=Post.objects.get(id = request.POST['postId'])
 	commenter1=User.objects.get(id = request.user.id)
 	Post_Comment.objects.create(post = post1, commenter = commenter1, comment = request.POST['new_comment'])
-	#new_post_text = request.POST['new_comment'];
-	#print new_post_text
-#	story1 = Story.objects.filter (id = storyid);
-#	
-#	note1=StoryNotification.objects.filter(story__id = storyid)
-#	if len (note1) > 0:
-#		note1[0].notification=request.POST["note"]
-#		note1[0].save()
-#	else:
-#		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/discussion/')
 
 def commentdelete(request, comment_id):
