@@ -79,15 +79,18 @@
 					{% for notification in allNotifications %}
 						{% if notification.story = story %}
 						{% if not notification.notification = "" %}						
+<<<<<<< HEAD
+						
+						<p class="notes">{{notification.notification|linebreaksbr}}</p> 
+=======
 							
-							<p class="notes">{{notification.notification|linebreaksbr}}</p> 
+							<p class="notes">{{notification.notification}}</p> 
+>>>>>>> c6caa6817eb2572e30a902c737147fc3a6b14d0c
 						
 						{% endif %}
 						
 						{% endif %}
 					{% endfor %}
-		
-					
 					
 				{% endif %}
 				{% if  story.status == True %}
@@ -103,7 +106,7 @@
 						{% if notification.story = story %}
 						{% if not notification.notification = "" %}						
 						
-							<p class="notes">{{notification.notification|linebreaksbr}}</p> 
+							<p class="notes">{{notification.notification}}</p> 
 						
 						{% endif %}
 						{% endif %}

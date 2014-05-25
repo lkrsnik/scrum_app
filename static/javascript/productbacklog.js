@@ -82,10 +82,12 @@ $(document).ready(function() {
 			//var encoded = $('#note').val ($(this).parents('.story_container').find('.notes').html());
 			var div = document.createElement('div');
 			div.innerHTML = $(this).parents('.story_container').find('.notes').html();
-			console.log(div.innerHTML);
-			
+			console.log(div.innerHTML)			
 			var text = div.innerHTML
+			console.log(text);
 			var decoded = $('#note').html(text).text();
+			decoded = replaceAll(decoded, "<br>", "\n");
+			console.log(decoded)
 			elem.value=decoded;
 			
 		
@@ -95,7 +97,9 @@ $(document).ready(function() {
 		});
 	  });
 	  		
-
+function replaceAll(txt, replace, with_this) {   
+	return txt.replace(new RegExp(replace, 'g'),with_this); 
+	}
 	  function htmlEntities(str) {
 			return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 		}
