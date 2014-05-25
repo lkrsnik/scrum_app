@@ -1641,14 +1641,41 @@ def documentation(request):
 		doc = docnew.documentation_text
 		documentation = Documentation.objects.filter(project__id = selected_project_id)
 
-	documentation[0].documentation_text = "<span style='color:rgb(0,0,255);'>blaaaaaaaa</span>"
+
 	documentation[0].save();
 	doc = documentation[0].documentation_text
 	if request.method == 'POST':
-		storyid = request.POST['story']
-		check = request.POST.getlist('checks')
-		for m in check:
-			print m
+		
+		if request.POST.get('story', 0) != 0:
+			storyid = request.POST['story']
+			story = Story.objects.get (id = storyid)
+			check = request.POST.getlist('checks')
+			newtext=''
+			for m in check:
+				print 'in'
+				print m
+				if(m=='1'):
+			
+					newtext = newtext+ "<span style='font-weight:bold;font-size: 20px; color: #4590ab;'><br>"+story.story_name+"<br></span>"
+				if(m=='2'):
+					newtext = newtext+"<span style='font-weight:bold;'><br>"+story.text+"</span>"
+				if(m=='3'):
+					newtext = newtext+"<br>"+story.test_text
+				if(m=='4'):
+					note = StoryNotification.objects.filter(story__id = storyid)
+					if len(note)>0:
+						newtext = newtext+"<span style='color: orange;'><br>"+note[0].notification +"</span>"
+					else:
+						newtext = newtext+''
+			newtext = newtext+"<br>"
+			doc = documentation[0].documentation_text + newtext
+				#documentation[0].documentation_text = doc
+				#documentation[0].save();
+				
+		else:
+			documentation[0].documentation_text = request.POST['textarea']
+			documentation[0].save();
+			doc = documentation[0].documentation_text
 		
 	return render_to_response ('scrumko/documentation.html', {'doc':doc, 'all_stories': all_stories, 'all_notification': all_notification}, context)
 

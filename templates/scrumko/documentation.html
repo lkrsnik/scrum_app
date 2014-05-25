@@ -29,10 +29,13 @@
 <!--<h1>Documentation</h1>-->
 
 <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
-
+<form id="document_form" method="post" action="/scrumko/documentation/"
+					enctype="multipart/form-data">
+					{% csrf_token %}
 <textarea name="textarea" class="jqte-test">{{ doc }}</textarea>
 <p class="showdoc" style="display:none;">{{ doc }}<br><br></p>
-<button class="status">Save</button>
+<input type="submit" value="Save">
+</form>
 </div>
 </br>
 {{ storyid }}
@@ -47,10 +50,10 @@
 </select></br></br>
 
 
-<input class="cb" type="checkbox" name="checks" value="1">Title
-<input class="cb" type="checkbox" name="checks" value="2">Description
-<input class="cb" type="checkbox" name="checks" value="3">Acceptance test
-<input class="cb" type="checkbox" name="checks" value="4">Notifications
+<input class="cb" type="checkbox" name="checks" value="1" checked>Title
+<input class="cb" type="checkbox" name="checks" value="2" checked>Description
+<input class="cb" type="checkbox" name="checks" value="3" checked>Acceptance test
+<input class="cb" type="checkbox" name="checks" value="4" checked>Notifications
  </br> </br>
 <input type="submit" value="Import">
 </form>
@@ -76,6 +79,16 @@
 	});
 	
 </script>
-
+<script>
+function validateFunction() {
+var fo = document.formname;
+if (!fo.field1.checked && !fo.field2.checked && !fo.field3.checked && 
+    !fo.field4.checked && !fo.field5.checked && !fo.field6.checked) {
+      alert("You must select at least one option.");
+      return false;
+}
+return true;
+}
+</script>
 {% endblock %}
 
