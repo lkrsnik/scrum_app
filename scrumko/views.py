@@ -1593,6 +1593,8 @@ def discussion(request):
 	context = RequestContext(request)
 	allPosts = Post.objects.filter(project__id=request.session['selected_project']).order_by('-id')
 	allComments = Post_Comment.objects.filter()
+	current_user = request.user.id
+	selected_project_id = request.session['selected_project']
 	
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
 	

@@ -27,8 +27,9 @@
 		<div class="post_container">
 			<div class="post_poster_container">
 				{{ post.poster }}
-				
+					{% if is_scrum_master %}
 					<a href="postdelete/{{post.id}}" class="target3" ><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete post</a> 	
+					{% endif %}
 			</div>
 		
 			<div class="post_date_container">
@@ -49,7 +50,7 @@
 					{% if comment.post = post %}
 						<div class="comment_commenter_container" >
 							{{comment.commenter }}
-							{% if is_staff %}
+							{% if is_scrum_master %}
 							<a href="commentdelete/{{comment.id}}" class="target2"><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete comment</a>
 							{% endif %}
 							
