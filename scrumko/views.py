@@ -1208,18 +1208,18 @@ def add_notification (request):
 	else:
 		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/productbacklog/')# function changes estimation of story
-def add_notification (request):
-	storyid = request.POST["storyid1"];
+# def add_notification (request):
+	# storyid = request.POST["storyid1"];
 		
-	story1 = Story.objects.filter (id = storyid);
+	# story1 = Story.objects.filter (id = storyid);
 	
-	note1=StoryNotification.objects.filter(story__id = storyid)
-	if len (note1) > 0:
-		note1[0].notification=request.POST["note"]
-		note1[0].save()
-	else:
-		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
-	return HttpResponseRedirect('/scrumko/productbacklog/')
+	# note1=StoryNotification.objects.filter(story__id = storyid)
+	# if len (note1) > 0:
+		# note1[0].notification=request.POST["note"]
+		# note1[0].save()
+	# else:
+		# p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
+	# return HttpResponseRedirect('/scrumko/productbacklog/')
 def add_notification1 (request):
 	storyid = request.POST["storyid1"];
 		

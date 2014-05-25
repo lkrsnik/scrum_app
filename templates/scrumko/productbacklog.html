@@ -67,6 +67,34 @@
 			<div class="story_acceptance_test_container" >				
 				{{ story.test_text }}
 			</div>
+			{% if  is_owner %}
+			<div class="note_content_container">
+				
+				{% if  story.status == False %}
+					
+					<a href="/scrumko/addstorytofinished/{{ story.id }}"  class="edit_note2" ><img src="/static/images/confirm.png" alt="yes" height="15" width="15" > Mark as realized</a>
+					
+					<a href="javascript: void(0)" class="edit_note" id="#opener1"  data-story="{{story.id}}" ><img src="/static/images/remove.png" alt="yes" height="15" width="15"> Reject</a>
+					<br />
+					{% for notification in allNotifications %}
+						{% if notification.story = story %}
+						{% if not notification.notification = "" %}						
+							
+							<p class="notes">{{notification.notification}}</p> 
+						
+						{% endif %}
+						
+						{% endif %}
+					{% endfor %}
+					
+				{% endif %}
+				{% if  story.status == True %}
+					<a href=""><img src="/static/images/yes.png" alt="yes" height="15" width="15"> Realized story</a>
+				{% endif %}
+			
+			</div>
+			{% endif %} 
+			{% if  not is_owner %}
 			<div class="note_content_container">
 			{% if note_permission %}
 					{% for notification in allNotifications %}
@@ -79,19 +107,8 @@
 						{% endif %}
 					{% endfor %}
 			{% endif %}
-			
-			
-			{% if  is_owner %}
-				{% if  story.status == False %}
-					<a href="/scrumko/addstorytofinished/{{ story.id }}" class="edit_note2"><img src="/static/images/confirm.png" alt="yes" height="15" width="15" > Mark as realized</a>
-					
-					<a href="javascript: void(0)" class="edit_note" id="#opener1" data-story="{{story.id}}"><img src="/static/images/remove.png" alt="yes" height="15" width="15"> Discard</a>
-				{% endif %}
-				{% if  story.status == True %}
-					<a href=""><img src="/static/images/yes.png" alt="yes" height="15" width="15"> Realized story</a>
-				{% endif %}
-		{% endif %} 
 			</div>
+			{% endif %}
 		</div>
 		
 		<br />	
