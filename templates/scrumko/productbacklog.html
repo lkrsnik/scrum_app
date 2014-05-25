@@ -73,7 +73,7 @@
 						{% if notification.story = story %}
 						{% if not notification.notification = "" %}						
 						
-							<p class="notes">{{notification.notification}}</p> 
+						<p class="notes">{{notification.notification|linebreaksbr}}</p> 
 						
 						{% endif %}
 						{% endif %}

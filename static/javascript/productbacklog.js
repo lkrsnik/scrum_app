@@ -76,7 +76,8 @@ $(document).ready(function() {
 		
 			$('#note').val ($(this).parents('.story_container').find('.notes').html());
 		
-		  $( "#dialog_note" ).dialog( "open" );$('#storyid1').val ($(this).attr('data-story'));
+		  $( "#dialog_note" ).dialog( "open" );
+		  $('#storyid1').val ($(this).attr('data-story'));
 			var elem = document.getElementById("note");
 			//var encoded = $('#note').val ($(this).parents('.story_container').find('.notes').html());
 			var div = document.createElement('div');
