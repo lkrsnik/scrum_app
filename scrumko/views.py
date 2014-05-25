@@ -17,7 +17,7 @@ from django.db.models import Min
 from datetime import date, timedelta as td
 
 from datetime import date, datetime
-import datetime
+import datetime, simplejson
 from django.db.models import Sum
 
 from scrumko.models import User
@@ -1299,8 +1299,7 @@ def taskcreate (request, id):
 	
 	# get all taskes and data for write out in papge
 	tasks = Task.objects.filter (story__id = id)
-	context_dict['tasks'] = tasks;
-	
+	context_dict['tasks'] = tasks;	
 	
 	    
 	if request.method == 'POST':
@@ -1873,11 +1872,12 @@ def get_burndown_data (request):
 		for story in stories:
 			#find tasks in this story
 			tasks = Task.objects.filter (story = story)
+			task_to_this_date = Remaining.objects.filter (task__story = story, day__lte = day)
 			
 			# check if task exsist
-			# if not then use story points
+			# if not or not to this time then use story points
 			# else use task remainings
-			if len (tasks) == 0:
+			if len (tasks) == 0 or len (task_to_this_date) == 0:
 				remaining += story.estimate * 6
 				workload += story.estimate * 6
 			else:
@@ -1887,7 +1887,8 @@ def get_burndown_data (request):
 					worked = Work_Time.objects.filter (task = task, day__lte = day).aggregate(Sum('time'))
 					
 					remaining += 0 if len( rems ) == 0 else rems[len(rems) - 1].time
-					workload += 0 if worked[time__sum] == None else worked[time__sum]
+					print (worked)
+					workload += 0 if worked['time__sum'] == None else worked['time__sum']
 		
 		data.append([i, remaining, workload])
 		
@@ -1900,11 +1901,15 @@ def progress (request):
 	
 	# put data to dict
 	data = get_burndown_data (request)
-	context_dict['data'] = json.dumps(data)
+	cont_dict['data'] = json.dumps(data, cls=DecimalJSONEncoder)
 	
 	return render_to_response ('scrumko/progress.html', cont_dict, context)		
 			
-		
+class DecimalJSONEncoder(simplejson.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return str(o)
+        return super(DecimalJSONEncoder, self).default(o)	
 		
 		
 		
