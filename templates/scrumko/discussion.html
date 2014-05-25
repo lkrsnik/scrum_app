@@ -28,8 +28,10 @@
 			<div class="post_poster_container">
 				{{ post.poster }}
 					{% if is_scrum_master %}
-					<a href="postdelete/{{post.id}}" class="target3" ><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete post</a> 	
+					<a href="postdelete/{{post.id}}" class="target3" style="float: right;" ><img src="/static/images/delete.png" alt="yes" height="15" width="15">&nbsp; Delete post</a> 
+					<br/>	
 					{% endif %}
+					
 			</div>
 		
 			<div class="post_date_container">
