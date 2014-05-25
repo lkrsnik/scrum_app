@@ -34,15 +34,13 @@
 					{% csrf_token %}
 <textarea name="textarea" class="jqte-test">{{ doc }}</textarea>
 <p class="showdoc" style="display:none;">{{ doc }}<br><br></p>
-<input type="submit" value="Save">
-</form>
+<input type="submit" value="Save" name="save">
+
 </div>
 </br>
 {{ storyid }}
 <h2>Import story:</h2>
-        <form id="document_form" method="post" action="/scrumko/documentation/"
-					enctype="multipart/form-data">
-					{% csrf_token %}
+       
 	<select id="id_story" name="story">
 {% for x in all_stories %}
     <option value="{{ x.id }}">{{ x.story_name }}</option>
@@ -55,7 +53,7 @@
 <input class="cb" type="checkbox" name="checks" value="3" checked>Acceptance test
 <input class="cb" type="checkbox" name="checks" value="4" checked>Notifications
  </br> </br>
-<input type="submit" value="Import">
+<input type="submit" value="Import" name="import">
 </form>
 <script>
 	$('.jqte-test').jqte();

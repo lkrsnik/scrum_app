@@ -1728,14 +1728,17 @@ def documentation(request):
  	documentation[0].save();
  	doc = documentation[0].documentation_text
  	if request.method == 'POST':
-		if request.POST.get('story', 0) != 0:
+		if request.POST.get('import', 0) != 0:
+			documentation[0].documentation_text = request.POST['textarea']
+			documentation[0].save();
+			doc = documentation[0].documentation_text
 			storyid = request.POST['story']
 			story = Story.objects.get (id = storyid)
 			check = request.POST.getlist('checks')
 			newtext=''
 			for m in check:
 				if(m=='1'):
-					newtext = newtext+ "<span style='font-weight:bold;font-size: 20px; color: #4590ab;'><br>"+story.story_name+"<br></span>"
+					newtext = newtext+ "<br><span style='font-weight:bold;font-size: 20px; color: #4590ab;'><br>"+story.story_name+"<br></span>"
 				if(m=='2'):
 					newtext = newtext+"<span style='font-weight:bold;'><br>"+story.text+"</span>"
 				if(m=='3'):
@@ -1746,7 +1749,7 @@ def documentation(request):
 						newtext = newtext+"<span style='color: orange;'><br>"+note[0].notification +"</span>"
 					else:
 						newtext = newtext+''
-						newtext = newtext+"<br>"
+				
 			doc = documentation[0].documentation_text + newtext
 				#documentation[0].documentation_text = doc
 				#documentation[0].save();
