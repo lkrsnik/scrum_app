@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+from django.db.models import Min
+from datetime import date, timedelta as td
 
 from datetime import date, datetime
 import datetime
@@ -1760,6 +1762,7 @@ def documentation(request):
 
  	return render_to_response ('scrumko/documentation.html', {'doc':doc, 'all_stories': all_stories, 'all_notification': all_notification}, context)
 
+
 @login_required
 def progress (request):
 	context = RequestContext(request)
@@ -1836,3 +1839,79 @@ def discardstory(request, id):
 	current_story.status=False
 	current_story.save()
 	return HttpResponseRedirect("/scrumko/productbacklog")
+
+# function provides data for burndown
+def get_burndown_data (request):
+	context = RequestContext(request)
+	
+	# get project
+	project_id = request.session.get('selected_project')
+	
+	# get start of first sprint
+	fistsprint = Sprint.objects.find (project_name__id = project_id)
+	
+	if len (fistsprint) == 0:
+		return HttpResponse ([])
+	
+	start_date = firstsprint.aggregate (Min('start_date'))['start_date__min']
+	
+	# define array for returning data
+	data = []
+	
+	# iterate thorught all dates to today
+	
+	d1 = start_date
+	d2 = date.today()
+
+	delta = d2 - d1
+
+	for i in range(delta.days + 1):
+		# date
+		day = d1 + td(days=i)
+		
+		remaining = 0
+		workload = 0
+		
+		#check all stories in project
+		stories = Story.objects.filter (project_name__id = project_id);
+		
+		# go throught the stories
+		for story in stories:
+			#find tasks in this story
+			tasks = Task.objects.filter (story = story)
+			
+			# check if task exsist
+			# if not then use story points
+			# else use task remainings
+			if len (tasks) == 0:
+				remaining += story.estimate * 6
+				workload += story.estimate * 6
+			else:
+				# go throught all task and add
+				for task in tasks:
+					rems = Remaining.objects.filter (task = task, day_lte = day)
+					worked = Work_Time.objects.filter (task = task, day_lte = day).aggregate(Sum('time'))
+					
+					remaining += rems[len(rems) - 1].time
+					workload += 0 if worked[time__sum] == None else worked[time__sum]
+		
+		data.append([i, remaining, workload])
+		
+		
+					
+		
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+	
+	
+	
