@@ -27,10 +27,10 @@
 		<div class="post_container">
 			<div class="post_poster_container">
 				{{ post.poster }}
-				{% if  is_scrum_master%}
-				<a href="postdelete/{{post.id}}" class="target3" ><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete post</a> 
-				{% endif %}
+				
+					<a href="postdelete/{{post.id}}" class="target3" ><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete post</a> 	
 			</div>
+		
 			<div class="post_date_container">
 				{{ post.post_time }}
 			  
@@ -40,18 +40,19 @@
 		
 				{{ post.content }}
 			</div>
-			
+				
 			
 			<div class="comment_content_container" >
 				<p class="theValue" hidden=true>{{ post.id }}</p>
-				
+			
 				{% for comment in allComments %}
 					{% if comment.post = post %}
 						<div class="comment_commenter_container" >
 							{{comment.commenter }}
-							{% if  is_scrum_master%}
-							<a href="commentdelete/{{comment.id}}" class="target2"><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete comment</a> 
+							{% if is_staff %}
+							<a href="commentdelete/{{comment.id}}" class="target2"><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete comment</a>
 							{% endif %}
+							
 						</div>
 						<div class="comment_comment_container" >
 							{{comment.comment }}
