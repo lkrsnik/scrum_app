@@ -677,6 +677,7 @@ a
 	font-size: 13px;
 	margin-left:auto; 
 	margin-right:auto;
+	float: right; 
 }
 .edit_note2
 {
@@ -685,6 +686,7 @@ a
 	font-size: 13px;
 	margin-left:auto; 
 	margin-right:auto;
+	float: right; 
 }
 
 .addstorytosprint
