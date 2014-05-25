@@ -913,3 +913,10 @@ input.cb
 	font-size: 13px;
 	padding:1px 5px 1px 10px;
 }
+
+#burndowncontainer
+{
+	width: 700px; 
+	height: 600px; 
+	margin: 0 auto
+}

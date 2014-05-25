@@ -1,11 +1,20 @@
 {% extends 'scrumko/main.html' %}
+{% load static %}
 
 {% block body_block %}
 	
 	<script>
 		data = jQuery.parseJSON('{{ data }}');
-		alert (data.length);
+		
 	</script>
+	<script type="text/javascript" src="{% static  'javascript/burndown.js' %}" ></script>
+	
+	<script src="{% static  'highchart/highcharts.js' %}"></script>
+	<script src="{% static  'highchart/modules/exporting.js"></script>
+	
+	<h1>Progress report</h1>
+	<br/>
+	<div id="burndowncontainer" ></div>
 	
 	
 {% endblock %}

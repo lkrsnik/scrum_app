@@ -1885,10 +1885,10 @@ def get_burndown_data (request):
 				for task in tasks:
 					rems = Remaining.objects.filter (task = task, day__lte = day)
 					worked = Work_Time.objects.filter (task = task, day__lte = day).aggregate(Sum('time'))
-					
+					print rems[len(rems) - 1].time
 					remaining += 0 if len( rems ) == 0 else rems[len(rems) - 1].time
-					print (worked)
-					workload += 0 if worked['time__sum'] == None else worked['time__sum']
+					
+					workload += (0 if worked['time__sum'] == None else worked['time__sum']) + (0 if len( rems ) == 0 else rems[len(rems) - 1].time)
 		
 		data.append([i, remaining, workload])
 		
@@ -1902,14 +1902,15 @@ def progress (request):
 	# put data to dict
 	data = get_burndown_data (request)
 	cont_dict['data'] = json.dumps(data, cls=DecimalJSONEncoder)
+	print (data)
 	
 	return render_to_response ('scrumko/progress.html', cont_dict, context)		
 			
 class DecimalJSONEncoder(simplejson.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            return str(o)
-        return super(DecimalJSONEncoder, self).default(o)	
+	def default(self, o):
+		if isinstance(o, decimal.Decimal):
+			return str(o)
+		return super(DecimalJSONEncoder, self).default(o)	
 		
 		
 		
