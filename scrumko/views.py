@@ -16,9 +16,10 @@ from django.core.exceptions import ValidationError
 
 from datetime import date, datetime
 import datetime
+from django.db.models import Sum
 
 from scrumko.models import User
-from scrumko.models import UserProfile, Task, Story_Sprint
+from scrumko.models import UserProfile, Task, Story_Sprint, Remaining
 from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time, Post, Post_Comment, Documentation
 
 
@@ -1243,16 +1244,16 @@ def change_estimation1 (request):
 def change_remaining (request):
 	
 	# get id where changing estimates
-	taskid1 = request.POST["taskid1"];
+	taskid1 = request.POST["taskid1"]
 		
 	# find story to change estimate
-	task = Task.objects.filter (id = taskid1);
+	task = Task.objects.filter (id = taskid1)
 	
 	# check if this story exsist
 	if len (task) > 0:
-		# if ok repair value
-		task[0].duratino = request.POST["duration"];
-		task[0].save();
+		# if ok add new remaining
+		rem = request.POST["duration"]
+		Remaining.objects.create (task = task[0], day = date.today(), time = rem)
 	
 	return HttpResponseRedirect('/scrumko/mytask/')
 def taskcreate (request, id):
@@ -1293,12 +1294,15 @@ def taskcreate (request, id):
 				task.status = 3
 			task.save()
 			
+			# add remaining time to remaining model
+			Remaining.objects.create (task = task, day = date.today(), time = task.duratino)
+						
 			success=True;
 		else:				
 			print task_form.errors	
 			context_dict ['success'] = success
 			context_dict ['task_form'] = task_form	
-			return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+			return render_to_response ('scrumko/taskcreate.html', context_dict, context)
     
 	# get form and add to dict
 	
@@ -1307,7 +1311,7 @@ def taskcreate (request, id):
 	context_dict ['success'] = success
        
 	# render page
-	return render_to_response ('scrumko/taskcreate.html', context_dict, context);
+	return render_to_response ('scrumko/taskcreate.html', context_dict, context)
 
 @login_required
 def taskedit (request, id):
@@ -1419,7 +1423,30 @@ def mytask(request):
 				break
 		
 	allStories=stories
-
+	
+	#########################################
+	# PG code here...						#
+	#########################################
+	
+	#add previous all task in alltasks1
+	alltasks1= allTasks
+	
+	
+	# create 2d table allTasks
+	allTsaks2 = [[0 for x in range(3)] for x in range(len(alltasks1))]
+	
+	for i in range (len(alltasks1)):
+		# get remaining for each task
+		remaining = Remaining.objects.filter (task = alltasks1[i])
+		workdone = Work_Time.objects.filter (task = alltasks1[i]).aggregate(Sum('time'))
+		print (workdone )
+		allTsaks2[i][2] = remaining[len(remaining)-1].time + (0 if workdone['time__sum']==None else workdone['time__sum'])			
+		allTsaks2[i][1] = remaining[len(remaining)-1].time
+		allTsaks2[i][0] = alltasks1[i]
+		
+	#########################################
+	#########################################
+	
 	
 
 	if request.session['selected_project'] == 0:
@@ -1560,7 +1587,32 @@ def mytask(request):
 					workdays = Work_Time.objects.filter(worker__id = current_user, task__id = taskid)
 					this_user=User.objects.get(id=current_user)
 					wtime_form = Work_Time_Edit_Form(initial={'worker': current_user , 'task': currenttask })	
-					return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
+					
+					#########################################
+					# PG code here...						#
+					#########################################
+					
+					#add previous all task in alltasks1
+					alltasks1= allTasks
+					
+					
+					# create 2d table allTasks
+					allTsaks2 = [[0 for x in range(3)] for x in range(len(alltasks1))]
+					
+					for i in range (len(alltasks1)):
+						# get remaining for each task
+						remaining = Remaining.objects.filter (task = alltasks1[i])
+						workdone = Work_Time.objects.filter (task = alltasks1[i]).aggregate(Sum('time'))
+						print (workdone )
+						allTsaks2[i][2] = remaining[len(remaining)-1].time + (0 if workdone['time__sum']==None else workdone['time__sum'])			
+						allTsaks2[i][1] = remaining[len(remaining)-1].time
+						allTsaks2[i][0] = alltasks1[i]
+						
+					#########################################
+					#########################################
+					
+					
+					return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTsaks2, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
 			else: 
 				change=True
 				if taskid == '' :
@@ -1569,25 +1621,40 @@ def mytask(request):
 				workdays = Work_Time.objects.filter(worker__id = current_user, task__id = taskid)
 				this_user=User.objects.get(id=current_user)
 				wtime_form = Work_Time_Edit_Form(initial={'worker': current_user , 'task': currenttask })	
-				return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
+				
+				#########################################
+				# PG code here...						#
+				#########################################
+				
+				#add previous all task in alltasks1
+				alltasks1= allTasks
+				
+				
+				# create 2d table allTasks
+				allTsaks2 = [[0 for x in range(3)] for x in range(len(alltasks1))]
+				
+				for i in range (len(alltasks1)):
+					# get remaining for each task
+					remaining = Remaining.objects.filter (task = alltasks1[i])
+					workdone = Work_Time.objects.filter (task = alltasks1[i]).aggregate(Sum('time'))
+					print (workdone )
+					allTsaks2[i][2] = remaining[len(remaining)-1].time + (0 if workdone['time__sum']==None else workdone['time__sum'])			
+					allTsaks2[i][1] = remaining[len(remaining)-1].time
+					allTsaks2[i][0] = alltasks1[i]
+					
+				#########################################
+				#########################################
+				
+				return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTsaks2, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
 		else:
 			print wtime_form.errors
 			change=True;
-			return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time,'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
+			return render_to_response('scrumko/mytask.html', {'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time,'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTsaks2, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)	
 	
 		
 		
-	return render_to_response('scrumko/mytask.html', {'notasks': notasks, 'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTasks, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	return render_to_response('scrumko/mytask.html', {'notasks': notasks, 'error_sprint': error_sprint, 'inday':inday, 'insprint':insprint, 'error_time': error_time, 'update':update, 'wtime_form': wtime_form, 'workdays':workdays, 'currenttask': currenttask, 'change':change, 'total':total, 'work':work, 'workTime': workTime, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTsaks2, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
-# @login_required	
-# def addtasktocompleted(request, id):
-
-			# taskcompleted = True
-			# current_story = Story.objects.filter(id = id)
-			# context = RequestContext(request)
-			# add = Task.objects.create(status=2, story = current_story[0])
-			
-			# return HttpResponseRedirect("/scrumko/mytask")	
 @login_required
 def discussion(request):
 	context = RequestContext(request)

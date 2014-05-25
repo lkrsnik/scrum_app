@@ -1,0 +1,906 @@
+
+body {
+	
+	text-align: left;
+	margin: 0;
+	background-color: #282828;
+	
+	font-family: 'Open Sans', sans-serif;
+	color: #c9c9c9;
+}
+
+pre {
+	text-align: left;
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
+	color: #c9c9c9;
+}
+
+*{
+	
+}
+
+h1
+{
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 25px;
+	color: #4590ab;
+}
+
+h2
+{
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 19px;
+	
+}
+
+input
+{
+	color: black;
+}
+
+select, textarea, option
+{
+	color: black;
+}
+
+a
+{
+	color: white;
+	text-decoration: none;
+}
+
+
+/* page */
+
+.page
+{
+	margin: auto;
+	
+	
+	
+}
+
+.menulogo
+{
+	overflow: auto;
+	width: 1100px;
+	margin: auto;
+}
+
+.logo
+{
+	float: left;
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 40px;
+	font-weight: 700;
+	color: white;	
+	
+}
+
+.menu
+{
+	float: right;
+	width: auto;
+	height: 40px;
+	
+}
+
+.menu ul {
+	list-style: none;
+	padding: 0px;
+	margin-left:auto;
+	
+}
+
+
+.menu li {
+	list-style: none;
+	padding: 0px;	
+	display: inline; 
+	
+}
+
+.menu a, .menu a:visited {
+	float: left;
+	padding: 0 20px 0 20px;
+	
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+	
+	font-weight: 300;
+	font-size: 19px;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.pagebody
+{
+	
+	margin: auto;
+	
+	width: 1100px;
+	
+	height: auto;
+	overflow-x:hidden;
+	overflow-y: hidden;
+}
+
+.mainwindow
+{
+	
+	
+	height: auto;
+	
+	
+	width: 70%;
+	float: left;
+	
+	
+}
+
+.sidemenu
+{	
+	height: auto;
+	width: 27%;
+	float: left;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	padding-left: 2%;
+}
+
+.headerhold, .bodyhold, .bodyhold2
+{
+	height: auto;
+	background-color: #3a3a3a;
+}
+
+.headerhold
+{
+	padding: 40px;
+	margin-top: 0px;
+
+}
+
+.bodyhold
+{
+	padding-top: 100px;
+	padding-bottom: 100px;
+	
+}
+.cpyright
+{
+	margin: auto;
+	width: 1100px;
+	
+	vertical-align: text-bottom;
+	text-align: center;
+}
+
+.gridmenu td
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	
+	border-radius: 15px;
+	width: 170px;
+	height: 170px;
+}
+.gridmenu a
+{
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 15px;
+}
+
+.gridmenu img
+{
+	margin-top: 20px;
+}
+
+.gridmenu
+{
+	border-spacing: 50px 20px;
+	text-align: center;
+}
+
+.userbarhold
+{
+	padding: 5px;
+	margin-top: 0px;
+	
+	background-color: #282828;
+}
+
+.userbar
+{
+	overflow: auto;
+	width: 1100px;
+	margin: auto;
+	text-align: right;
+	padding: 0 50px 0 10px;
+	
+}
+
+
+#user
+{
+	width: 40px;
+	height: 40px;
+	border: solid;
+	border-width: 1px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-color: #666666;
+	
+	border-radius: 4px;
+	float: right;
+}
+
+#userdata
+{
+	margin: 15px 20px 5px 0;
+	float: right;
+	
+	
+}
+
+/* for second template */
+
+.menulogo2
+{
+	overflow: auto;
+	width: 500px;
+	margin: auto;
+
+}
+
+.pagebody2
+{
+	overflow: auto;
+	margin: auto;
+	
+	width: 500px;
+	height: auto;
+	
+	
+	border-radius: 15px;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logo2
+{
+	text-align: center;
+	
+	
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 40px;
+	font-weight: 700;
+	color: white;	
+}
+
+.bodyhold2
+{
+	padding-top: 5px;
+	padding-bottom: 100px;
+	
+}
+
+.loginfield
+{
+	width: 90%;
+	margin: 0 5% 0 5%;
+	
+	border-radius: 5px;
+	
+	
+	height: 22px;
+}
+
+.loginfieldsubmit
+{
+	width: 50%;
+	margin: 0 5% 0 5%;
+	
+	border-radius: 5px;
+	
+	
+	height: 30px;
+}
+
+#index
+{
+	width: 495px;
+	
+	text-align: center;
+	
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.mainwindow2
+{
+	height: auto;
+	
+	width: 100%;
+	float: left;
+	
+	text-align: center;
+	
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 20px;
+}
+
+.header2
+{
+	font-size: 30px;
+
+}
+.error
+{
+		
+	font-size: 15px;	
+	color: red;
+	font-weight: normal;
+}
+
+/* style for div with information about succes adde something*/
+
+.succes
+{
+	margin: auto;
+	color: green;
+	background-color: #C6FCC0;
+	border: solid 1px;
+	border-color: green;
+	display: inline-block;
+
+	border-radius: 5px;
+	padding: 10px 30px 10px 30px;
+}
+
+.succes_hold
+{
+	text-align: center;
+}
+
+/* style for input fields on normal page */
+
+.mainwindow input, .mainwindow select, .mainwindow button
+{
+	
+	width: 200px;
+	margin: 0 20px 0 20px;
+	
+	border-radius: 5px;
+	height: 26px;
+	
+	cursor:pointer
+}
+
+.mainwindow2 input
+{
+	
+}
+
+.mainwindow textarea
+{
+	
+	width: 200px;
+	margin: 0 20px 0 20px;
+	resize: none;
+	border-radius: 5px;
+	
+}
+
+/* style for wide form */
+.fieldwrapper2 input, .fieldwrapper2 select
+{
+	
+	width: 400px;
+	margin: 0 20px 0 20px;
+	
+	border-radius: 5px;
+	height: 26px;
+}
+
+.fieldwrapper2 textarea
+{
+	
+	width: 400px;
+	margin: 0 20px 0 20px;
+	resize: none;
+	border-radius: 5px;
+	
+}
+
+
+
+.mainwindow input[type="submit"]
+{
+	
+
+}
+
+.mainwindow select[multiple="multiple"]
+{
+	height: 300px;
+
+}
+
+.fieldwrapper, .errorwrapper
+{
+	float: left;
+	width: 30%;
+}
+
+.fieldwrapper2, .errorwrapper2
+{
+	float: left;
+	width: 65%;
+}
+
+.errorwrapper, .errorwrapper2
+{
+	color: red;
+}
+
+/* div hold one form line */
+.formpart
+{
+	width: 100%;
+	display: inline-block;
+}
+
+.userTable {
+	margin:5px;
+	padding:5px;
+	width:100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	border:1px solid #000000;
+}
+.userTableFIRST {
+	margin:5px;
+	padding:5px;
+	width:100%;
+	text-align:center;
+	border:1px solid #000000;
+	background-color: rgba(255, 255, 255, 0.01);
+	font-weight:900;
+}
+.userTableCenter {
+	margin:5px;
+	padding:5px;
+	width:100%;
+	text-align:center;
+	border:1px solid #000000;
+	background-color: rgba(255, 255, 255, 0.1);
+	font-weight:900;
+}
+.projectTable {
+	margin:5px;
+	padding:5px;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	border:1px solid #000000;
+	table-layout: fixed;
+	width:700px;
+	
+}
+.projectTableFIRST {
+	margin:5px;
+	padding:5px;
+	width:100%;
+	
+	border:1px solid #000000;
+	background-color: rgba(255, 255, 255, 0.01);
+	font-weight:900;
+}
+
+.ui-datepicker-year
+{
+	color: black !important;
+}
+
+/* planing poker */
+
+.storydes
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	width: 86%;
+	
+	padding: 10px 10px 10px 20px;
+	
+	border-radius: 15px;
+}
+
+.planingtable
+{
+	/*background-color: rgba(255, 255, 255, 0.1);*/
+	width: 90%;
+	
+	/*padding: 10px 10px 10px 20px;*/
+	
+	border-radius: 15px;
+}
+
+.planingtable tr
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	height: 40px;
+	
+	border-radius: 15px;
+}
+
+.planingtable tr:first-child
+{
+	color: #4590ab;
+}
+
+.planingtable td
+{
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.planingtable table { border-collapse: separate; }
+
+.planingtable tr:first-child td:first-child { border-top-left-radius: 10px; }
+.planingtable tr:first-child td:last-child { border-top-right-radius: 10px; }
+.planingtable tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+.planingtable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+.projectrows
+{
+	width: 50%;
+}
+
+#estimate_buttons button
+{
+	width: 44px;
+	margin: 20px 4px 0 4px;
+	
+	border-radius: 5px;
+	height: 44px;
+	
+	border:0;
+	
+	background-color: rgba(255, 255, 255, 0.1);
+	
+	color: white;
+	cursor:pointer
+}
+
+/*CSS for Product backlog*/
+.story_container
+{
+	width: 90%;
+	
+}
+.time_history
+{
+	font-size: 12px;
+	margin: 0px 0px 0px 2px;
+}
+.time_change
+{
+	color: #4590ab;
+	font-weight: bold; 
+}
+.story_name_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #4590ab;
+	font-weight: bold; 
+}
+.story_actions_container
+{
+	padding:1px 15px 1px 15px;
+	margin-bottom:3px;
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+}
+.story_priority,.story_business
+{
+	width: 20%;
+	text-align: center;
+	padding-right:15px;
+	float: left;
+}
+.story_estimation,.story_edit,.backlog_poker
+{
+	
+	text-align: center;
+	padding-left:10px;
+	float: right;
+}
+
+.story_estimation
+{
+	width: 25%;
+}
+
+.story_edit
+{
+	width: 12%;
+}
+
+.story_content_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+	
+	
+}
+
+.note_content_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+	
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+}
+
+
+.story_acceptance_test_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	/*border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;*/
+}
+
+.notes
+{
+	margin: 0px 0px 0px 0px;
+	font-size: 0.8em;
+	color: orange;
+}
+
+.edit_note
+{
+ padding:1px 10px 1px 10px; 
+	margin-bottom:3px;
+	font-size: 13px;
+	margin-left:auto; 
+	margin-right:auto;
+}
+.edit_note2
+{
+	padding:1px 10px 1px 10px; 
+	margin-bottom:3px;
+	font-size: 13px;
+	margin-left:auto; 
+	margin-right:auto;
+}
+
+.addstorytosprint
+{
+	font-size: 0.9em;
+}
+#note {
+  width: 80%;
+  
+}
+
+#warning
+{
+	color: red;
+}
+
+#warningCom
+{
+	color: red;
+}
+
+.story_sprintbacklog_tasks_background
+{
+	padding: 5px 5px 5px 5px;
+	margin-bottom:3px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.story_sprintbacklog_tasks_foreground
+{
+	
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.backlogtasktable
+{
+	/*background-color: rgba(255, 255, 255, 0.1);*/
+	width: 100%;
+	
+	/*padding: 10px 10px 10px 20px;*/
+	
+	border-radius: 15px;
+}
+
+.backlogtasktable tr
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+	
+	border-radius: 15px;
+}
+
+.backlogtasktable tr:first-child
+{
+	color: #4590ab;
+}
+
+.backlogtasktable_unassigned
+{
+	background-color: rgba(255, 0, 0, 0.1);
+	
+}
+
+.backlogtasktable_assigned
+{
+	background-color: rgba(127, 90, 0, 0.1);
+}
+
+.backlogtasktable_completed
+{
+	background-color: rgba(0, 255, 0, 0.1);
+}
+
+.backlogtasktable_active
+{
+	background-color: rgba(127, 160, 0, 0.1);
+}
+
+.backlogtasktable td
+{
+	padding: 5px 5px 5px 5px;
+}
+
+.backlogtasktable table { border-collapse: separate; }
+
+.backlogtasktable tr:first-child td:first-child { border-top-left-radius: 10px; }
+.backlogtasktable tr:first-child td:last-child { border-top-right-radius: 10px; }
+.backlogtasktable tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+.backlogtasktable tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+.column_tasks{ width: 50%; }
+.column_status{ width: 15%; }
+.column_member{ width: 20%; }
+.column_remaining{ width: 10%; }
+.column_actions{ width: 10%; }
+.column_mytask{ width: 10%; }
+.timeedit{ 
+	float: right; 
+	margin: 0 7px 0 7px;
+}
+.link{text-decoration:underline}
+
+.productbacklogbut div
+{
+	background-color: rgba(255, 255, 255, 0.1);
+	
+	width: 275px;
+	height: 30px;
+	
+	border-radius: 15px;
+	float: left;
+	
+	margin: 0 15px 0 15px;
+	padding: 15px;
+	text-align: center;
+	
+}
+
+.productbacklogbut
+{
+	height: 60px;
+}
+
+.productbacklogbut .selected a
+{
+	color: #4590ab;
+}
+
+.textedit
+{
+	width: 90%;
+}
+
+input.cb
+{
+	width:19px;
+    height:19px;
+	background-color: red;
+}
+.tabcb
+{
+	width: 80%;
+	padding:1px;
+	
+}
+
+
+.post_container
+{
+	width: 90%;
+	
+}
+
+.post_poster_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #4590ab;
+	font-weight: bold; 
+}
+.post_date_container
+{
+	padding:1px 15px 1px 15px;
+	margin-bottom:3px;
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+}
+
+.post_content_container
+{
+	margin-bottom:3px;
+	padding:15px 15px 15px 15px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+	
+	
+}
+
+.comment_content_container
+{
+	padding: 5px 5px 5px 5px;
+	margin-bottom:3px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.comment_commenter_container
+{
+	margin-bottom:3px;
+	padding:5px 10px 5px 10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #4590ab;
+}
+
+.comment_comment_container
+{
+	margin-bottom:3px;
+	padding:5px 10px 5px 10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: white;
+}
+
+.comment_date_container
+{
+	padding:1px 10px 1px 10px;
+	margin-bottom:10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+.target2
+{
+	font-size: 13px;
+	padding:1px 5px 1px 10px;
+}

@@ -134,18 +134,18 @@
 				<!-- {% if task.status == 0 %}
 					<p> Ni taskov </p>
 				{% endif %} -->
-				{% if task.status == 1 %}
-					{% if task.story == sprintstory.story%}
+				{% if task.0.status == 1 %}
+					{% if task.0.story == sprintstory.story%}
 					
 					<tr>
 						<td class="column_mytask">
-							{{ task.text }}
+							{{ task.0.text }}
 						</td>
 						<td class="column_mytask">
 						
 							
 							{% for k, v in work.items %}
-								{% if k = task.id %}
+								{% if k = task.0.id %}
 								{{ v }}
 								{% if not v = "" %}
 								  &nbsp;h
@@ -153,35 +153,30 @@
 								{% endif %}
 							{% endfor %}
 							
-							<a href="/scrumko/mytask?id={{ task.id }}"> <img src="/static/images/edit.png" alt="yes" class="timeedit" height="17" width="17"></a>
+							<a href="/scrumko/mytask?id={{ task.0.id }}"> <img src="/static/images/edit.png" alt="yes" class="timeedit" height="17" width="17"></a>
 						</td>
 						<td class="column_mytask">
 			
-							<p class="dur" style="float: left; margin: 0px;"> {{ task.duratino }} </p> &nbsp;h
-								<a href="javascript: void(0)" class="edit_remaining" id="#opener2" data-story="{{task.id}}" >
+							<p class="dur" style="float: left; margin: 0px;"> {{ task.1 }} </p> &nbsp;h
+								<a href="javascript: void(0)" class="edit_remaining" id="#opener2" data-story="{{task.0.id}}" >
 							 <img src="/static/images/edit.png" alt="yes" class="timeedit" height="17" width="17">
 							 </a>
 						</td>
 						<td class="column_mytask">
-							{% for k, v in total.items %}
-								{% if k = task.id %}
-								{{ v }} 
-									&nbsp;h
-								{% endif %}								
-							{% endfor %}
+							{{ task.2 }}
 						
 							 </td>
 						</td>
 						<td>
 
-							{% if task.status == 0 %}
+							{% if task.0.status == 0 %}
 								Can not complete
-							{% elif task.status == 1 %}
-								<a href="?complete=1&task={{task.id}}" class="link">Complete</a> 
+							{% elif task.0.status == 1 %}
+								<a href="?complete=1&task={{task.0.id}}" class="link">Complete</a> 
 								<!-- <a href="/scrumko/addtasktocompleted/{{ task.id }}" class="link" >Complete</a>  -->
-							{% elif task.status == 2 %}
+							{% elif task.0.status == 2 %}
 								Completed
-							{% elif task.status == 3 %}
+							{% elif task.0.status == 3 %}
 								Active	 
 							{% endif %}												
 						</td>	
