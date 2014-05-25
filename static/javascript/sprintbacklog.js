@@ -86,8 +86,16 @@ $(document).ready(function() {
 		  },
 		  width: 600
 		});
-	 
 		$( ".edit_note" ).click(function() {
+			$('#storyid1').val ($(this).attr('data-story'));		
+			$('#note').val ($(this).parents('.story_container').find('.notes').html());		
+		  $( "#dialog_note" ).dialog( "open" );
+		});		
+		$("#submit1").click (function(e) {
+			val = $("#note").val();
+		});
+	 
+		/*$( ".edit_note" ).click(function() {
 			$('#storyid1').val ($(this).attr('data-story'));
 			var elem = document.getElementById("note");
 			//var encoded = $('#note').val ($(this).parents('.story_container').find('.notes').html());
@@ -97,7 +105,7 @@ $(document).ready(function() {
 		
 		  $( "#dialog_note" ).dialog( "open" );
 		  
-		});
+		});*/
 	  });
 	  $(function() {
 		 
