@@ -85,7 +85,7 @@ class Story_Sprint (models.Model):
 class Task (models.Model):
 	story = models.ForeignKey (Story)
 	text = models.CharField(max_length=1000, blank=False)
-	duratino = models.DecimalField(max_digits=4, decimal_places=1, blank=False)
+	duratino = models.DecimalField(max_digits=4, decimal_places=2, blank=False)
 	worker = models.ForeignKey(User, blank=True, null=True)
 	status = models.IntegerField(default=0)
 		
@@ -93,7 +93,13 @@ class Work_Time (models.Model):
 	task = models.ForeignKey (Task)
 	worker = models.ForeignKey(User)
 	day = models.DateField(blank=False)
-	time = models.DecimalField(max_digits=4, decimal_places=1, blank=False)
+	time = models.DecimalField(max_digits=4, decimal_places=2, blank=False)
+	
+class Remaining (models.Model): 
+	task = models.ForeignKey (Task)
+	day = models.DateField(blank=False)
+	time = models.DecimalField(max_digits=4, decimal_places=2, blank=False)
+
 	
 class Post (models.Model):
 	project = models.ForeignKey(Project)
