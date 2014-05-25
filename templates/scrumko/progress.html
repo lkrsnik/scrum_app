@@ -2,9 +2,10 @@
 
 {% block body_block %}
 	
-	<div>
-		<canvas width="700" height="700" id="report"></canvas>
-	</div>
+	<script>
+		data = jQuery.parseJSON('{{ data }}');
+		alert (data.length);
+	</script>
 	
 	
 {% endblock %}

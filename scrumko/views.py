@@ -1760,12 +1760,7 @@ def documentation(request):
  	return render_to_response ('scrumko/documentation.html', {'doc':doc, 'all_stories': all_stories, 'all_notification': all_notification}, context)
 
 
-@login_required
-def progress (request):
-	context = RequestContext(request)
-	cont_dict = {};
-	
-	return render_to_response ('scrumko/progress.html', cont_dict, context)
+
 	
 	
 @login_required
@@ -1839,18 +1834,17 @@ def discardstory(request, id):
 
 # function provides data for burndown
 def get_burndown_data (request):
-	context = RequestContext(request)
-	
+		
 	# get project
 	project_id = request.session.get('selected_project')
 	
 	# get start of first sprint
-	fistsprint = Sprint.objects.find (project_name__id = project_id)
+	fistsprint = Sprint.objects.filter (project_name__id = project_id)
 	
 	if len (fistsprint) == 0:
 		return HttpResponse ([])
 	
-	start_date = firstsprint.aggregate (Min('start_date'))['start_date__min']
+	start_date = fistsprint.aggregate (Min('start_date'))['start_date__min']
 	
 	# define array for returning data
 	data = []
@@ -1886,17 +1880,26 @@ def get_burndown_data (request):
 			else:
 				# go throught all task and add
 				for task in tasks:
-					rems = Remaining.objects.filter (task = task, day_lte = day)
-					worked = Work_Time.objects.filter (task = task, day_lte = day).aggregate(Sum('time'))
+					rems = Remaining.objects.filter (task = task, day__lte = day)
+					worked = Work_Time.objects.filter (task = task, day__lte = day).aggregate(Sum('time'))
 					
-					remaining += rems[len(rems) - 1].time
+					remaining += 0 if len( rems ) == 0 else rems[len(rems) - 1].time
 					workload += 0 if worked[time__sum] == None else worked[time__sum]
 		
 		data.append([i, remaining, workload])
 		
-		
+	return data
 					
-		
+@login_required
+def progress (request):
+	context = RequestContext(request)
+	cont_dict = {};
+	
+	# put data to dict
+	data = get_burndown_data (request)
+	context_dict['data'] = json.dumps(data)
+	
+	return render_to_response ('scrumko/progress.html', cont_dict, context)		
 			
 		
 		
