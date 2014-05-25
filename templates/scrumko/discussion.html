@@ -41,7 +41,7 @@
 		
 			<div class="post_content_container" >		
 		
-				{{ post.content }}
+				<pre>{{ post.content }}</pre>
 			</div>
 				
 			
@@ -53,12 +53,15 @@
 						<div class="comment_commenter_container" >
 							{{comment.commenter }}
 							{% if is_scrum_master %}
-							<a href="commentdelete/{{comment.id}}" class="target2"><img src="/static/images/delete.png" alt="yes" height="15" width="15">Delete comment</a>
+							
+							<a href="commentdelete/{{comment.id}}" class="target2" style="float: right;"><img src="/static/images/delete.png" alt="yes" height="15" width="15">&nbsp; Delete comment</a>
+							
 							{% endif %}
 							
 						</div>
 						<div class="comment_comment_container" >
-							{{comment.comment }}
+							<pre>{{comment.comment }}</pre>
+							
 						</div>
 						<div class="comment_date_container" >
 							{{comment.comment_time }}

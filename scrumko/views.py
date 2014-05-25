@@ -19,7 +19,7 @@ import datetime
 
 from scrumko.models import User
 from scrumko.models import UserProfile, Task, Story_Sprint
-from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time, Post, Post_Comment
+from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time, Post, Post_Comment, Documentation
 
 
 import json
@@ -1609,21 +1609,9 @@ def add_new_post(request):
 	
 
 def add_new_comment(request):
-	#print request.POST['postId']
-	#print request.POST['new_comment']
 	post1=Post.objects.get(id = request.POST['postId'])
 	commenter1=User.objects.get(id = request.user.id)
 	Post_Comment.objects.create(post = post1, commenter = commenter1, comment = request.POST['new_comment'])
-	#new_post_text = request.POST['new_comment'];
-	#print new_post_text
-#	story1 = Story.objects.filter (id = storyid);
-#	
-#	note1=StoryNotification.objects.filter(story__id = storyid)
-#	if len (note1) > 0:
-#		note1[0].notification=request.POST["note"]
-#		note1[0].save()
-#	else:
-#		p = StoryNotification.objects.create(story=story1[0], notification=request.POST["note"])
 	return HttpResponseRedirect('/scrumko/discussion/')
 
 def commentdelete(request, comment_id):
@@ -1642,13 +1630,27 @@ def documentation(request):
 	storyid=""
 	check=[];
 	selected_project_id = request.session['selected_project']
+	thisproject = Project.objects.get(id = selected_project_id)
 	all_stories = Story.objects.filter(project_name__id = selected_project_id)
 	all_notification = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	documentation = Documentation.objects.filter(project__id = selected_project_id)
+	
+				
+	if len (documentation) <= 0:
+		docnew = Documentation.objects.create(project=thisproject, documentation_text="Documentation")
+		doc = docnew.documentation_text
+		documentation = Documentation.objects.filter(project__id = selected_project_id)
+
+	documentation[0].documentation_text = "<span style='color:rgb(0,0,255);'>blaaaaaaaa</span>"
+	documentation[0].save();
+	doc = documentation[0].documentation_text
 	if request.method == 'POST':
 		storyid = request.POST['story']
 		check = request.POST.getlist('checks')
+		for m in check:
+			print m
 		
-	return render_to_response ('scrumko/documentation.html', {'all_stories': all_stories, 'all_notification': all_notification}, context)
+	return render_to_response ('scrumko/documentation.html', {'doc':doc, 'all_stories': all_stories, 'all_notification': all_notification}, context)
 
 @login_required
 def progress (request):

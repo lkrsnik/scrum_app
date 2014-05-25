@@ -113,8 +113,9 @@ class Post_Comment (models.Model):
 	commenter = models.ForeignKey(User)
 	comment = models.CharField(max_length=1000, blank=False)
 	
-	
-
+class Documentation (models.Model):
+	project = models.ForeignKey(Project)
+	documentation_text = models.TextField(blank=True)
 
 
 

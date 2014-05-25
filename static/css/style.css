@@ -9,6 +9,13 @@ body {
 	color: #c9c9c9;
 }
 
+pre {
+	text-align: left;
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
+	color: #c9c9c9;
+}
+
 *{
 	
 }
@@ -896,5 +903,5 @@ input.cb
 .target2
 {
 	font-size: 13px;
-	padding:1px 10px 1px 10px;
+	padding:1px 5px 1px 10px;
 }

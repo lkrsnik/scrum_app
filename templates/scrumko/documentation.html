@@ -30,8 +30,9 @@
 
 <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
 
-<p name="textarea" class="jqte-test">Lep pozdrav vsem, ki se nahajate na tej strani.<br> Še posebej Petri, Primožu in Luku :)</p>
-<button class="status">Change</button><button class="status">Commit</button>
+<textarea name="textarea" class="jqte-test">{{ doc }}</textarea>
+<p class="showdoc" style="display:none;">{{ doc }}<br><br></p>
+<button class="status">Save</button>
 </div>
 </br>
 {{ storyid }}
@@ -62,6 +63,16 @@
 	{
 		jqteStatus = jqteStatus ? false : true;
 		$('.jqte-test').jqte({"status" : jqteStatus})
+	
+		if(jqteStatus==false){
+			$('.jqte-test').attr( "style", "display:none;" );
+			$('.showdoc').attr( "style", "display:initial;" );
+			
+		}
+		else{
+			$('.jqte-test').attr( "style", "display:initial;" );
+			$('.showdoc').attr( "style", "display:none;" );
+		}
 	});
 	
 </script>
