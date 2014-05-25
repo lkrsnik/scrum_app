@@ -1592,8 +1592,11 @@ def mytask(request):
 def discussion(request):
 	context = RequestContext(request)
 	allPosts = Post.objects.filter(project__id=request.session['selected_project']).order_by('-id')
-	allComments = Post_Comment.objects.filter();
-	return render_to_response ('scrumko/discussion.html', {'allPosts': allPosts,'allComments': allComments}, context)	
+	allComments = Post_Comment.objects.filter()
+	
+	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
+	
+	return render_to_response ('scrumko/discussion.html', {'allPosts': allPosts,'allComments': allComments, 'is_scrum_master' : is_scrum_master}, context)	
 	
 
 def add_new_post(request):
@@ -1630,6 +1633,7 @@ def postdelete(request, post_id):
 	context = RequestContext(request)
 	post_info = Post.objects.get(id=post_id).delete()
 	return HttpResponseRedirect("/scrumko/discussion")
+	
 @login_required
 def documentation(request):
 	context = RequestContext(request)
