@@ -1924,13 +1924,16 @@ def get_progress_table (request):
 		for stsp in storysprint:
 			selectedvelocity += stsp.story.estimate
 			
-			winput += Work_Time.objects.filter (task__story = stsp.story).aggregate(Sum('time'))['time__sum']
+			work = Work_Time.objects.filter (task__story = stsp.story).aggregate(Sum('time'))['time__sum']
+			
+			winput +=  0 if work == None else work
 			
 			if stsp.story.status == True:
 				realised += stsp.story.estimate
 		
+		print (selectedvelocity)
 		# calculate percentage
-		percent = 0 if selectedvelocity == 0 else realised / selectedvelocity * 100
+		percent = "%0.1f" % (0 if selectedvelocity == 0 else realised / selectedvelocity * 100) + ' %'
 		
 		# work input calc		
 		data.append (['Sprint' + str(index), velocity, selectedvelocity, realised, percent, winput])
