@@ -330,6 +330,7 @@ def addstorytosprint(request, id):
 			add = Story_Sprint.objects.create(sprint=current_sprintek, story = current_story[0])
 			
 			return HttpResponseRedirect("/scrumko/productbacklog")	
+			
 @login_required
 def sprintcreate(request):
 	# check permision to form and
@@ -1902,8 +1903,12 @@ def get_progress_table (request):
 	# get all sprints
 	sprints = Sprint.objects.filter (project_name__id = request.session.get('selected_project'))
 	
+	# numerate index
+	index = 0
+	
 	# iterate throught sprint
 	for sprint in sprints:
+		index += 1
 		# get planned velocity
 		velocity = sprint.velocity
 		
@@ -1913,21 +1918,22 @@ def get_progress_table (request):
 		# selected velocity
 		selectedvelocity = 0
 		realised = 0
+		winput = 0
 		
 		# iterate throught storysprint
 		for stsp in storysprint:
 			selectedvelocity += stsp.story.estimate
 			
+			winput += Work_Time.objects.filter (task__story = stsp.story).aggregate(Sum('time'))['time__sum']
+			
 			if stsp.story.status == True:
 				realised += stsp.story.estimate
 		
 		# calculate percentage
-		percent = realised / selectedvelocity * 100
+		percent = 0 if selectedvelocity == 0 else realised / selectedvelocity * 100
 		
-		# work input calc
-		winput = Work_Time (task__story = story).aggregate(Sum('time'))['time__sum']
-		
-		data.append (['Sprint' + sprints.index(sprint), velocity, selectedvelocity, realised, percent, winput])
+		# work input calc		
+		data.append (['Sprint' + str(index), velocity, selectedvelocity, realised, percent, winput])
 		
 	return data
 			
@@ -1942,8 +1948,7 @@ def progress (request):
 	data = get_burndown_data (request)
 	cont_dict['data'] = json.dumps(data, cls=DecimalJSONEncoder)
 	
-	cont_dict['tabledata'] = get_progress_table (request)
-	
+	cont_dict['tabledata'] = get_progress_table (request)	
 	
 	return render_to_response ('scrumko/progress.html', cont_dict, context)		
 			

@@ -10,11 +10,35 @@
 	<script type="text/javascript" src="{% static  'javascript/burndown.js' %}" ></script>
 	
 	<script src="{% static  'highchart/highcharts.js' %}"></script>
-	<script src="{% static  'highchart/modules/exporting.js"></script>
+	<script src="{% static  'highchart/modules/exporting.js' %}"></script>
 	
 	<h1>Progress report</h1>
 	<br/>
 	<div id="burndowncontainer" ></div>
+	
+	<br/>
+	<h1>Sprint velocity</h1>
+	<br/>
+	<table class="planingtable">
+		<tr>
+			<td>Sprint</td>
+			<td>Estimated velocity</td>
+			<td>Selected velocity</td>
+			<td colspan="2">Realized velocity</td>
+			<td>Work input</td>
+			
+		</tr>
+		{% for row in tabledata %}
+		<tr>
+			
+			{% for cell in row %}
+				<td>{{ cell }}</td>
+			{% endfor %}
+		
+		</tr>
+		{% endfor %}
+	
+	</table>
 	
 	
 {% endblock %}
