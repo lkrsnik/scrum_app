@@ -1891,7 +1891,7 @@ def get_burndown_data (request):
 					
 					workload += (0 if worked['time__sum'] == None else worked['time__sum']) + (0 if len( rems ) == 0 else rems[len(rems) - 1].time)
 		
-		data.append([i, remaining, workload])
+		data.append([i + 1, remaining, workload])
 		
 	return data
 		
