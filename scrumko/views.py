@@ -1893,6 +1893,45 @@ def get_burndown_data (request):
 		data.append([i, remaining, workload])
 		
 	return data
+		
+def get_progress_table (request):
+	
+	#array for data
+	data = []
+	
+	# get all sprints
+	sprints = Sprint.objects.filter (project_name__id = request.session.get('selected_project'))
+	
+	# iterate throught sprint
+	for sprint in sprints:
+		# get planned velocity
+		velocity = sprint.velocity
+		
+		# get story in sprint
+		storysprint = Story_Sprint.objects.filter (sprint = sprint)
+		
+		# selected velocity
+		selectedvelocity = 0
+		realised = 0
+		
+		# iterate throught storysprint
+		for stsp in storysprint:
+			selectedvelocity += stsp.story.estimate
+			
+			if stsp.story.status == True:
+				realised += stsp.story.estimate
+		
+		# calculate percentage
+		percent = realised / selectedvelocity * 100
+		
+		# work input calc
+		winput = Work_Time (task__story = story).aggregate(Sum('time'))['time__sum']
+		
+		data.append (['Sprint' + sprints.index(sprint), velocity, selectedvelocity, realised, percent, winput])
+		
+	return data
+			
+		
 					
 @login_required
 def progress (request):
@@ -1902,7 +1941,9 @@ def progress (request):
 	# put data to dict
 	data = get_burndown_data (request)
 	cont_dict['data'] = json.dumps(data, cls=DecimalJSONEncoder)
-	print (data)
+	
+	cont_dict['tabledata'] = get_progress_table (request)
+	
 	
 	return render_to_response ('scrumko/progress.html', cont_dict, context)		
 			
