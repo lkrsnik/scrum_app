@@ -87,6 +87,9 @@ $(document).ready(function() {
 			console.log(text);
 			var decoded = $('#note').html(text).text();
 			decoded = replaceAll(decoded, "<br>", "\n");
+			if (decoded=='undefined'){
+				decoded="";
+			}
 			console.log(decoded)
 			elem.value=decoded;
 			
