@@ -65,7 +65,7 @@
 			
 			
 			<div class="story_acceptance_test_container" >				
-				{{ story.test_text }}
+				{{ story.test_text|linebreaksbr }}
 			</div>
 			{% if  is_owner %}
 			<div class="note_content_container">
@@ -175,7 +175,7 @@
 			
 			
 			<div class="story_acceptance_test_container" >				
-				{{ story.test_text }}
+				{{ story.test_text|linebreaksbr }}
 			</div>
 			<div class="note_content_container">
 			{% if note_permission %}
