@@ -609,16 +609,27 @@ a
 }
 .story_priority,.story_business
 {
-	width: 20%;
-	text-align: center;
-	padding-right:15px;
+	
+	
+	padding-right: 0px;
 	float: left;
 }
+
+.story_business
+{
+	width: 20%;
+}
+
+.story_priority
+{
+	width: 30%;
+}
+
 .story_estimation,.story_edit,.backlog_poker
 {
 	
 	text-align: center;
-	padding-left:10px;
+	padding-left: 0px;
 	float: right;
 }
 

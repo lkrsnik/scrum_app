@@ -120,7 +120,7 @@
 		
 		{% for story in stroynotinsprint %}
 			{% if  is_scrum_master%}
-				{% if story.estimate > 0 and story.status = False %}
+				{% if story.estimate > 0 and story.status = False and sprint_exsist %}
 				<a href="/scrumko/addstorytosprint/{{ story.id }}" class="addstorytosprint"><img src="/static/images/add.png" alt="yes" height="15" width="15">Add story to sprint</a>							
 				 
 				{% endif %}	

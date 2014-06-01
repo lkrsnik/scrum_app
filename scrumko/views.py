@@ -229,8 +229,10 @@ def productbacklog(request):
 	# stories not in sprint
 	stroynotinsprint = Story.objects.filter(project_name__id=request.session['selected_project'],  status = False).exclude(id__in = story_sp.values_list('story_id', flat=True))
 		
+	# check if stprint exsist
+	sprint_exsist = not current_sprint (request) == None;
 	
-	return render_to_response('scrumko/productbacklog.html', {'addStorytoFinished': addStorytoFinished,'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stroyinsprint, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
+	return render_to_response('scrumko/productbacklog.html', {'addStorytoFinished': addStorytoFinished,'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stroyinsprint, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master, 'sprint_exsist': sprint_exsist}, context)
 
 def productbacklog_fin(request):
 	context = RequestContext(request)
@@ -338,7 +340,7 @@ def addstorytosprint(request, id):
 	if len (user_project) == 0:	
 		return HttpResponseRedirect('/scrumko/home')
 	
-	# check if story is in sprint
+	# check if story sprint exsist
 	current_sprintek = current_sprint(request)
 	
 	if (current_sprintek) is None:
