@@ -74,7 +74,9 @@ def home(request):
 	is_scrum_master = len (Project.objects.filter(scrum_master__id = current_user, id = selected_project_id)) > 0
 	is_project_owner = len (Project.objects.filter(project_owner__id = current_user, id = selected_project_id)) > 0
 	# Construct a dictionary to pass to the template engine as its context.
-	context_dict.update( {'is_project_owner':is_project_owner, 'is_owner':is_owner, 'is_scrum_master': is_scrum_master});	
+	is_team_member = Project.objects.filter (team__id = current_user, id = selected_project_id).exists();
+	
+	context_dict.update( {'is_project_owner':is_project_owner, 'is_owner':is_owner, 'is_scrum_master': is_scrum_master, 'is_team_memeber' : is_team_member});	
 				
 	return render_to_response('scrumko/home.html', context_dict, context)
 
@@ -174,7 +176,7 @@ def addprojecttosession (request):
 			role += ", " if pr.project_owner.id == current_user or pr.team.filter (id = current_user).exists() else " " 
 			
 		if pr.project_owner.id == current_user:
-			role += "Project owner "
+			role += "Project owner"
 			role += ", " if pr.team.filter (id = current_user).exists() else " " 
 			
 		if pr.team.filter (id = current_user).exists():

@@ -40,7 +40,7 @@
 			
 		{% endif %}
 		
-		{% if not is_owner and not is_scrum_master %}
+		{% if is_team_memeber and not is_scrum_master %}
 		
 			
 				<td><a href="/scrumko/poker/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Planning poker</a></td>			
