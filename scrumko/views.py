@@ -17,18 +17,22 @@ from django.db.models import Min
 from datetime import date, timedelta as td
 
 from datetime import date, datetime
-import datetime, simplejson
+import datetime
 from django.db.models import Sum
 
 from scrumko.models import User
 from scrumko.models import UserProfile, Task, Story_Sprint, Remaining
 from scrumko.models import Sprint, Project, Story, Poker, Poker_estimates, NotificationPermission, StoryNotification, Work_Time, Post, Post_Comment, Documentation
 
+from decimal import Decimal
 
 import json
+import decimal
 #from scrumko.forms import UserForm, UserProfileForm
 
-from decimal import Decimal
+#from django.core.serializers.json import DjangoJSONEncoder
+
+
 
 @ensure_csrf_cookie
 
@@ -1949,24 +1953,24 @@ def progress (request):
 	
 	# put data to dict
 	data = get_burndown_data (request)
-	cont_dict['data'] = json.dumps(data, cls=DecimalJSONEncoder)
+	cont_dict['data'] = json.dumps(data, cls=DecimalEncoder ) #cls=DecimalJSONEncoder
 	
 	cont_dict['tabledata'] = get_progress_table (request)	
 	
 	return render_to_response ('scrumko/progress.html', cont_dict, context)		
 			
-class DecimalJSONEncoder(simplejson.JSONEncoder):
-	def default(self, o):
-		if isinstance(o, decimal.Decimal):
-			return str(o)
-		return super(DecimalJSONEncoder, self).default(o)	
+#class DecimalJSONEncoder(simplejson.JSONEncoder):
+#	def default(self, o):
+#		if isinstance(o, decimal.Decimal):
+#			return str(o)
+#		return super(DecimalJSONEncoder, self).default(o)	
+	
 		
-		
-		
-		
-		
-		
-		
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        super(DecimalEncoder, self).default(o)	
 		
 		
 	
