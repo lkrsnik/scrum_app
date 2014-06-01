@@ -10,17 +10,17 @@
 		<table class="gridmenu">
 		{% if request.user.is_superuser %}		
 			<tr>
-				<td><a href="/scrumko/projectcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> <br/> Create project </a></td>
-				<td><a href="/scrumko/register/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user <a></td>
-				<td><a href="/scrumko/maintainuser/"> <img src="/static/images/user.png" height="130" width="130"><br/> Edit users</a></td>
+				<td><a href="/scrumko/projectcreate/">  <img src="/static/images/createproject.png" height="130" width="130"> <br/> Create project </a></td>
+				<td><a href="/scrumko/register/"> <img src="/static/images/createuser.png" height="130" width="130"><br/> Create user <a></td>
+				<td><a href="/scrumko/maintainuser/"> <img src="/static/images/edituser.png" height="130" width="130"><br/> Edit users</a></td>
 				
 			</tr>
 		{% endif %}
 		{% if  is_scrum_master%}
 			<tr>
-				<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Create sprint</a></td>			
-				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Edit sprints</a></td>
-				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user story </a></td>
+				<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/createsprint.png" height="130" width="130"><br/> Create sprint</a></td>			
+				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/editsprint.png" height="130" width="130"><br/> Edit sprints</a></td>
+				<td><a href="/scrumko/storycreate/"> <img src="/static/images/createuserstory.png" height="130" width="130"><br/> Create user story </a></td>
 			
 			</tr>
 		{% endif %}
@@ -28,14 +28,14 @@
 		<tr>
 		{% if  is_owner %}
 			
-				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user story </a></td>
+				<td><a href="/scrumko/storycreate/"> <img src="/static/images/createuserstory.png" height="130" width="130"><br/> Create user story </a></td>
 				
 			
 		{% endif %}
 		
 		{% if  is_scrum_master or request.user.is_superuser or is_project_owner %}
 			
-				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Edit projects</a></td>			
+				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/editproject.png" height="130" width="130"><br/> Edit projects</a></td>			
 				
 			
 		{% endif %}
@@ -43,7 +43,7 @@
 		{% if is_team_memeber and not is_scrum_master %}
 		
 			
-				<td><a href="/scrumko/poker/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Planning poker</a></td>			
+				<td><a href="/scrumko/poker/">  <img src="/static/images/planningpoker.png" height="130" width="130"><br/> Planning poker</a></td>			
 			
 			
 		

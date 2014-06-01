@@ -1818,10 +1818,6 @@ def documentation(request):
 
  	return render_to_response ('scrumko/documentation.html', {'doc':doc, 'all_stories': all_stories, 'all_notification': all_notification}, context)
 
-
-
-	
-	
 @login_required
 def addstorytofinished(request, id):
 	allcompleted=True
@@ -1866,7 +1862,7 @@ def addstorytofinished(request, id):
 					
 				#prever ce se nima taskov
 	print allcompleted	
-				
+		
 	if allcompleted == True and noTask == False:
 		current_story.status=True
 		current_story.save()
