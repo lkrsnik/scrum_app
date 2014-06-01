@@ -918,4 +918,22 @@ input.cb
 {
 	width: 680px; 
 	height: 600px; 
+}
+
+.role
+{
+	font-size: 12px;
+	color: #c9c9c9;
+	margin-top: 0;
+}
+
+.projselect
+{
+	margin-right: 20px;
+}
+
+.projselect:hover
+{
+	background-color: rgba(255, 255, 255, 0.1);
+}
 	

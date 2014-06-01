@@ -2,51 +2,7 @@
 
 {% block body_block %}
 	
-	<h1> Choose current project </h1>
-		<table class=planingtable>
-	   	
-		
-		<tr>
-			<td >
-				Project name
-			</td>
-			<td >
-				Project owner
-			</td>
-			<td >
-				Scrum master
-			</td>
-			<td >
-				
-			</td>
-		</tr>
-			
-		{% for detail in project_detail %}
-			
-				
-				
-			<tr>
-				<td>
-					{{ detail.project_name }}
-				</td>
-		
-				<td>
-					{{ detail.project_owner }}
-				</td>
-				<td>
-					{{ detail.scrum_master }}
-				</td>
-			
-				<td>
-				<a href="?project_id={{detail.id}}&name={{detail.project_name}}">Select<a>						
-				</td>	
-				
-			</tr>
-				
-			
-			
-		{% endfor %}
-	</table>
+	
 	<h1> Control panel</h1>
 
 	<div class="cpanel">

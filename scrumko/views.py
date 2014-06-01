@@ -41,7 +41,7 @@ def home(request):
 	
 	# get current user
 	current_user = request.user.id
-	current_user = request.user.id
+	
 	
 	# Request the context of the request.
    	context = RequestContext(request)
@@ -136,11 +136,37 @@ def index(request):
 				request.session['selected_project'] = 0
 				request.session['project_name'] = ''
 				
+				# get all user projects and add it to session
+				current_user = request.user.id
+				project_info = Project.objects.filter(Q(scrum_master__id = current_user) | Q(project_owner__id = current_user) | Q(team__id = current_user)).distinct()
+					
+				# change this qs in array
+				projects = []
+				
+				for pr in project_info:
+					role = "as "
+					if pr.scrum_master.id == current_user:
+						role += "Scrum master"						
+						role += ", " if pr.project_owner.id == current_user or pr.team.filter (id = current_user).exists() else " " 
+						
+					if pr.project_owner.id == current_user:
+						role += "Project owner "
+						role += ", " if pr.team.filter (id = current_user).exists() else " " 
+						
+					if pr.team.filter (id = current_user).exists():
+						role += "Team member"
+										
+					d = [pr.project_name, pr.id, role]
+					projects.append(d)
+				
+				request.session['project'] = projects				
+				
+				
 				return HttpResponseRedirect('/scrumko/home/')
 			else:
                 # An inactive account was used - no logging in!
 				success=False;
-				return HttpResponse("Your Rango account is disabled.")
+				return HttpResponse("Your Scrumko account is disabled.")
 		else:
             # Bad login details were provided. So we can't log the user in.
 			print "Invalid login details: {0}, {1}".format(username, password)
