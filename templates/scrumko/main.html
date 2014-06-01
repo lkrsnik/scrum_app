@@ -17,22 +17,22 @@
 {% block side_block %}
 	<h1> Current project</h1>
 	<h2>{{ request.session.project_name }}</h2>
-	<h1> Notifications</h1>					
-	<h2> To do </h2>
-	<br/>
-	<br/>
+					
+	<h1> Projects </h1>
+	
+	{% for project in request.session.project %}
+		<a href="/scrumko/home?project_id={{project.1}}&name={{project.0}}">
+			<div class="projselect">
+				{{project.0}}<br/>
+				<p class="role">{{project.2}}</p>
+			</div>
+		</a>
+	{% endfor %}
+	
+	
 	<br/>
 	
-	<h2> Past activities </h2>
-	<br/>
-	<br/>
-	<br/>
 	
-	<h2> Messages </h2>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
 	
 {% endblock %}
 					
