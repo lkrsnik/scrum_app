@@ -228,13 +228,23 @@ def productbacklog(request):
 	# stories in sprint
 	stroyinsprint = Story.objects.filter(project_name__id=request.session['selected_project'], id__in = story_sp.values_list('story_id', flat=True), status = False)
 	
+	stspnew = []
+	
+	for story in stroyinsprint:
+		# check if not task finished
+		allfinished = Task.objects.filter (story = story, status = 2)
+		alltasks_st = Task.objects.filter (story = story)
+		
+		can_end = len(allfinished) > 0 and len (allfinished) == len (alltasks_st)
+		stspnew.append ([story, can_end])		
+	
 	# stories not in sprint
 	stroynotinsprint = Story.objects.filter(project_name__id=request.session['selected_project'],  status = False).exclude(id__in = story_sp.values_list('story_id', flat=True))
 		
 	# check if stprint exsist
 	sprint_exsist = not current_sprint (request) == None;
 	
-	return render_to_response('scrumko/productbacklog.html', {'addStorytoFinished': addStorytoFinished,'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stroyinsprint, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master, 'sprint_exsist': sprint_exsist}, context)
+	return render_to_response('scrumko/productbacklog.html', {'addStorytoFinished': addStorytoFinished,'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stspnew, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master, 'sprint_exsist': sprint_exsist}, context)
 
 def productbacklog_fin(request):
 	context = RequestContext(request)
