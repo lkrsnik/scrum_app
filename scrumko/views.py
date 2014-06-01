@@ -228,7 +228,14 @@ def productbacklog(request):
 	
 	# stories not in sprint
 	stroynotinsprint = Story.objects.filter(project_name__id=request.session['selected_project'],  status = False).exclude(id__in = story_sp.values_list('story_id', flat=True))
-		
+	
+	for story in stroynotinsprint:
+		if (story.priority=="won't have this time"):
+			story.priority="won't have"
+			
+	for story in stroyinsprint:
+		if (story.priority=="won't have this time"):
+			story.priority="won't have"
 	
 	return render_to_response('scrumko/productbacklog.html', {'addStorytoFinished': addStorytoFinished,'addStorytoSprint': addStorytoSprint, 'allNotifications': allNotifications, 'note_permission': note_permission, 'stroyinsprint': stroyinsprint, 'stroynotinsprint': stroynotinsprint, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
@@ -249,6 +256,10 @@ def productbacklog_fin(request):
 	note_permission = note_permission.permission
 	
 	allNotifications = StoryNotification.objects.filter(story__project_name__id = selected_project_id)
+	
+	for story in allStories:
+		if (story.priority=="won't have this time"):
+			story.priority="won't have"
 	
 	return render_to_response('scrumko/productbacklog_fin.html', {'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
@@ -321,6 +332,10 @@ def sprintbacklog(request):
 		
 	#########################################
 	#########################################
+	
+	for story in allStories:
+		if (story.story.priority=="won't have this time"):
+			story.story.priority="won't have"
 	
 	return render_to_response('scrumko/sprintbacklog.html', {'addStorytoFinished2': addStorytoFinished2, 'allNotifications': allNotifications, 'note_permission': note_permission, 'allStories': allStories, 'allTasks': allTsaks2, 'is_owner': is_owner, 'is_scrum_master': is_scrum_master}, context)
 
