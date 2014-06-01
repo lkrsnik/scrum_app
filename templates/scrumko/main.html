@@ -21,7 +21,7 @@
 	<h1> Projects </h1>
 	
 	{% for project in request.session.project %}
-		<a href="?project_id={{project.1}}&name={{project.0}}">
+		<a href="/scrumko/home?project_id={{project.1}}&name={{project.0}}">
 			<div class="projselect">
 				{{project.0}}<br/>
 				<p class="role">{{project.2}}</p>
