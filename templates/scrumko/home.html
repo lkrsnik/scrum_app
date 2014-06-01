@@ -12,43 +12,43 @@
 			<tr>
 				<td><a href="/scrumko/projectcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"> <br/> Create project </a></td>
 				<td><a href="/scrumko/register/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user <a></td>
-				<td><a href="/scrumko/maintainuser/"> <img src="/static/images/user.png" height="130" width="130"><br/> Maintain users</a></td>
+				<td><a href="/scrumko/maintainuser/"> <img src="/static/images/user.png" height="130" width="130"><br/> Edit users</a></td>
 				
 			</tr>
 		{% endif %}
 		{% if  is_scrum_master%}
 			<tr>
 				<td><a href="/scrumko/sprintcreate/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Create sprint</a></td>			
-				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Maintain sprints</a></td>
+				<td><a href="/scrumko/maintainsprint/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Edit sprints</a></td>
 				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user story </a></td>
 			
 			</tr>
 		{% endif %}
+		
+		<tr>
 		{% if  is_owner %}
-			<tr>
+			
 				<td><a href="/scrumko/storycreate/"> <img src="/static/images/user.png" height="130" width="130"><br/> Create user story </a></td>
-				<td></td>
-				<td></td>
-			</tr>
+				
+			
 		{% endif %}
 		
 		{% if  is_scrum_master or request.user.is_superuser or is_project_owner %}
-			<tr>
-				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Maintain projects</a></td>			
-				<td></td>
-				<td></td>
-			</tr>
+			
+				<td><a href="/scrumko/maintainproject/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Edit projects</a></td>			
+				
+			
 		{% endif %}
 		
 		{% if not is_owner and not is_scrum_master %}
 		
-			<tr>
+			
 				<td><a href="/scrumko/poker/">  <img src="/static/images/seznamZahtev.png" height="130" width="130"><br/> Planning poker</a></td>			
 			
-			</tr>
+			
 		
 		{% endif %}
-		
+		</tr>
 		</table>
 
 	</div>

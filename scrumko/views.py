@@ -136,31 +136,7 @@ def index(request):
 				request.session['selected_project'] = 0
 				request.session['project_name'] = ''
 				
-				# get all user projects and add it to session
-				current_user = request.user.id
-				project_info = Project.objects.filter(Q(scrum_master__id = current_user) | Q(project_owner__id = current_user) | Q(team__id = current_user)).distinct()
-					
-				# change this qs in array
-				projects = []
-				
-				for pr in project_info:
-					role = "as "
-					if pr.scrum_master.id == current_user:
-						role += "Scrum master"						
-						role += ", " if pr.project_owner.id == current_user or pr.team.filter (id = current_user).exists() else " " 
-						
-					if pr.project_owner.id == current_user:
-						role += "Project owner "
-						role += ", " if pr.team.filter (id = current_user).exists() else " " 
-						
-					if pr.team.filter (id = current_user).exists():
-						role += "Team member"
-										
-					d = [pr.project_name, pr.id, role]
-					projects.append(d)
-				
-				request.session['project'] = projects				
-				
+				addprojecttosession (request)	
 				
 				return HttpResponseRedirect('/scrumko/home/')
 			else:
@@ -180,6 +156,34 @@ def index(request):
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
 		return render_to_response('scrumko/index.html', {'success': success}, context)
+
+# this function add project in session
+
+def addprojecttosession (request):
+	# get all user projects and add it to session
+	current_user = request.user.id
+	project_info = Project.objects.filter(Q(scrum_master__id = current_user) | Q(project_owner__id = current_user) | Q(team__id = current_user)).distinct()
+		
+	# change this qs in array
+	projects = []
+	
+	for pr in project_info:
+		role = "as "
+		if pr.scrum_master.id == current_user:
+			role += "Scrum master"						
+			role += ", " if pr.project_owner.id == current_user or pr.team.filter (id = current_user).exists() else " " 
+			
+		if pr.project_owner.id == current_user:
+			role += "Project owner "
+			role += ", " if pr.team.filter (id = current_user).exists() else " " 
+			
+		if pr.team.filter (id = current_user).exists():
+			role += "Team member"
+							
+		d = [pr.project_name, pr.id, role]
+		projects.append(d)
+	
+	request.session['project'] = projects
 
 
 # Use the login_required() decorator to ensure only those logged in can access the view.
@@ -544,6 +548,8 @@ def projectcreate(request):
 			notification_permission.permission=request.POST.get('permission', False)
 			notification_permission.save()
 		
+			addprojecttosession (request)
+		
 		else:
 			print project_form.errors
 			return render_to_response('scrumko/projectcreate.html',{'project_form': project_form, 'notification_form': notification_form, 'registered': registered, 'all_members': all_members, 'all_options': all_options}, context)
@@ -582,6 +588,10 @@ def maintainproject(request):
 def projectdelete(request, id):
 	context = RequestContext(request)
 	projecr_info = Project.objects.get(id=id).delete()
+	
+	# refresh project array
+	addprojecttosession (request)
+	
 	return HttpResponseRedirect("/scrumko/maintainproject")	
 
 @login_required
@@ -642,6 +652,8 @@ def editproject(request):
 
 				registered = True	
 				all_members=""
+				
+				addprojecttosession (request)
 
 		else:
 			print project_form.errors
