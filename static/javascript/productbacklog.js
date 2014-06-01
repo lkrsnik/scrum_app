@@ -13,8 +13,6 @@ $(document).ready(function() {
 	});
 
 
-
-
 	$(function() {
 		$( "#dialog" ).dialog({
 		  autoOpen: false,

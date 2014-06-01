@@ -71,7 +71,7 @@
 			<div class="note_content_container">
 				
 				{% if  story.status == False %}
-					
+											
 					<a href="/scrumko/addstorytofinished/{{ story.id }}"  class="edit_note2" ><img src="/static/images/confirm.png" alt="yes" height="15" width="15" > Mark as realized</a>
 					
 					<a href="javascript: void(0)" class="edit_note" id="#opener1"  data-story="{{story.id}}" ><img src="/static/images/remove.png" alt="yes" height="15" width="15"> Reject</a>
@@ -87,7 +87,6 @@
 						{% endif %}
 					{% endfor %}
 		
-					
 					
 				{% endif %}
 				{% if  story.status == True %}
